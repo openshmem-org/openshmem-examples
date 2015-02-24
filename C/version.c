@@ -35,35 +35,34 @@
  *
  */
 
-
-
-/*
- * simply prints out the version of OpenSHMEM from PE 0 only
- *
- */
-
 #include <stdio.h>
+#include <sys/utsname.h>
 
-#include <shmemx.h>
+#include <shmem.h>
 
 int
 main (int argc, char **argv)
 {
-  int npes;
-  int me;
+  int me, npes;
+  struct utsname u;
+  int maj, min;
+  char verstring [_SHMEM_MAX_NAME_LEN];
+
+  uname (&u);
 
   start_pes (0);
-  npes = shmem_n_pes ();
-  me = shmem_my_pe ();
 
-  if (me == 0)
-    {
-      printf ("PE %d (of %d) says hello from\n", me, npes);
-      printf ("  OpenSHMEM library version %d.%d\n",
-	      SHMEM_VERSION_MAJOR,
-	      SHMEM_VERSION_MINOR
-	      );
-    }
+  me = shmem_my_pe ();
+  npes = shmem_n_pes ();
+
+  shmem_info_get_version (& maj, & min);
+  shmem_info_get_name (verstring);
+
+  printf ("%s: \"%s\" %d.%d on PE %4d of %4d\n",
+          u.nodename,
+          verstring,
+          maj, min,
+          me, npes);
 
   return 0;
 }

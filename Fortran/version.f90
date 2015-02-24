@@ -34,24 +34,27 @@
 ! SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 !
 
-!
-! simply prints out the version of OpenSHMEM from PE 0 only
-!
-
 program version
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
-  integer :: my_pe, num_pes
-  integer :: me, npes
+  integer :: num_pes, my_pe
 
-  call start_pes(0)
-  me = my_pe()
-  npes = num_pes()
+  integer :: maj, min
+  integer :: npes, me
+  character (len = 32) :: h
+  character (len = SHMEM_MAX_NAME_LEN) :: verstr
 
-  if (me == 0) then
-     write (*, *) 'PE ', me, ' of ', npes, ' says hello from OpenSHMEM version'
-     write (*, *) 'Major ', SHMEM_VERSION_MAJOR, 'Minor ', SHMEM_VERSION_MINOR
-  end if
+  call start_pes (0)
+
+  npes = num_pes ()
+  me = my_pe ()
+  call hostnm (h)
+
+  call shmem_info_get_version (maj, min)
+  call shmem_info_get_name (verstr)
+
+  write (*, "(A16, A, A, I1, A1, I1, A, I4, A, I4)") &
+       & h, verstr, ' ', maj, '.', min, ': on PE ', me, ' / ',  npes
 
 end program version
