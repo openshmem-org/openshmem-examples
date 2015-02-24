@@ -53,7 +53,7 @@ main (int argc, char **argv)
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 
-  printf ("%s: Hello from node %4d of %4d\n", u.nodename, me, npes);
+  printf ("%s: Hello from PE %4d of %4d\n", u.nodename, me, npes);
 
 
   return 0;
