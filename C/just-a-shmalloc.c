@@ -41,14 +41,14 @@
  * just do a shmalloc and a free, no output to be expected
  */
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main ()
 {
   long *x;
 
-  start_pes (0);
+  shmem_init ();
 
   x = (long *) shmalloc (sizeof (*x));
 

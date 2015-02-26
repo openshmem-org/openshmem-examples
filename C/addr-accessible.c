@@ -46,7 +46,7 @@
  */
 
 #include <stdio.h>
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 static int
 check_it (void *addr)
@@ -65,7 +65,7 @@ main (int argc, char *argv[])
   char *msg = "OK";
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   shm_target = (int *) shmalloc (sizeof (int));

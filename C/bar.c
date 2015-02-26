@@ -39,7 +39,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 #define NPES 4
 
@@ -57,7 +57,7 @@ main ()
       pSync[i] = _SHMEM_SYNC_VALUE;
     }
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

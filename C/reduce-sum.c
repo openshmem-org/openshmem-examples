@@ -46,7 +46,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 #ifndef MAX
 # define MAX(a,b) (((a) > (b)) ? (a) : (b))
@@ -71,7 +71,7 @@ main ()
   int *pWrk;
   int pWrk_size;
 
-  start_pes (0);
+  shmem_init ();
 
   pWrk_size = MAX (nred/2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
   pWrk = (int *) shmalloc (pWrk_size * sizeof (*pWrk));

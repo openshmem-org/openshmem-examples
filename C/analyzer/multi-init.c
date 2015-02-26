@@ -43,13 +43,13 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (int argc, char **argv)
 {
-  start_pes (0);
-  start_pes (0);
+  shmem_init ();
+  shmem_init ();
 
   printf ("Hello from multi-init test\n");
 

@@ -49,7 +49,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 const int table_size = 16;
 
@@ -119,7 +119,7 @@ main (int argc, char *argv[])
 
   srand ( getpid ()  + getuid () );
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

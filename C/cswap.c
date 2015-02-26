@@ -39,7 +39,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main ()
@@ -48,7 +48,7 @@ main ()
   int oldval;
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   oldval = shmem_int_cswap (&race_winner, -1, me, 0);

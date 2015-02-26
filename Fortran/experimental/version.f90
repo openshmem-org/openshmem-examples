@@ -45,7 +45,7 @@ program version
   character (len = 32) :: h
   character (len = SHMEM_MAX_NAME_LEN) :: verstr
 
-  call start_pes (0)
+  call shmem_init ()
 
   npes = num_pes ()
   me = my_pe ()

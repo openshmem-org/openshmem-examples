@@ -53,7 +53,7 @@ main (int argc, char **argv)
   int me;
   int *ip;
 
-  start_pes (0);
+  shmem_init ();
   npes = shmem_n_pes ();
   me = shmem_my_pe ();
 

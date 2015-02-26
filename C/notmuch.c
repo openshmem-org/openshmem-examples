@@ -43,11 +43,11 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (int argc, char *argv[])
 {
-  start_pes (0);
+  shmem_init ();
   return 0;
 }

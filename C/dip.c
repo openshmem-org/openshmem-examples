@@ -46,7 +46,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 static const double E  = 2.71828182;
 static const double PI = 3.14159265;
@@ -59,7 +59,7 @@ main (void)
   double *f;
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   f = (double *) shmalloc (sizeof (*f));

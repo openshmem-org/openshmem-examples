@@ -44,7 +44,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main ()
@@ -53,7 +53,7 @@ main ()
 
   setbuf (stdout, NULL);
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

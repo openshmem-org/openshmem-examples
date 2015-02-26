@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (int argc, char **argv)
@@ -53,7 +53,7 @@ main (int argc, char **argv)
   long src;
   int me, npes;
 
-  start_pes (0);
+  shmem_init ();
 
   me = shmem_my_pe ();
   npes = shmem_n_pes ();

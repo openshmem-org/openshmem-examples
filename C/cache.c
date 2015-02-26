@@ -44,14 +44,14 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 long var;
 
 int
 main (void)
 {
-  start_pes (0);
+  shmem_init ();
 
   shmem_clear_cache_inv ();
 

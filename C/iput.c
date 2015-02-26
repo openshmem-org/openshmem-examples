@@ -45,7 +45,7 @@
  */
 
 #include <stdio.h>
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main ()
@@ -58,7 +58,7 @@ main ()
   static short target[10];
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   if (me == 0)

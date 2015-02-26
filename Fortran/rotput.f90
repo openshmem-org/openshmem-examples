@@ -46,7 +46,7 @@ program rotput
   integer me, npes
   integer nextpe
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   call start_pes(0)
   me = my_pe()

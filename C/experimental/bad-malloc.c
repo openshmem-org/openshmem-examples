@@ -47,7 +47,7 @@ main (int argc, char *argv[])
   int me, npes;
   long *x;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

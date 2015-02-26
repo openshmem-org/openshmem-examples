@@ -39,7 +39,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 long pSync[_SHMEM_BCAST_SYNC_SIZE];
 
@@ -52,7 +52,7 @@ main (void)
   int nlong = 8;
   int me, npes;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

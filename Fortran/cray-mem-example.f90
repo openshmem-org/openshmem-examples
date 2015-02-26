@@ -14,7 +14,7 @@
 
 program shpalloc_example
   implicit none
-  include "mpp/shmem.fh"
+  include "shmem.fh"
   integer :: num_pes    ! not declared in SGI header
 
   integer :: n_pes
@@ -28,7 +28,7 @@ end program shpalloc_example
 
 subroutine sub(imax,jmax)
   implicit none
-  include "mpp/shmem.fh"
+  include "shmem.fh"
   integer :: my_pe, num_pes    ! not declared in SGI header
 
   integer imax, jmax

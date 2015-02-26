@@ -51,7 +51,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 #define N 7
 
@@ -93,7 +93,7 @@ main (int argc, char **argv)
   float *dest13;
 
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

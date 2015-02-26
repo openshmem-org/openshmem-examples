@@ -36,7 +36,7 @@
 
 program a
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   integer :: my_pe
 

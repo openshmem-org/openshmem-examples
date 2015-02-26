@@ -39,12 +39,12 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main ()
 {
-  start_pes (0);
+  shmem_init ();
 
   if (shmem_my_pe () == 0)
     {

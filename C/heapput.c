@@ -40,7 +40,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 long dest = -999;
 
@@ -50,7 +50,7 @@ main ()
   int *all;
   int me;
 
-  start_pes (0);
+  shmem_init ();
 
   me = shmem_my_pe ();
 

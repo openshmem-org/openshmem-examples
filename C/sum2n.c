@@ -43,7 +43,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int counter = 0;		/* symmetric */
 
@@ -52,7 +52,7 @@ main (int argc, char *argv[])
 {
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   if (me > 0)

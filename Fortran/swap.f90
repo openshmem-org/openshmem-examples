@@ -43,7 +43,7 @@
 
 program swap
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   integer :: shmem_int4_swap
 

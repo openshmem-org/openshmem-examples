@@ -46,7 +46,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (void)
@@ -60,7 +60,7 @@ main (void)
     srand (now + getpid ());
   }
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 

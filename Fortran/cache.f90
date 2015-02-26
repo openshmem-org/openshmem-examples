@@ -43,9 +43,9 @@ program cachetest
 
   integer, save :: var
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
-  call start_pes (0)
+  call shmem_init ()
 
   call shmem_clear_cache_inv ()
 

@@ -36,7 +36,7 @@
 
 program lock
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   integer, save :: L
   integer :: me

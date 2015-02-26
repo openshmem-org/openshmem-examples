@@ -48,7 +48,7 @@ main()
 {
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   dst = 999;

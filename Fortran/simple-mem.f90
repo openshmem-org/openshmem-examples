@@ -42,7 +42,7 @@
 
 program mem
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   integer :: A(16)
 

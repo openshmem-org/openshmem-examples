@@ -46,7 +46,7 @@
  *      See COPYRIGHT in top-level directory (of MPICH distribution).
  */
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 #include <stdlib.h>
 #include <sys/time.h>
 
@@ -82,7 +82,7 @@ main (int argc, char *argv[])
   double h, sum, x;
   struct timeval startwtime, endwtime;
 
-  start_pes (0);
+  shmem_init ();
   numprocs = shmem_n_pes ();
   myid = shmem_my_pe ();
 

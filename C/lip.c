@@ -44,7 +44,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (void)
@@ -52,7 +52,7 @@ main (void)
   long *f;
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   f = (long *) shmalloc (sizeof (*f));

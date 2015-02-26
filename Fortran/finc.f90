@@ -44,7 +44,7 @@
 
 program finc
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   integer :: num_pes, my_pe
 

@@ -49,7 +49,7 @@
 #include <sys/time.h>
 
 #include <unistd.h>
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 #include <sys/utsname.h>
 
@@ -157,7 +157,7 @@ main (int argc, char *argv[])
 
   uname (&un);
 
-  start_pes (0);
+  shmem_init ();
 
   proc = shmem_my_pe ();
   nproc = shmem_n_pes ();

@@ -50,7 +50,7 @@ main ()
 {
   int *p;
 
-  start_pes (0);
+  shmem_init ();
 
   p = shmemx_malloc (64 * sizeof (*p));
 

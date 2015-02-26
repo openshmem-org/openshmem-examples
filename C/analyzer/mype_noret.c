@@ -39,14 +39,14 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (int argc, char **argv)
 {
   int me, npes;
 
-  start_pes (0);
+  shmem_init ();
 
   shmem_my_pe ();		/* expect to get warning here */
   npes = shmem_n_pes ();

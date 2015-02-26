@@ -41,19 +41,19 @@
 
 program whoami
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   integer :: num_pes, my_pe
 
   integer :: npes, me
   character*32 :: h
 
-  call start_pes (0)
+  call shmem_init ()
 
   npes = num_pes ()
   me = my_pe ()
   call hostnm (h)
 
-  print *, h, 'I am ', me, ' of ', npes
+  write (*, "(A16, A, I4, A, I4)") h, 'I am ', me, ' of ', npes
 
 end program whoami

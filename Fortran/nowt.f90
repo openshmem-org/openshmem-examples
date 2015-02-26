@@ -40,7 +40,7 @@
 !
 program nowt
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
   call start_pes(0)
 

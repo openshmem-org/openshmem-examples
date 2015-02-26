@@ -47,7 +47,7 @@
 
 #include <stdio.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int dst;
 
@@ -57,7 +57,7 @@ main ()
   int me;
   int old;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   old = -1;

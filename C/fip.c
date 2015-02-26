@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 
 static const float E  = 2.71828182;
@@ -59,7 +59,7 @@ main (void)
   float *f;
   int me;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
 
   f = (float *) shmalloc (sizeof (*f));

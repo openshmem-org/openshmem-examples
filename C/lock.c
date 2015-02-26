@@ -40,7 +40,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 long L = 0;
 
@@ -50,7 +50,7 @@ main (int argc, char **argv)
   int me;
   int slp;
 
-  start_pes (0);
+  shmem_init ();
   me = shmem_my_pe ();
   slp = 1;
 
