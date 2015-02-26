@@ -139,6 +139,7 @@ int main(int argc,char *argv[]){
 		printf("%d ",rray[i]);
 	printf("\n");
         //mpi_err = MPI_Finalize();
+    return 0;
 }
 /*
   0:myid= 0 scounts=1 7 4

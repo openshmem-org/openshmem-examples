@@ -101,6 +101,7 @@ int main(int argc,char *argv[]){
 	for(i=0;i<numnodes;i++)
 		printf("%d ",rcounts[i]);
 	printf("\n");
+    return 0;
 }
 
 void seed_random(int  id){
