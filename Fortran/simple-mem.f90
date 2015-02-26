@@ -51,7 +51,7 @@ program mem
 
   len = 64    ! size of A
 
-  call start_pes(0)
+  call shmem_init ()
 
   call shpalloc(addr, len, errcode, abort)
 

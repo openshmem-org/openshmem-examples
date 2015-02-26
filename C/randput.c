@@ -75,7 +75,7 @@ main (int argc, char **argv)
 
   src = rand () % 1000;
 
-  dest = (long *) shmalloc (sizeof (*dest));
+  dest = (long *) shmem_malloc (sizeof (*dest));
   *dest = -1;
   shmem_barrier_all ();
 

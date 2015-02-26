@@ -68,7 +68,7 @@ main (int argc, char *argv[])
   shmem_init ();
   me = shmem_my_pe ();
 
-  shm_target = (int *) shmalloc (sizeof (int));
+  shm_target = (int *) shmem_malloc (sizeof (int));
 
   if (me == 0)
     {
@@ -86,15 +86,15 @@ main (int argc, char *argv[])
 	  msg = "FAIL (stack variable)";
 	}
       if (!check_it (shm_target))
-	{			/* shmalloc: yes */
-	  msg = "FAIL (shmalloc)";
+	{			/* shmem_malloc: yes */
+	  msg = "FAIL (shmem_malloc)";
 	}
 
       printf ("%s\n", msg);
 
     }
 
-  shfree (shm_target);
+  shmem_free (shm_target);
 
   return 0;
 }

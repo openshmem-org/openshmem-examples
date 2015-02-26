@@ -73,7 +73,7 @@ main (int argc, char **argv)
       src[i] = (long) me;
     }
 
-  dest = (long *) shmalloc (N * sizeof (*dest));
+  dest = (long *) shmem_malloc (N * sizeof (*dest));
 
   nextpe = (me + 1) % npes;
 
@@ -86,7 +86,7 @@ main (int argc, char **argv)
       printf ("%d @ %s: dest[%d] = %ld\n", me, u.nodename, i, dest[i]);
     }
 
-  shfree (dest);
+  shmem_free (dest);
 
   return 0;
 }

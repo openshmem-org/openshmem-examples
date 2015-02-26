@@ -74,10 +74,10 @@ main ()
   shmem_init ();
 
   pWrk_size = MAX (nred/2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
-  pWrk = (int *) shmalloc (pWrk_size * sizeof (*pWrk));
+  pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
   assert (pWrk != NULL);
 
-  pSync = (long *) shmalloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
+  pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
   assert (pSync != NULL);
 
   for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
@@ -95,8 +95,8 @@ main ()
   printf ("\n");
 
   shmem_barrier_all ();
-  shfree (pSync);
-  shfree (pWrk);
+  shmem_free (pSync);
+  shmem_free (pWrk);
 
   return 0;
 }

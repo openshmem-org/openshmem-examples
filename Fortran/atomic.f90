@@ -38,7 +38,7 @@ program a
 
   include 'shmem.fh'
 
-  integer :: my_pe
+  integer :: shmem_my_pe
 
   integer :: me
 
@@ -48,8 +48,8 @@ program a
   x = 99
   y = 42
 
-  call start_pes(0)
-  me = my_pe()
+  call shmem_init ()
+  me = shmem_my_pe()
 
   call shmem_barrier_all()
 

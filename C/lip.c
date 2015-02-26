@@ -55,7 +55,7 @@ main (void)
   shmem_init ();
   me = shmem_my_pe ();
 
-  f = (long *) shmalloc (sizeof (*f));
+  f = (long *) shmem_malloc (sizeof (*f));
 
   *f = 3;
   shmem_barrier_all ();

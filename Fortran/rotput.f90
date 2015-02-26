@@ -48,9 +48,9 @@ program rotput
 
   include 'shmem.fh'
 
-  call start_pes(0)
-  me = my_pe()
-  npes = num_pes()
+  call shmem_init ()
+  me = shmem_my_pe()
+  npes = shmem_n_pes()
 
   nextpe = MOD(me + 1, npes)
 

@@ -132,7 +132,7 @@ main (int argc, char *argv[])
    * each PE only stores what it owns
    */
   table_bytes = sizeof (*table) * ip_pe;
-  table = shmalloc (table_bytes);             /* !!! unchecked !!! */
+  table = shmem_malloc (table_bytes);             /* !!! unchecked !!! */
   /*
    * initialize table
    */
@@ -145,7 +145,7 @@ main (int argc, char *argv[])
    * each PE needs to be able to lock everywhere
    */
   lock_bytes = sizeof (*lock) * table_size;
-  lock = shmalloc (lock_bytes);            	/* !!! unchecked !!! */
+  lock = shmem_malloc (lock_bytes);            	/* !!! unchecked !!! */
   /*
    * initialize locks
    */
@@ -187,8 +187,8 @@ main (int argc, char *argv[])
    * clean up allocated memory
    */
   shmem_barrier_all ();
-  shfree (lock);
-  shfree (table);
+  shmem_free (lock);
+  shmem_free (table);
 
   return 0;
 }

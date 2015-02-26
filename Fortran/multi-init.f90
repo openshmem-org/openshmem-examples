@@ -43,7 +43,7 @@ program multiinit
 
   include 'shmem.fh'
 
-  call start_pes(0)
-  call start_pes(0)
+  call shmem_init ()
+  call shmem_init ()
 
 end program multiinit

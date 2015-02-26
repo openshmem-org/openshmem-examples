@@ -56,7 +56,7 @@ main (void)
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 
-  target = (long *) shmalloc (8 * sizeof (*target));
+  target = (long *) shmem_malloc (8 * sizeof (*target));
 
   for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1)
     {
@@ -75,7 +75,7 @@ main (void)
 	}
     }
 
-  shfree (target);
+  shmem_free (target);
 
   return 0;
 }

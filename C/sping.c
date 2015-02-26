@@ -200,7 +200,7 @@ main (int argc, char *argv[])
   else if ((incWords = getSize (argv[optind++])) < 0)
     usage (progName);
 
-  if (!(rbuf = (long *) shmalloc (maxWords * sizeof (long))))
+  if (!(rbuf = (long *) shmem_malloc (maxWords * sizeof (long))))
     {
       perror ("Failed memory allocation");
       exit (1);
@@ -274,7 +274,7 @@ main (int argc, char *argv[])
   shmem_barrier_all ();
 
   free (tbuf);
-  shfree (rbuf);
+  shmem_free (rbuf);
 
   return 0;
 }

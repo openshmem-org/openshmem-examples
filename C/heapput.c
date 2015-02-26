@@ -65,7 +65,7 @@ main ()
   printf ("%d: dest = %ld\n", me, dest);
 
 #if 0
-  all = (int *) shmalloc (sizeof (*all));
+  all = (int *) shmem_malloc (sizeof (*all));
   assert (all != NULL);
 
   *all = 314159;
@@ -81,7 +81,7 @@ main ()
 
   printf ("%d: all = %d\n", me, *all);
 
-  shfree (all);
+  shmem_free (all);
 #endif
 
   return 0;

@@ -71,10 +71,10 @@ int main(int argc,char *argv[]){
 	float z;
 
 	init_it(&argc,&argv);
-	scounts=(int*)shmalloc(sizeof(int)*numnodes);
-	rcounts=(int*)shmalloc(sizeof(int)*numnodes);
-	sdisp=(int*)shmalloc(sizeof(int)*numnodes);
-	rdisp=(int*)shmalloc(sizeof(int)*numnodes);
+	scounts=(int*)shmem_malloc(sizeof(int)*numnodes);
+	rcounts=(int*)shmem_malloc(sizeof(int)*numnodes);
+	sdisp=(int*)shmem_malloc(sizeof(int)*numnodes);
+	rdisp=(int*)shmem_malloc(sizeof(int)*numnodes);
 	/*
 	! seed the random number generator with a
 	! different number on each processor

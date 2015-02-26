@@ -58,7 +58,7 @@ main ()
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 
-  target = (long *) shmalloc (sizeof (*target));
+  target = (long *) shmem_malloc (sizeof (*target));
 
   *target = me;
   shmem_barrier_all ();
@@ -71,7 +71,7 @@ main ()
       printf ("%d: target = %d, swapped = %d\n", me, *target, swapped_val);
     }
 
-  shfree (target);
+  shmem_free (target);
 
   return 0;
 }

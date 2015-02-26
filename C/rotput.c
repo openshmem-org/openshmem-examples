@@ -62,7 +62,7 @@ main (int argc, char **argv)
 
   src = nextpe;
 
-  dest = (int *) shmalloc (sizeof (*dest));
+  dest = (int *) shmem_malloc (sizeof (*dest));
   assert (dest != NULL);
 
   *dest = -1;
@@ -84,7 +84,7 @@ main (int argc, char **argv)
   printf ("\n");
 
   shmem_barrier_all ();
-  shfree (dest);
+  shmem_free (dest);
 
   return 0;
 }

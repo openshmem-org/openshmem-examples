@@ -35,24 +35,31 @@
  *
  */
 
-
-
-/*
- * just do a shmem_malloc and a free, no output to be expected
- */
+#include <stdio.h>
+#include <sys/utsname.h>
 
 #include <shmem.h>
 
 int
-main ()
+main (int argc, char **argv)
 {
-  long *x;
+  int me, npes;
+  struct utsname u;
+
+  uname (&u);
 
   shmem_init ();
 
-  x = (long *) shmem_malloc (sizeof (*x));
+  me = shmem_my_pe ();
+  npes = shmem_n_pes ();
 
-  shmem_free (x);
+  printf ("%s: %4d / %4d: Hello\n",
+          u.nodename, me, npes);
+
+  shmem_finalize();
+
+  printf ("%s: %4d / %4d: OpenSHMEM finalized, but can do other things\n",
+          u.nodename, me, npes);
 
   return 0;
 }

@@ -38,7 +38,7 @@ program version
 
   include 'shmem.fh'
 
-  integer :: num_pes, my_pe
+  integer :: shmem_n_pes, shmem_my_pe
 
   integer :: maj, min
   integer :: npes, me
@@ -47,8 +47,8 @@ program version
 
   call shmem_init ()
 
-  npes = num_pes ()
-  me = my_pe ()
+  npes = shmem_n_pes ()
+  me = shmem_my_pe ()
   call hostnm (h)
 
   call shmem_info_get_version (maj, min)

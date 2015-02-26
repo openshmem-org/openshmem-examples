@@ -49,8 +49,8 @@ program inc
 
   include 'shmem.fh'
 
-  call start_pes(0)
-  me = my_pe()
+  call shmem_init ()
+  me = shmem_my_pe()
 
   dst = 74
   call shmem_barrier_all()

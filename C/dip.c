@@ -38,7 +38,7 @@
 
 
 /*
- * double value put from PE 0 to PE 1 to shmalloc'ed variable
+ * double value put from PE 0 to PE 1 to shmem_malloc'ed variable
  * (Intended for runinng on 2 PEs)
  *
  */
@@ -62,7 +62,7 @@ main (void)
   shmem_init ();
   me = shmem_my_pe ();
 
-  f = (double *) shmalloc (sizeof (*f));
+  f = (double *) shmem_malloc (sizeof (*f));
 
   *f = PI;
   shmem_barrier_all ();
@@ -83,7 +83,7 @@ main (void)
 	      (fabs (*f - E) < epsilon) ? "OK" : "FAIL");
     }
 
-  shfree (f);
+  shmem_free (f);
   
   return 0;
 }

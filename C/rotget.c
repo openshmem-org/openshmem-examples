@@ -56,7 +56,7 @@ main (int argc, char **argv)
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 
-  src = (long *) shmalloc (sizeof (*src));
+  src = (long *) shmem_malloc (sizeof (*src));
 
   *src = me;
 

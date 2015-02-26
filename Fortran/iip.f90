@@ -47,8 +47,8 @@ program iip
   integer, save :: n
   integer :: me
 
-  call start_pes(0)
-  me = my_pe()
+  call shmem_init ()
+  me = shmem_my_pe()
 
   n = 3
 

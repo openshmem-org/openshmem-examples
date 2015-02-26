@@ -90,7 +90,7 @@ int main ( int argc, char *argv[] )
   //
   //  Initialize SHMEM.
   //
-  start_pes(0);
+  shmem_init();
   //
   //  Get the number of processes.
   //

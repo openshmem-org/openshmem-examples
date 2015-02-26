@@ -128,19 +128,19 @@ main (int argc, char **argv)
       src13 = (float) me;
 
 
-      dest1 = (short *) shmalloc (N * sizeof (*dest1));
-      dest2 = (int *) shmalloc (N * sizeof (*dest2));
-      dest3 = (long *) shmalloc (N * sizeof (*dest3));
-      dest4 = (long double *) shmalloc (N * sizeof (*dest4));
-      dest5 = (long long *) shmalloc (N * sizeof (*dest5));
-      dest6 = (double *) shmalloc (N * sizeof (*dest6));
-      dest7 = (float *) shmalloc (N * sizeof (*dest7));
-      dest8 = (char *) shmalloc (4 * sizeof (*dest8));
-      dest9 = (short *) shmalloc (sizeof (*dest9));
-      dest10 = (int *) shmalloc (sizeof (*dest10));
-      dest11 = (long *) shmalloc (sizeof (*dest11));
-      dest12 = (double *) shmalloc (sizeof (*dest12));
-      dest13 = (float *) shmalloc (sizeof (*dest13));
+      dest1 = (short *) shmem_malloc (N * sizeof (*dest1));
+      dest2 = (int *) shmem_malloc (N * sizeof (*dest2));
+      dest3 = (long *) shmem_malloc (N * sizeof (*dest3));
+      dest4 = (long double *) shmem_malloc (N * sizeof (*dest4));
+      dest5 = (long long *) shmem_malloc (N * sizeof (*dest5));
+      dest6 = (double *) shmem_malloc (N * sizeof (*dest6));
+      dest7 = (float *) shmem_malloc (N * sizeof (*dest7));
+      dest8 = (char *) shmem_malloc (4 * sizeof (*dest8));
+      dest9 = (short *) shmem_malloc (sizeof (*dest9));
+      dest10 = (int *) shmem_malloc (sizeof (*dest10));
+      dest11 = (long *) shmem_malloc (sizeof (*dest11));
+      dest12 = (double *) shmem_malloc (sizeof (*dest12));
+      dest13 = (float *) shmem_malloc (sizeof (*dest13));
 
       for (i = 0; i < N; i += 1)
 	{
@@ -396,19 +396,19 @@ main (int argc, char **argv)
 
       shmem_barrier_all ();
 
-      shfree (dest1);
-      shfree (dest2);
-      shfree (dest3);
-      shfree (dest4);
-      shfree (dest5);
-      shfree (dest6);
-      shfree (dest7);
-      shfree (dest8);
-      shfree (dest9);
-      shfree (dest10);
-      shfree (dest11);
-      shfree (dest12);
-      shfree (dest13);
+      shmem_free (dest1);
+      shmem_free (dest2);
+      shmem_free (dest3);
+      shmem_free (dest4);
+      shmem_free (dest5);
+      shmem_free (dest6);
+      shmem_free (dest7);
+      shmem_free (dest8);
+      shmem_free (dest9);
+      shmem_free (dest10);
+      shmem_free (dest11);
+      shmem_free (dest12);
+      shmem_free (dest13);
 
     }
   else

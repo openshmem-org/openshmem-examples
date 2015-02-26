@@ -43,7 +43,7 @@ program testbarrier
 
   include 'shmem.fh'
 
-  call start_pes(0)
+  call shmem_init ()
 
   call shmem_barrier_all
 

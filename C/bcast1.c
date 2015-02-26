@@ -56,13 +56,13 @@ main (void)
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 
-  source = (long *) shmalloc (npes * sizeof (*source));
+  source = (long *) shmem_malloc (npes * sizeof (*source));
   for (i = 0; i < npes; i += 1)
     {
       source[i] = i + 1;
     }
 
-  target = (long *) shmalloc (npes * sizeof (*target));
+  target = (long *) shmem_malloc (npes * sizeof (*target));
   for (i = 0; i < npes; i += 1)
     {
       target[i] = -999;
@@ -83,8 +83,8 @@ main (void)
 
   shmem_barrier_all ();
 
-  shfree (target);
-  shfree (source);
+  shmem_free (target);
+  shmem_free (source);
 
   return 0;
 }

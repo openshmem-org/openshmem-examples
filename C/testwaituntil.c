@@ -66,7 +66,7 @@ main (void)
   me = shmem_my_pe ();
   npes = shmem_n_pes ();
 
-  dest = (long *) shmalloc (sizeof (*dest));
+  dest = (long *) shmem_malloc (sizeof (*dest));
 
   *dest = 9L;
   shmem_barrier_all ();
