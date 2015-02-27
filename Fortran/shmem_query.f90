@@ -38,37 +38,37 @@
 !  PE<id> : Major ver=<..> (SUCCESS) Minor ver=<..>(SUCCESS) Name=<..> 
 !
 
-        program query
-        
-          implicit none
-          include 'shmem.fh'
-        
-          character (len=SHMEM_MAX_NAME_LEN) name
-          character (len=7) :: major_status, minor_status
-        
-          integer :: major_ver, minor_ver
-          integer :: me, shmem_my_pe
-        
-          call shmem_init ()
-          me = shmem_my_pe()
-        
-          call shmem_info_get_version(major_ver, minor_ver)
-          call shmem_info_get_name(name)
+program query
 
-          if (major_ver == SHMEM_MAJOR_VERSION) then
-            major_status = "SUCCESS"
-          else
-            major_status = "FAIL"
-          end if
+  implicit none
+  include 'shmem.fh'
 
-          if (minor_ver == SHMEM_MINOR_VERSION) then
-            minor_status = "SUCCESS"
-          else
-            minor_status = "FAIL"
-          end if
+  character (len=SHMEM_MAX_NAME_LEN) name
+  character (len=7) :: major_status, minor_status
 
-          print *,'PE',me,':Major ver=',major_ver,'(',major_status,')',&
-                          ' Minor ver=',minor_ver,'(',minor_status,')',&
-                          ' Name="',name
-        
-        end program
+  integer :: major_ver, minor_ver
+  integer :: me, shmem_my_pe
+
+  call shmem_init ()
+  me = shmem_my_pe()
+
+  call shmem_info_get_version(major_ver, minor_ver)
+  call shmem_info_get_name(name)
+
+  if (major_ver == SHMEM_MAJOR_VERSION) then
+     major_status = "SUCCESS"
+  else
+     major_status = "FAIL"
+  end if
+
+  if (minor_ver == SHMEM_MINOR_VERSION) then
+     minor_status = "SUCCESS"
+  else
+     minor_status = "FAIL"
+  end if
+
+  print *,'PE',me,':Major ver=',major_ver,'(',major_status,')',&
+       ' Minor ver=',minor_ver,'(',minor_status,')',&
+       ' Name="',name
+
+end program query
