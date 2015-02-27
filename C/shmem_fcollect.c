@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -37,7 +37,7 @@
 
 /*
  * This program shows how to use shmem_fcollect to simulate MPI_Alltoall
- * Each processor send/rec a different  random number to/from other processors.  
+ * Each processor send/rec a different  random number to/from other processors. 
  * Adopted/ported from source url: http://geco.mines.edu/workshop/class2/examples/mpi/c_ex07.c
  */
 
@@ -142,7 +142,7 @@ int main(int argc,char *argv[])
   shmem_barrier_all();
 
   // not possible, coz even though the rcounts[myid] will be different on each PE, the elements collected
-  // by PE0 from other PE's will be constant. 
+  // by PE0 from other PE's will be constant.
   //shmem_collect32(rray_full,sray,rcounts[myid],0,0,numnodes,psync);
 
 	printf("myid= %d rray=",myid);
