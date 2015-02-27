@@ -64,30 +64,41 @@ main ()
 
   shmem_init ();
   me = shmem_my_pe ();
-  
+
   shmem_info_get_version(&major_ver, &minor_ver);
   shmem_info_get_name(name);
 
   if ( major_ver == _SHMEM_MAJOR_VERSION )
-	  major_status = SUCCESS;
-  else 
-	  major_status = FAIL;
+    {
+      major_status = SUCCESS;
+    }
+  else
+    {
+      major_status = FAIL;
+    }
 
   if ( minor_ver == _SHMEM_MINOR_VERSION )
-	  minor_status = SUCCESS;
-  else 
-	  minor_status = FAIL;
+    {
+      minor_status = SUCCESS;
+    }
+  else
+    {
+      minor_status = FAIL;
+    }
 
   if ( strlen(name) < _SHMEM_MAX_NAME_LEN )
-	  name_status = SUCCESS;
+    {
+      name_status = SUCCESS;
+    }
   else
-	  name_status = UNDEF;
-
+    {
+      name_status = UNDEF;
+    }
 
   printf ("On PE%d:\n Major version = %d(%s)\n Minor Version = %d(%s)\n Name=\"%s\"(%s)\n", me,
-		 major_ver, major_status, 
-		 minor_ver, minor_status, 
-		 name, name_status);
+          major_ver, major_status,
+          minor_ver, minor_status,
+          name, name_status);
 
   return 0;
 }
