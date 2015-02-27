@@ -47,68 +47,84 @@
 
 
 /* globals */
-int numnodes,myid,mpi_err;
+int numnodes, myid, mpi_err;
 #define mpi_root 0
 /* end module  */
 
-void init_it(int  *argc, char ***argv);
-void seed_random(int  id);
-void random_number(float *z);
+void init_it (int *argc, char ***argv);
+void seed_random (int id);
+void random_number (float *z);
 
-void init_it(int  *argc, char ***argv) {
-    //mpi_err = MPI_Init(argc,argv);
-    //mpi_err = MPI_Comm_size( MPI_COMM_WORLD, &numnodes );
-    //mpi_err = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    start_pes(0);
-    numnodes = shmem_n_pes();
-    myid = shmem_my_pe();
+void
+init_it (int *argc, char ***argv)
+{
+  //mpi_err = MPI_Init(argc,argv);
+  //mpi_err = MPI_Comm_size( MPI_COMM_WORLD, &numnodes );
+  //mpi_err = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+  shmem_init ();
+  numnodes = shmem_n_pes ();
+  myid = shmem_my_pe ();
 }
 
-int main(int argc,char *argv[]){
-	int *sray,*rray;
-	int *sdisp,*scounts,*rdisp,*rcounts;
-	int ssize,rsize,i,k,j;
-	float z;
+int
+main (int argc, char *argv[])
+{
+  int *sray, *rray;
+  int *sdisp, *scounts, *rdisp, *rcounts;
+  int ssize, rsize, i, k, j;
+  float z;
 
-	init_it(&argc,&argv);
-	scounts=(int*)shmem_malloc(sizeof(int)*numnodes);
-	rcounts=(int*)shmem_malloc(sizeof(int)*numnodes);
-	sdisp=(int*)shmem_malloc(sizeof(int)*numnodes);
-	rdisp=(int*)shmem_malloc(sizeof(int)*numnodes);
-	/*
-	! seed the random number generator with a
-	! different number on each processor
-	*/
-	seed_random(myid);
-	/* find  data to send */
-	for(i=0;i<numnodes;i++){
-		random_number(&z);
-		scounts[i]=(int)(10.0*z)+1;
-	}
-	printf("-------myid= %d scounts=",myid);
-	for(i=0;i<numnodes;i++)
-		printf("%d ",scounts[i]);
-	printf("\n");
-	/* send the data */
-	//mpi_err = MPI_Alltoall(scounts,1,MPI_INT, rcounts,1,MPI_INT, MPI_COMM_WORLD);
-        shmem_barrier_all();
-        int other,j1;
-        for(j1=0;j1<numnodes;j1++){
-                shmem_int_put(&rcounts[myid],&scounts[j1],1,j1);
-        }
-        shmem_barrier_all();
-	printf("myid= %d rcounts=",myid);
-	for(i=0;i<numnodes;i++)
-		printf("%d ",rcounts[i]);
-	printf("\n");
-    return 0;
+  init_it (&argc, &argv);
+  scounts = (int *) shmem_malloc (sizeof (int) * numnodes);
+  rcounts = (int *) shmem_malloc (sizeof (int) * numnodes);
+  sdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
+  rdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
+  /*
+     ! seed the random number generator with a
+     ! different number on each processor
+   */
+  seed_random (myid);
+  /* find  data to send */
+  for (i = 0; i < numnodes; i++)
+    {
+      random_number (&z);
+      scounts[i] = (int) (10.0 * z) + 1;
+    }
+  printf ("-------myid= %d scounts=", myid);
+  for (i = 0; i < numnodes; i++)
+    {
+      printf ("%d ", scounts[i]);
+    }
+  printf ("\n");
+
+  /* send the data */
+  //mpi_err = MPI_Alltoall(scounts,1,MPI_INT, rcounts,1,MPI_INT, MPI_COMM_WORLD);
+  shmem_barrier_all ();
+  int other, j1;
+  for (j1 = 0; j1 < numnodes; j1++)
+    {
+      shmem_int_put (&rcounts[myid], &scounts[j1], 1, j1);
+    }
+  shmem_barrier_all ();
+  printf ("myid= %d rcounts=", myid);
+  for (i = 0; i < numnodes; i++)
+    {
+      printf ("%d ", rcounts[i]);
+    }
+  printf ("\n");
+  return 0;
 }
 
-void seed_random(int  id){
-	srand((unsigned int)id);
+void
+seed_random (int id)
+{
+  srand ((unsigned int) id);
 }
-void random_number(float *z){
-	int i;
-	i=rand();
-	*z=(float)i/RAND_MAX;
+
+void
+random_number (float *z)
+{
+  int i;
+  i = rand ();
+  *z = (float) i / RAND_MAX;
 }

@@ -5,9 +5,8 @@
 !
 ! Original copyright indicated at above URL.
 !
-! Changes here are to make it OpenSHMEM compliant (e.g. start_pes
-! instead of shmem_init, can't use shmem_my_pe as variable because it
-! conflicts with API).
+! Changes here are to make it OpenSHMEM compliant (e.g. can't use
+! shmem_my_pe as variable because it conflicts with API).
 !
 ! Requires "cray pointer" compatibility (e.g. -fcray-pointer with GCC).
 !
@@ -15,7 +14,7 @@
 program shpalloc_example
   implicit none
   include "shmem.fh"
-  integer :: shmem_n_pes    ! not declared in SGI header
+  integer :: shmem_n_pes    ! OpenSHMEM routine
 
   integer :: n_pes
   integer :: imax, jmax
@@ -29,7 +28,7 @@ end program shpalloc_example
 subroutine sub(imax,jmax)
   implicit none
   include "shmem.fh"
-  integer :: shmem_my_pe, shmem_n_pes    ! not declared in SGI header
+  integer :: shmem_my_pe, shmem_n_pes    ! OpenSHMEM routines
 
   integer imax, jmax
   integer :: mype, n_pes

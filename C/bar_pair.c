@@ -56,7 +56,7 @@ main()
     pSync[i] = _SHMEM_SYNC_VALUE;
   }
 
-  start_pes(0);
+  shmem_init();
   me = shmem_my_pe();
   npes = shmem_n_pes();
 
@@ -65,7 +65,7 @@ main()
   if (me == 0) {
     shmem_int_p(&x, 4, 1);
   }
-  
+
   if(me==2) {
     printf("Process %d going to sleep\n",me);
     sleep(3);
