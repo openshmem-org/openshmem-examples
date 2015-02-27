@@ -36,5 +36,10 @@
 
 .PHONY: all default clean
 
+SUBDIRS = C C++ Fortran
+
 all default clean:
-	for d in * ; do [ -d "$$d" ] && $(MAKE) -C "$$d" $@ ; done
+	for d in $(SUBDIRS) ; \
+	do \
+		$(MAKE) $(MFLAGS) -C "$$d" $@ ; \
+	done
