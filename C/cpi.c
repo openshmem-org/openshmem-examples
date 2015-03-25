@@ -79,7 +79,7 @@ int
 main (int argc, char *argv[])
 {
   int myid, numprocs, i;
-  double h, sum, x;
+  double h, sum;
   struct timeval startwtime, endwtime;
 
   shmem_init ();
@@ -110,7 +110,7 @@ main (int argc, char *argv[])
   /* A slightly better approach starts from large i and works back */
   for (i = myid + 1; i <= n; i += numprocs)
     {
-      x = h * ((double) i - 0.5);
+      const double x = h * ((double) i - 0.5);
       sum += f (x);
     }
   mypi = h * sum;
