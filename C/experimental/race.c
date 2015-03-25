@@ -33,8 +33,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
- */  
-   
+ */
+
 
 #include <stdio.h>
 
@@ -43,39 +43,38 @@
 int src = 42;
 
 int
-main()
+main ()
 {
-  int *dst;
-  int me;
+    int *dst;
+    int me;
 
-  shmem_init ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  dst = shmalloc (sizeof (*dst));
-  *dst = -999;
-  shmem_barrier_all ();
+    dst = shmalloc (sizeof (*dst));
+    *dst = -999;
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      int s;
-      shmemx_request_handle_t h;
+    if (me == 0) {
+        int s;
+        shmemx_request_handle_t h;
 
-      shmemx_int_put_nb (dst, &src, 1, 1, &h);
+        shmemx_int_put_nb (dst, &src, 1, 1, &h);
 
-      shmemx_test_req (h, &s);
+        shmemx_test_req (h, &s);
 
-      fprintf (stderr, "%d: before wait, s = %d\n", me, s);
+        fprintf (stderr, "%d: before wait, s = %d\n", me, s);
 
-      shmemx_wait_req (h);
+        shmemx_wait_req (h);
 
-      shmemx_test_req (h, &s);
+        shmemx_test_req (h, &s);
 
-      fprintf (stderr, "%d: after wait, s = %d\n", me, s);
+        fprintf (stderr, "%d: after wait, s = %d\n", me, s);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  fprintf (stderr, "%d: dst = %d\n", me, *dst);
+    fprintf (stderr, "%d: dst = %d\n", me, *dst);
 
-  return 0;
+    return 0;
 }

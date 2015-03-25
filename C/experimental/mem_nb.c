@@ -49,35 +49,36 @@
 int
 main (int argc, char **argv)
 {
-  int npes;
-  int me;
-  int *ip;
+    int npes;
+    int me;
+    int *ip;
 
-  shmem_init ();
-  npes = shmem_n_pes ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    npes = shmem_n_pes ();
+    me = shmem_my_pe ();
 
-  /* fire off allocation */
-  ip = shmalloc_nb (sizeof (*ip));
+    /* fire off allocation */
+    ip = shmalloc_nb (sizeof (*ip));
 
-  printf ("PE %d / %d does some other work in the middle of shmalloc_nb\n", me, npes);
+    printf ("PE %d / %d does some other work in the middle of shmalloc_nb\n",
+            me, npes);
 
-  /* now wait for all PEs to be ready */
-  shmem_barrier_all ();
+    /* now wait for all PEs to be ready */
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      /* PE 0 writes number of PEs to top PE */
-      shmem_int_p (ip, npes, npes - 1);
+    if (me == 0) {
+        /* PE 0 writes number of PEs to top PE */
+        shmem_int_p (ip, npes, npes - 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  printf ("PE %d  / %d says \"ip\" = %d\n", me, npes, *ip);
+    printf ("PE %d  / %d says \"ip\" = %d\n", me, npes, *ip);
 
-  shfree_nb (ip);
+    shfree_nb (ip);
 
-  printf ("PE %d / %d does some other work in the middle of shfree_nb\n", me, npes);
+    printf ("PE %d / %d does some other work in the middle of shfree_nb\n", me,
+            npes);
 
-  return 0;
+    return 0;
 }

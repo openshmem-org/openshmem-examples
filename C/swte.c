@@ -51,17 +51,17 @@ static int value;
 int
 main ()
 {
-  int old;
-  int me;
+    int old;
+    int me;
 
-  shmem_init ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  value = me + 1;
+    value = me + 1;
 
-  old = shmem_int_cswap (&value, value, -value, me);
+    old = shmem_int_cswap (&value, value, -value, me);
 
-  printf ("%d: value = %d, old = %d\n", me, value, old);
+    printf ("%d: value = %d, old = %d\n", me, value, old);
 
-  return 0;
+    return 0;
 }

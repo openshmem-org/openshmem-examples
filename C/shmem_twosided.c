@@ -51,66 +51,62 @@ int inmsg2 = 9999;
 void
 even ()
 {
-  int outmsg1 = 4;
-  int dest = 1;
-  int source = 1;
-  int rc, count, tag = 1;
-  //MPI_Status Stat;
-  //rc = MPI_Send(&outmsg1, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
-  //rc = MPI_Recv(&inmsg1, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
-  shmem_int_put (&inmsg2, &outmsg1, 1, dest);
+    int outmsg1 = 4;
+    int dest = 1;
+    int source = 1;
+    int rc, count, tag = 1;
+    // MPI_Status Stat;
+    // rc = MPI_Send(&outmsg1, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
+    // rc = MPI_Recv(&inmsg1, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
+    shmem_int_put (&inmsg2, &outmsg1, 1, dest);
 
-  if (inmsg1 == 9999)
-    {
-      shmem_int_wait (&inmsg1, 9999);
+    if (inmsg1 == 9999) {
+        shmem_int_wait (&inmsg1, 9999);
     }
 
-  printf ("Task %d: Received %d\n", rank, inmsg1);
+    printf ("Task %d: Received %d\n", rank, inmsg1);
 }
 
 void
 odd ()
 {
-  int dest = 0;
-  int source = 0;
-  int outmsg2 = 7;
-  int rc, count, tag = 1;
-  int temp2;
-  //MPI_Status Stat;
-  //rc = MPI_Recv(&inmsg2, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
-  //rc = MPI_Send(&outmsg2, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
+    int dest = 0;
+    int source = 0;
+    int outmsg2 = 7;
+    int rc, count, tag = 1;
+    int temp2;
+    // MPI_Status Stat;
+    // rc = MPI_Recv(&inmsg2, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
+    // rc = MPI_Send(&outmsg2, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
 
-  shmem_int_put (&inmsg1, &outmsg2, 1, dest);
+    shmem_int_put (&inmsg1, &outmsg2, 1, dest);
 
-  if (inmsg2 == 9999)
-    {
-      shmem_int_wait (&inmsg2, 9999);
+    if (inmsg2 == 9999) {
+        shmem_int_wait (&inmsg2, 9999);
     }
 
-  printf ("Task %d: Received %d\n", rank, inmsg2);
+    printf ("Task %d: Received %d\n", rank, inmsg2);
 }
 
 int
 main (int argc, char *argv[])
 {
 
-  //MPI_Init(&argc,&argv);
-  //MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
-  //MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    // MPI_Init(&argc,&argv);
+    // MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  shmem_init ();
-  rank = shmem_my_pe ();
-  numtasks = shmem_n_pes ();
+    shmem_init ();
+    rank = shmem_my_pe ();
+    numtasks = shmem_n_pes ();
 
-  if (rank == 0)
-    {
-      even ();
+    if (rank == 0) {
+        even ();
     }
-  else if (rank == 1)
-    {
-      odd ();
+    else if (rank == 1) {
+        odd ();
     }
 
-  //MPI_Finalize();
-  return 0;
+    // MPI_Finalize();
+    return 0;
 }

@@ -44,14 +44,13 @@
 int
 main ()
 {
-  shmem_init ();
+    shmem_init ();
 
-  if (shmem_my_pe () == 0)
-    {
-      shmem_int_put (NULL, NULL, 1, 1);
+    if (shmem_my_pe () == 0) {
+        shmem_int_put (NULL, NULL, 1, 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  return 0;
+    return 0;
 }

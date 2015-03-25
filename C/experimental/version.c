@@ -43,26 +43,23 @@
 int
 main (int argc, char **argv)
 {
-  int me, npes;
-  struct utsname u;
-  int maj, min;
-  char verstring [_SHMEM_MAX_NAME_LEN];
+    int me, npes;
+    struct utsname u;
+    int maj, min;
+    char verstring[_SHMEM_MAX_NAME_LEN];
 
-  uname (&u);
+    uname (&u);
 
-  shmem_init ();
+    shmem_init ();
 
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  shmem_info_get_version (& maj, & min);
-  shmem_info_get_name (verstring);
+    shmem_info_get_version (&maj, &min);
+    shmem_info_get_name (verstring);
 
-  printf ("%s: \"%s\" %d.%d on PE %4d of %4d\n",
-          u.nodename,
-          verstring,
-          maj, min,
-          me, npes);
+    printf ("%s: \"%s\" %d.%d on PE %4d of %4d\n",
+            u.nodename, verstring, maj, min, me, npes);
 
-  return 0;
+    return 0;
 }

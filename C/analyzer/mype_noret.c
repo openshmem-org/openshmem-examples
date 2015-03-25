@@ -44,14 +44,14 @@
 int
 main (int argc, char **argv)
 {
-  int me, npes;
+    int me, npes;
 
-  shmem_init ();
+    shmem_init ();
 
-  shmem_my_pe ();		/* expect to get warning here */
-  npes = shmem_n_pes ();
+    shmem_my_pe ();             /* expect to get warning here */
+    npes = shmem_n_pes ();
 
-  printf ("Hello from %d PEs\n", npes);
+    printf ("Hello from %d PEs\n", npes);
 
-  return 0;
+    return 0;
 }

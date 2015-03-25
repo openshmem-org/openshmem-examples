@@ -47,38 +47,38 @@ long pSync[_SHMEM_BARRIER_SYNC_SIZE];
 int x = 10101;
 
 int
-main()
+main ()
 {
-  int me, npes;
-  int i;
+    int me, npes;
+    int i;
 
-  for (i = 0; i < _SHMEM_BARRIER_SYNC_SIZE; i += 1) {
-    pSync[i] = _SHMEM_SYNC_VALUE;
-  }
+    for (i = 0; i < _SHMEM_BARRIER_SYNC_SIZE; i += 1) {
+        pSync[i] = _SHMEM_SYNC_VALUE;
+    }
 
-  shmem_init();
-  me = shmem_my_pe();
-  npes = shmem_n_pes();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  shmem_barrier_all();
+    shmem_barrier_all ();
 
-  if (me == 0) {
-    shmem_int_p(&x, 4, 1);
-  }
+    if (me == 0) {
+        shmem_int_p (&x, 4, 1);
+    }
 
-  if(me==2) {
-    printf("Process %d going to sleep\n",me);
-    sleep(3);
-    printf("Process %d out from sleep\n",me);
-  }
+    if (me == 2) {
+        printf ("Process %d going to sleep\n", me);
+        sleep (3);
+        printf ("Process %d out from sleep\n", me);
+    }
 
-  printf("Process %d before barrier\n",me);
-  if(me == 2 || me == 3) {
-    shmem_barrier(2, 0, 2,  pSync);
-  }
-  printf("Process %d after barrier\n",me);
+    printf ("Process %d before barrier\n", me);
+    if (me == 2 || me == 3) {
+        shmem_barrier (2, 0, 2, pSync);
+    }
+    printf ("Process %d after barrier\n", me);
 
-  printf("%d: x = %d\n", me, x);
+    printf ("%d: x = %d\n", me, x);
 
-  return 0;
+    return 0;
 }

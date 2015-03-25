@@ -42,26 +42,25 @@
 int
 main (void)
 {
-  int me, npes;
+    int me, npes;
 
-  shmem_init ();
+    shmem_init ();
 
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  if (me == 0)
-    {
-      FILE *fp = fopen ("input.txt", "r");
+    if (me == 0) {
+        FILE *fp = fopen ("input.txt", "r");
 
-      if (fp == NULL)
-	{			/* Input file required by program is not available */
-	  shmem_global_exit (99);	/* use easy to spot exit status */
-	}
+        if (fp == NULL) {       /* Input file required by program is not
+                                   available */
+            shmem_global_exit (99); /* use easy to spot exit status */
+        }
 
-      /* do something with the file */
+        /* do something with the file */
 
-      fclose (fp);
+        fclose (fp);
     }
 
-  return 0;
+    return 0;
 }

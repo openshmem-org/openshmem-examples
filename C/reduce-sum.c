@@ -49,7 +49,7 @@
 #include <shmem.h>
 
 #ifndef MAX
-# define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 
 /*
@@ -66,37 +66,36 @@ int dst;
 int
 main ()
 {
-  int i;
-  long *pSync;
-  int *pWrk;
-  int pWrk_size;
+    int i;
+    long *pSync;
+    int *pWrk;
+    int pWrk_size;
 
-  shmem_init ();
+    shmem_init ();
 
-  pWrk_size = MAX (nred/2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
-  pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
-  assert (pWrk != NULL);
+    pWrk_size = MAX (nred / 2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
+    pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
+    assert (pWrk != NULL);
 
-  pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
-  assert (pSync != NULL);
+    pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
+    assert (pSync != NULL);
 
-  for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
-    {
-      pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = _SHMEM_SYNC_VALUE;
     }
 
-  src = shmem_my_pe () + 1;
-  shmem_barrier_all ();
+    src = shmem_my_pe () + 1;
+    shmem_barrier_all ();
 
-  shmem_int_sum_to_all (&dst, &src, nred, 0, 0, 4, pWrk, pSync);
+    shmem_int_sum_to_all (&dst, &src, nred, 0, 0, 4, pWrk, pSync);
 
-  printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
-  printf (" %d", dst);
-  printf ("\n");
+    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
+    printf (" %d", dst);
+    printf ("\n");
 
-  shmem_barrier_all ();
-  shmem_free (pSync);
-  shmem_free (pWrk);
+    shmem_barrier_all ();
+    shmem_free (pSync);
+    shmem_free (pWrk);
 
-  return 0;
+    return 0;
 }

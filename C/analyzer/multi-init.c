@@ -48,10 +48,10 @@
 int
 main (int argc, char **argv)
 {
-  shmem_init ();
-  shmem_init ();
+    shmem_init ();
+    shmem_init ();
 
-  printf ("Hello from multi-init test\n");
+    printf ("Hello from multi-init test\n");
 
-  return 0;
+    return 0;
 }

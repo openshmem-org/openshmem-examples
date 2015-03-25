@@ -33,8 +33,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
- */  
-   
+ */
+
 
 
 /*
@@ -51,33 +51,32 @@
 int
 main (int argc, char **argv)
 {
-  int i;
-  int nextpe;
-  int me, npes;
-  long src[N];
-  long *dest;
-  shmemx_request_handle_t handle;
+    int i;
+    int nextpe;
+    int me, npes;
+    long src[N];
+    long *dest;
+    shmemx_request_handle_t handle;
 
-  shmem_init ();
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  for (i = 0; i < N; i += 1)
-    {
-      src[i] = (long) me;
+    for (i = 0; i < N; i += 1) {
+        src[i] = (long) me;
     }
 
-  dest = (long *) shmalloc (N * sizeof (*dest));
+    dest = (long *) shmalloc (N * sizeof (*dest));
 
-  nextpe = (me + 1) % npes;
+    nextpe = (me + 1) % npes;
 
-  shmemx_long_put_nb (dest, src, N, nextpe, &handle);
+    shmemx_long_put_nb (dest, src, N, nextpe, &handle);
 
-  shmemx_wait_req (handle);
+    shmemx_wait_req (handle);
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  shfree (dest);
+    shfree (dest);
 
-  return 0;
+    return 0;
 }

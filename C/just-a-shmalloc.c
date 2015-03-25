@@ -46,13 +46,13 @@
 int
 main ()
 {
-  long *x;
+    long *x;
 
-  shmem_init ();
+    shmem_init ();
 
-  x = (long *) shmem_malloc (sizeof (*x));
+    x = (long *) shmem_malloc (sizeof (*x));
 
-  shmem_free (x);
+    shmem_free (x);
 
-  return 0;
+    return 0;
 }

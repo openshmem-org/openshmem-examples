@@ -49,26 +49,24 @@ int x = 10101;
 int
 main ()
 {
-  int me, npes;
-  int i;
+    int me, npes;
+    int i;
 
-  for (i = 0; i < _SHMEM_BARRIER_SYNC_SIZE; i += 1)
-    {
-      pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < _SHMEM_BARRIER_SYNC_SIZE; i += 1) {
+        pSync[i] = _SHMEM_SYNC_VALUE;
     }
 
-  shmem_init ();
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  if (me == 0)
-    {
-      shmem_int_p (&x, 4, 1);
+    if (me == 0) {
+        shmem_int_p (&x, 4, 1);
     }
 
-  shmem_barrier (0, 0, npes, pSync);
+    shmem_barrier (0, 0, npes, pSync);
 
-  printf ("%d: x = %d\n", me, x);
+    printf ("%d: x = %d\n", me, x);
 
-  return 0;
+    return 0;
 }

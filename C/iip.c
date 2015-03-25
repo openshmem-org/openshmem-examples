@@ -52,28 +52,26 @@ int n;
 int
 main (void)
 {
-  int me;
+    int me;
 
-  shmem_init ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  n = 3;
+    n = 3;
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      shmem_int_p (&n, 42, 1);
+    if (me == 0) {
+        shmem_int_p (&n, 42, 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  /* now check */
+    /* now check */
 
-  if (me == 1)
-    {
-      printf ("PE %d: n = %d, %s\n", me, n, (n == 42) ? "OK" : "FAIL");
+    if (me == 1) {
+        printf ("PE %d: n = %d, %s\n", me, n, (n == 42) ? "OK" : "FAIL");
     }
 
-  return 0;
+    return 0;
 }

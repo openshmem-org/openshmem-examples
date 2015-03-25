@@ -48,17 +48,17 @@
 int
 main ()
 {
-  int *p;
+    int *p;
 
-  shmem_init ();
+    shmem_init ();
 
-  p = shmemx_malloc (64 * sizeof (*p));
+    p = shmemx_malloc (64 * sizeof (*p));
 
-  assert (p != NULL);
+    assert (p != NULL);
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  shmemx_free (p);
+    shmemx_free (p);
 
-  return 0;
+    return 0;
 }

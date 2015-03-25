@@ -53,42 +53,41 @@
 int
 main (int argc, char **argv)
 {
-  long src;
-  long *dest;
-  int me, npes;
-  struct utsname u;
-  int su;
+    long src;
+    long *dest;
+    int me, npes;
+    struct utsname u;
+    int su;
 
-  su = uname (&u);
-  assert (su == 0);
+    su = uname (&u);
+    assert (su == 0);
 
-  shmem_init ();
+    shmem_init ();
 
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  {
-    time_t now;
-    time (&now);
-    srand (now + getpid ());
-  }
-
-  src = rand () % 1000;
-
-  dest = (long *) shmem_malloc (sizeof (*dest));
-  *dest = -1;
-  shmem_barrier_all ();
-
-  if (me == 0)
     {
-      int other_pe = rand () % npes;
-      printf ("%d: -> %d, sending value %ld\n", me, other_pe, src);
-      shmem_long_put (dest, &src, 1, other_pe);
+        time_t now;
+        time (&now);
+        srand (now + getpid ());
     }
 
-  shmem_barrier_all ();
+    src = rand () % 1000;
 
-  printf ("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
+    dest = (long *) shmem_malloc (sizeof (*dest));
+    *dest = -1;
+    shmem_barrier_all ();
 
-  return 0;
+    if (me == 0) {
+        int other_pe = rand () % npes;
+        printf ("%d: -> %d, sending value %ld\n", me, other_pe, src);
+        shmem_long_put (dest, &src, 1, other_pe);
+    }
+
+    shmem_barrier_all ();
+
+    printf ("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
+
+    return 0;
 }

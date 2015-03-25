@@ -56,25 +56,24 @@ int dst;
 int
 main ()
 {
-  int i;
-  int me;
-  int npes;
+    int i;
+    int me;
+    int npes;
 
-  for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
-    {
-      pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = _SHMEM_SYNC_VALUE;
     }
 
-  shmem_init ();
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  src = me + 1;
-  shmem_barrier_all ();
+    src = me + 1;
+    shmem_barrier_all ();
 
-  shmem_int_or_to_all (&dst, &src, 1, 0, 0, npes, pWrk, pSync);
+    shmem_int_or_to_all (&dst, &src, 1, 0, 0, npes, pWrk, pSync);
 
-  printf ("%d/%d   dst = %d\n", me, npes, dst);
+    printf ("%d/%d   dst = %d\n", me, npes, dst);
 
-  return 0;
+    return 0;
 }

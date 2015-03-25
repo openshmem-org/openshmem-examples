@@ -49,25 +49,24 @@
 int
 main (int argc, char **argv)
 {
-  int dest;
-  int src;
-  int me, npes;
+    int dest;
+    int src;
+    int me, npes;
 
-  shmem_init ();
+    shmem_init ();
 
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  src = 42;
+    src = 42;
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      shmem_int_put (&dest, &src, 1, 1);
+    if (me == 0) {
+        shmem_int_put (&dest, &src, 1, 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  return 0;
+    return 0;
 }

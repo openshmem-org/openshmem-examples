@@ -45,27 +45,25 @@
 
 #include <shmem.h>
 
-int counter = 0;		/* symmetric */
+int counter = 0;                /* symmetric */
 
 int
 main (int argc, char *argv[])
 {
-  int me;
+    int me;
 
-  shmem_init ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  if (me > 0)
-    {
-      shmem_int_add (&counter, me, 0);
+    if (me > 0) {
+        shmem_int_add (&counter, me, 0);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      printf ("counter = %d\n", counter);
+    if (me == 0) {
+        printf ("counter = %d\n", counter);
     }
 
-  return 0;
+    return 0;
 }

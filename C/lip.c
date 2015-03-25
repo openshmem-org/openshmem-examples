@@ -49,30 +49,29 @@
 int
 main (void)
 {
-  long *f;
-  int me;
+    long *f;
+    int me;
 
-  shmem_init ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  f = (long *) shmem_malloc (sizeof (*f));
+    f = (long *) shmem_malloc (sizeof (*f));
 
-  *f = 3;
-  shmem_barrier_all ();
+    *f = 3;
+    shmem_barrier_all ();
 
-  printf ("PE %d: before put, f = %d\n", me, *f);
+    printf ("PE %d: before put, f = %d\n", me, *f);
 
-  if (me == 0)
-    {
-      shmem_long_p (f, 42, 1);
+    if (me == 0) {
+        shmem_long_p (f, 42, 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  if (me == 1)
-    {
-      printf ("PE %d:  after put, f = %d, %s\n", me, *f, (*f == 42) ? "OK" : "FAIL");
+    if (me == 1) {
+        printf ("PE %d:  after put, f = %d, %s\n", me, *f,
+                (*f == 42) ? "OK" : "FAIL");
     }
 
-  return 0;
+    return 0;
 }

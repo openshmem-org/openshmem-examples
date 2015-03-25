@@ -53,40 +53,38 @@
 int
 main (int argc, char **argv)
 {
-  int i;
-  int nextpe;
-  int me, npes;
-  long src[N];
-  long *dest;
-  struct utsname u;
-  int su;
+    int i;
+    int nextpe;
+    int me, npes;
+    long src[N];
+    long *dest;
+    struct utsname u;
+    int su;
 
-  su = uname (&u);
-  assert (su == 0);
+    su = uname (&u);
+    assert (su == 0);
 
-  shmem_init ();
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  for (i = 0; i < N; i += 1)
-    {
-      src[i] = (long) me;
+    for (i = 0; i < N; i += 1) {
+        src[i] = (long) me;
     }
 
-  dest = (long *) shmem_malloc (N * sizeof (*dest));
+    dest = (long *) shmem_malloc (N * sizeof (*dest));
 
-  nextpe = (me + 1) % npes;
+    nextpe = (me + 1) % npes;
 
-  shmem_long_put (dest, src, N, nextpe);
+    shmem_long_put (dest, src, N, nextpe);
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  for (i = 0; i < N; i += 1)
-    {
-      printf ("%d @ %s: dest[%d] = %ld\n", me, u.nodename, i, dest[i]);
+    for (i = 0; i < N; i += 1) {
+        printf ("%d @ %s: dest[%d] = %ld\n", me, u.nodename, i, dest[i]);
     }
 
-  shmem_free (dest);
+    shmem_free (dest);
 
-  return 0;
+    return 0;
 }

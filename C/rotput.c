@@ -49,42 +49,40 @@
 int
 main (int argc, char **argv)
 {
-  int nextpe;
-  int me, npes;
-  int src;
-  int *dest;
+    int nextpe;
+    int me, npes;
+    int src;
+    int *dest;
 
-  shmem_init ();
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  nextpe = (me + 1) % npes;
+    nextpe = (me + 1) % npes;
 
-  src = nextpe;
+    src = nextpe;
 
-  dest = (int *) shmem_malloc (sizeof (*dest));
-  assert (dest != NULL);
+    dest = (int *) shmem_malloc (sizeof (*dest));
+    assert (dest != NULL);
 
-  *dest = -1;
-  shmem_barrier_all ();
+    *dest = -1;
+    shmem_barrier_all ();
 
-  shmem_int_put (dest, &src, 1, nextpe);
+    shmem_int_put (dest, &src, 1, nextpe);
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  printf ("%4d: got %4d: ", me, *dest);
-  if (*dest == me)
-    {
-      printf ("CORRECT");
+    printf ("%4d: got %4d: ", me, *dest);
+    if (*dest == me) {
+        printf ("CORRECT");
     }
-  else
-    {
-      printf ("WRONG, expected %d", me);
+    else {
+        printf ("WRONG, expected %d", me);
     }
-  printf ("\n");
+    printf ("\n");
 
-  shmem_barrier_all ();
-  shmem_free (dest);
+    shmem_barrier_all ();
+    shmem_free (dest);
 
-  return 0;
+    return 0;
 }

@@ -58,47 +58,41 @@
 int
 main ()
 {
-  char *major_status, *minor_status, *name_status, name[_SHMEM_MAX_NAME_LEN];
-  int major_ver, minor_ver;
-  int me;
+    char *major_status, *minor_status, *name_status, name[_SHMEM_MAX_NAME_LEN];
+    int major_ver, minor_ver;
+    int me;
 
-  shmem_init ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  shmem_info_get_version(&major_ver, &minor_ver);
-  shmem_info_get_name(name);
+    shmem_info_get_version (&major_ver, &minor_ver);
+    shmem_info_get_name (name);
 
-  if ( major_ver == _SHMEM_MAJOR_VERSION )
-    {
-      major_status = SUCCESS;
+    if (major_ver == _SHMEM_MAJOR_VERSION) {
+        major_status = SUCCESS;
     }
-  else
-    {
-      major_status = FAIL;
+    else {
+        major_status = FAIL;
     }
 
-  if ( minor_ver == _SHMEM_MINOR_VERSION )
-    {
-      minor_status = SUCCESS;
+    if (minor_ver == _SHMEM_MINOR_VERSION) {
+        minor_status = SUCCESS;
     }
-  else
-    {
-      minor_status = FAIL;
+    else {
+        minor_status = FAIL;
     }
 
-  if ( strlen(name) < _SHMEM_MAX_NAME_LEN )
-    {
-      name_status = SUCCESS;
+    if (strlen (name) < _SHMEM_MAX_NAME_LEN) {
+        name_status = SUCCESS;
     }
-  else
-    {
-      name_status = UNDEF;
+    else {
+        name_status = UNDEF;
     }
 
-  printf ("On PE%d:\n Major version = %d(%s)\n Minor Version = %d(%s)\n Name=\"%s\"(%s)\n", me,
-          major_ver, major_status,
-          minor_ver, minor_status,
-          name, name_status);
+    printf
+        ("On PE%d:\n Major version = %d(%s)\n Minor Version = %d(%s)\n Name=\"%s\"(%s)\n",
+         me, major_ver, major_status, minor_ver, minor_status, name,
+         name_status);
 
-  return 0;
+    return 0;
 }

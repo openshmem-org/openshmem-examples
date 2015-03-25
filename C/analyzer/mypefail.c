@@ -44,11 +44,11 @@
 int
 main (int argc, char **argv)
 {
-  int me, npes;
+    int me, npes;
 
-  me = shmem_my_pe ();
+    me = shmem_my_pe ();
 
-  printf ("Hello from PE %d\n", me);
+    printf ("Hello from PE %d\n", me);
 
-  return 0;
+    return 0;
 }
