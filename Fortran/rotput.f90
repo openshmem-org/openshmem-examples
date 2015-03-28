@@ -41,6 +41,8 @@
  
 program rotput
 
+  integer :: shmem_my_pe, shmem_n_pes
+
   integer, save :: dest
   integer src
   integer me, npes
@@ -54,9 +56,9 @@ program rotput
 
   nextpe = MOD(me + 1, npes)
 
-  src = nextpe;
+  src = nextpe
 
-  dest = -1;
+  dest = -1
   call shmem_barrier_all()
 
   call shmem_integer_put(dest, src, 1, nextpe)
