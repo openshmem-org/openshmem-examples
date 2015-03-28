@@ -41,6 +41,8 @@
 
 program rotput
 
+  integer :: shmem_my_pe, shmem_n_pes
+
   integer, save :: dest
   integer src
   integer me, npes
@@ -49,19 +51,19 @@ program rotput
   include 'shmem.fh'
 
   call shmem_init ()
-  me = shmem_my_pe()
-  npes = shmem_n_pes()
+  me = shmem_my_pe ()
+  npes = shmem_n_pes ()
 
   nextpe = MOD(me + 1, npes)
 
-  src = nextpe;
+  src = nextpe
 
-  dest = -1;
-  call shmem_barrier_all()
+  dest = -1
+  call shmem_barrier_all ()
 
-  call shmem_integer_put(dest, src, 1, nextpe)
+  call shmem_integer_put (dest, src, 1, nextpe)
 
-  call shmem_barrier_all()
+  call shmem_barrier_all ()
 
   if (dest == me) then
      print *, me, ': got ', dest, 'CORRECT'
