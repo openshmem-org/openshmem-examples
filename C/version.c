@@ -61,5 +61,7 @@ main (int argc, char **argv)
     printf ("%s: \"%s\" %d.%d on PE %4d of %4d\n",
             u.nodename, verstring, maj, min, me, npes);
 
+    shmem_finalize ();
+
     return 0;
 }

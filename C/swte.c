@@ -63,5 +63,7 @@ main ()
 
     printf ("%d: value = %d, old = %d\n", me, value, old);
 
+    shmem_finalize ();
+
     return 0;
 }

@@ -275,6 +275,7 @@ main (int argc, char *argv[])
 
   free (tbuf);
   shmem_free (rbuf);
+  shmem_finalize ();
 
   return 0;
 }

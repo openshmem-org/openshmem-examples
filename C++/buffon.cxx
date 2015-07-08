@@ -193,6 +193,8 @@ main (int argc, char *argv[])
         cout << "  Normal end of execution.\n";
     }
 
+    shmem_finalize ();
+
     return 0;
 }
 

@@ -56,4 +56,6 @@ program whoami
 
   write (*, "(A16, A, I4, A, I4)") h, 'I am ', me, ' of ', npes
 
+  call shmem_finalize()
+
 end program whoami

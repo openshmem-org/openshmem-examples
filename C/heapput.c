@@ -82,5 +82,7 @@ main ()
     shmem_free (all);
 #endif
 
+    shmem_finalize ();
+
     return 0;
 }

@@ -76,9 +76,11 @@ main ()
 
     printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
     for (i = 0; i < N; i += 1) {
-        printf (" %d", dst[i]);
+        printf (" %ld", dst[i]);
     }
     printf ("\n");
+
+    shmem_finalize ();
 
     return 0;
 }

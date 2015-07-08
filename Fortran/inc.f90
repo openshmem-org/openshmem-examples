@@ -73,5 +73,6 @@ program inc
      end if
   end if
 
+  call shmem_finalize()
 
 end program inc

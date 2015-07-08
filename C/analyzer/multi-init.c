@@ -53,5 +53,7 @@ main (int argc, char **argv)
 
     printf ("Hello from multi-init test\n");
 
+    shmem_finalize ();
+
     return 0;
 }

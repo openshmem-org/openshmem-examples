@@ -57,4 +57,6 @@ program mem
 
   call shpdeallc(addr, errcode, abort)
 
+  call shmem_finalize()
+
 end program mem

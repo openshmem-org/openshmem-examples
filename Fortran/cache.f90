@@ -59,4 +59,6 @@ program cachetest
 
   call shmem_udcflush_line (var)
 
+  call shmem_finalize ()
+
 end program cachetest

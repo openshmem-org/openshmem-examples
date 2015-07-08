@@ -67,10 +67,12 @@ main ()
 
     if (me & 1) {
         swapped_val = shmem_long_swap (target, new_val, (me + 1) % npes);
-        printf ("%d: target = %d, swapped = %d\n", me, *target, swapped_val);
+        printf ("%d: target = %ld, swapped = %ld\n", me, *target, swapped_val);
     }
 
     shmem_free (target);
+
+    shmem_finalize ();
 
     return 0;
 }

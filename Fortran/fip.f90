@@ -77,4 +77,6 @@ program fip
      end if
   end if
 
+  call shmem_finalize()
+
 end program fip

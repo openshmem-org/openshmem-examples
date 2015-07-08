@@ -57,5 +57,7 @@ main ()
         printf ("pe %d was first\n", me);
     }
 
+    shmem_finalize ();
+
     return 0;
 }

@@ -23,6 +23,7 @@ program shpalloc_example
   imax  = n_pes
   jmax  = n_pes
   call sub(imax,jmax)
+  call shmem_finalize()
 end program shpalloc_example
 
 subroutine sub(imax,jmax)

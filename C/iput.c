@@ -73,5 +73,7 @@ main ()
     }
     shmem_barrier_all ();       /* sync before exiting */
 
+    shmem_finalize ();
+
     return 0;
 }

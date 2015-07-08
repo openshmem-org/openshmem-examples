@@ -68,5 +68,7 @@ main (int argc, char **argv)
 
     printf ("%d : %ld\n", me, dest);
 
+    shmem_finalize ();
+
     return 0;
 }

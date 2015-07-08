@@ -369,5 +369,8 @@ main (int argc, char **argv)
     else {
         printf ("Number of PEs must be > 1 to test shmem get, test skipped\n");
     }
+
+    shmem_finalize ();
+
     return 0;
 }

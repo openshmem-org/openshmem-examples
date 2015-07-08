@@ -128,4 +128,6 @@ program main
 
 30 stop
 
+  call shmem_finalize()
+
 end program main

@@ -184,5 +184,7 @@ main (int argc, char *argv[])
     shmem_free (lock);
     shmem_free (table);
 
+    shmem_finalize ();
+
     return 0;
 }

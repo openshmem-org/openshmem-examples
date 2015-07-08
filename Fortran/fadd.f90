@@ -70,5 +70,5 @@ program fadd
         print *, 'FAIL'
      end if
   end if
-
+  call shmem_finalize()
 end program fadd

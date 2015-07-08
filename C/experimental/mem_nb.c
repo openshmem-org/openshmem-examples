@@ -80,5 +80,7 @@ main (int argc, char **argv)
     printf ("PE %d / %d does some other work in the middle of shfree_nb\n", me,
             npes);
 
+    shmem_finalize ();
+
     return 0;
 }

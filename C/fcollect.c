@@ -90,5 +90,7 @@ main (void)
 
     shmem_free (dst);
 
+    shmem_finalize ();
+
     return 0;
 }

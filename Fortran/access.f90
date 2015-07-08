@@ -84,4 +84,6 @@ program a
 
   print *, me, ': shmem_ptr returned', p
 
+  call shmem_finalize()
+
 end program

@@ -61,7 +61,7 @@ show_dst (char *tag)
     int i;
     printf ("%8s: dst[%d/%d] = ", tag, me, npes);
     for (i = 0; i < DST_SIZE; i += 1) {
-        printf ("%d ", dst[i]);
+        printf ("%ld ", dst[i]);
     }
     printf ("\n");
 }
@@ -88,6 +88,8 @@ main (void)
     shmem_fcollect64 (dst, src, 2, 0, 0, npes, pSync);
 
     show_dst ("AFTER");
+
+    shmem_finalize ();
 
     return 0;
 }

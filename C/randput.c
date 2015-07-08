@@ -89,5 +89,7 @@ main (int argc, char **argv)
 
     printf ("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
 
+    shmem_finalize ();
+
     return 0;
 }

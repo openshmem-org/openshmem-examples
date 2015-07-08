@@ -61,5 +61,7 @@ program globalexit
 
     close (2)
   end if
+  
+  call shmem_finalize()
 
 end program globalexit

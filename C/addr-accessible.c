@@ -91,5 +91,7 @@ main (int argc, char *argv[])
 
     shmem_free (shm_target);
 
+    shmem_finalize ();
+    
     return 0;
 }

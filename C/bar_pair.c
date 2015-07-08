@@ -80,5 +80,7 @@ main ()
 
     printf ("%d: x = %d\n", me, x);
 
+    shmem_finalize ();
+ 
     return 0;
 }

@@ -155,6 +155,7 @@ main (int argc, char *argv[])
         printf ("%d ", rray[i]);
     printf ("\n");
     // mpi_err = MPI_Finalize();
+    shmem_finalize ();
     return 0;
 }
 

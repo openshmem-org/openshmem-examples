@@ -55,6 +55,7 @@ main (int argc, char **argv)
 
     printf ("%s: Hello from PE %4d of %4d\n", u.nodename, me, npes);
 
+    shmem_finalize ();
 
     return 0;
 }

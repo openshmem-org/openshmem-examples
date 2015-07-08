@@ -47,4 +47,6 @@ program testbarrier
 
   call shmem_barrier_all
 
+  call shmem_finalize()
+
 end program testbarrier

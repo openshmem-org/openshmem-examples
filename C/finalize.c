@@ -60,5 +60,7 @@ main (int argc, char **argv)
     printf ("%s: %4d / %4d: OpenSHMEM finalized, but can do other things\n",
             u.nodename, me, npes);
 
+    shmem_finalize ();
+
     return 0;
 }

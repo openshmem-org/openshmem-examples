@@ -89,5 +89,7 @@ main (void)
 
     show_dst ("AFTER");
 
+    shmem_finalize ();
+
     return 0;
 }

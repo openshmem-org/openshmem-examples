@@ -108,6 +108,7 @@ main (int argc, char *argv[])
         printf ("%d ", rcounts[i]);
     }
     printf ("\n");
+    shmem_finalize ();
     return 0;
 }
 

@@ -50,5 +50,7 @@ main (int argc, char **argv)
 
     printf ("Hello from PE %d\n", me);
 
+    shmem_finalize ();
+
     return 0;
 }

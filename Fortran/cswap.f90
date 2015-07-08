@@ -56,5 +56,5 @@ program cswap
   if (oldval == -1) then
      print *, 'pe ', me, ' was first'
   end if
-
+  call shmem_finalize()
 end program cswap

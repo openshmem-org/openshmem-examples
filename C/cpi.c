@@ -134,5 +134,7 @@ main (int argc, char *argv[])
       fflush (stdout);
     }
 
+  shmem_finalize ();
+
   return 0;
 }

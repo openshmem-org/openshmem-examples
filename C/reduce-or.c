@@ -75,5 +75,7 @@ main ()
 
     printf ("%d/%d   dst = %d\n", me, npes, dst);
 
+    shmem_finalize ();
+
     return 0;
 }

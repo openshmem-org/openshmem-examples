@@ -52,13 +52,15 @@ main (int argc, char *argv[])
     npes = shmem_n_pes ();
 
     /* deliberately pass different values */
-    x = (long *) shmalloc ((me + 1) * 2);
+    x = (long *) shmem_malloc ((me + 1) * 2);
     if (x == (long *) NULL) {
-        fprintf (stderr, "%d/%d: %s\n", me, npes, sherror ());
+        fprintf (stderr, "%d/%d: %d\n", me, npes, sherror ());
         return 1;
     }
 
-    shfree (x);
+    shmem_free (x);
+
+    shmem_finalize ();
 
     return 0;
 }

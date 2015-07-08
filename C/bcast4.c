@@ -81,5 +81,7 @@ main (void)
 
     shmem_free (target);
 
+    shmem_finalize ();
+
     return 0;
 }

@@ -45,5 +45,6 @@ program multiinit
 
   call shmem_init ()
   call shmem_init ()
+  call shmem_finalize()
 
 end program multiinit

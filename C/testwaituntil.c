@@ -76,13 +76,13 @@ main (void)
         for (i = 0; i < 4; i += 1) {
             long src = 9L;
             shmem_long_put (dest, &src, 1, 1);
-            fprintf (stderr, "PE %d put %d\n", me, src);
+            fprintf (stderr, "PE %d put %ld\n", me, src);
         }
         fprintf (stderr, "----------------------------\n");
         for (i = 0; i < 1000; i += 1) {
             long src = rand () % 10;
             shmem_long_put (dest, &src, 1, 1);
-            fprintf (stderr, "PE %d put %d\n", me, src);
+            fprintf (stderr, "PE %d put %ld\n", me, src);
             if (src != 9L)
                 break;
         }
@@ -92,8 +92,10 @@ main (void)
 
     if (me == 1) {
         shmem_long_wait_until (dest, _SHMEM_CMP_NE, 9L);
-        fprintf (stderr, "PE %d finished wait, got %d\n", me, *dest);
+        fprintf (stderr, "PE %d finished wait, got %ld\n", me, *dest);
     }
+
+    shmem_finalize ();
 
     return 0;
 }

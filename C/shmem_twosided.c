@@ -108,5 +108,6 @@ main (int argc, char *argv[])
     }
 
     // MPI_Finalize();
+    shmem_finalize ();
     return 0;
 }

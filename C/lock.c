@@ -70,5 +70,7 @@ main (int argc, char **argv)
 
     shmem_barrier_all ();
 
+    shmem_finalize ();
+
     return 0;
 }

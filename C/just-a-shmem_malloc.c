@@ -35,32 +35,24 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+
+
+/*
+ * just do a shmem_malloc and a free, no output to be expected
+ */
+
 #include <shmem.h>
 
 int
-main (void)
+main ()
 {
-    int me, npes;
+    long *x;
 
     shmem_init ();
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    x = (long *) shmem_malloc (sizeof (*x));
 
-    if (me == 0) {
-        FILE *fp = fopen ("input.txt", "r");
-
-        if (fp == NULL) {       /* Input file required by program is not
-                                   available */
-            shmem_global_exit (99); /* use easy to spot exit status */
-        }
-
-        /* do something with the file */
-
-        fclose (fp);
-    }
+    shmem_free (x);
 
     shmem_finalize ();
 

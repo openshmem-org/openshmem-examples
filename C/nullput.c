@@ -52,5 +52,7 @@ main ()
 
     shmem_barrier_all ();
 
+    shmem_finalize ();
+
     return 0;
 }

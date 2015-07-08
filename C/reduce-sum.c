@@ -97,5 +97,7 @@ main ()
     shmem_free (pSync);
     shmem_free (pWrk);
 
+    shmem_finalize ();
+
     return 0;
 }

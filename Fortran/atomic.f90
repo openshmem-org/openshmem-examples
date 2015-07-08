@@ -71,4 +71,6 @@ program a
 
   print *, me, ': Var x is', x, 'and y is', y
 
+  call shmem_finalize()
+
 end program

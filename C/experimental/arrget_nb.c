@@ -66,7 +66,7 @@ main (int argc, char **argv)
         src[i] = (long) me;
     }
 
-    dest = (long *) shmalloc (N * sizeof (*dest));
+    dest = (long *) shmem_malloc (N * sizeof (*dest));
 
     nextpe = (me + 1) % npes;
 
@@ -76,7 +76,9 @@ main (int argc, char **argv)
 
     shmem_barrier_all ();
 
-    shfree (dest);
+    shmem_free (dest);
+
+    shmem_finalize ();
 
     return 0;
 }

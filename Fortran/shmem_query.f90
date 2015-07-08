@@ -71,4 +71,6 @@ program query
        ' Minor ver=',minor_ver,'(',minor_status,')',&
        ' Name="',name
 
+  call shmem_finalize()
+
 end program query

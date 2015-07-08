@@ -60,5 +60,7 @@ main ()
 
     shmemx_free (p);
 
+    shmem_finalize ();
+
     return 0;
 }

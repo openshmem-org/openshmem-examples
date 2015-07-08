@@ -69,5 +69,7 @@ main ()
 
     printf ("%d: dst = %d\n", me, dst);
 
+    shmem_finalize ();
+
     return 0;
 }

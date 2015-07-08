@@ -60,7 +60,7 @@ main (void)
     *f = 3;
     shmem_barrier_all ();
 
-    printf ("PE %d: before put, f = %d\n", me, *f);
+    printf ("PE %d: before put, f = %ld\n", me, *f);
 
     if (me == 0) {
         shmem_long_p (f, 42, 1);
@@ -69,9 +69,11 @@ main (void)
     shmem_barrier_all ();
 
     if (me == 1) {
-        printf ("PE %d:  after put, f = %d, %s\n", me, *f,
+        printf ("PE %d:  after put, f = %ld, %s\n", me, *f,
                 (*f == 42) ? "OK" : "FAIL");
     }
+
+    shmem_finalize ();
 
     return 0;
 }

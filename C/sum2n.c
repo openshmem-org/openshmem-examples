@@ -65,5 +65,7 @@ main (int argc, char *argv[])
         printf ("counter = %d\n", counter);
     }
 
+    shmem_finalize ();
+
     return 0;
 }

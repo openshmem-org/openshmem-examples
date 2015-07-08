@@ -147,6 +147,7 @@ main (int argc, char *argv[])
     }
     printf ("\n");
     // mpi_err = MPI_Finalize();
+    shmem_finalize ();
     return 0;
 }
 

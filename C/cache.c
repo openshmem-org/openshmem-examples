@@ -65,5 +65,7 @@ main (void)
 
     shmem_udcflush_line (&var);
 
+    shmem_finalize ();
+
     return 0;
 }

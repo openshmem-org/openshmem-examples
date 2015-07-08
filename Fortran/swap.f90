@@ -65,4 +65,6 @@ program swap
     print *, me, ': target = ', targ, ' swapped = ' , swapped_val
   end if
 
+  call shmem_finalize()
+
 end program swap

@@ -66,4 +66,6 @@ program finc
 
   print *, me, ': old = ', old, ', dst = ', dst
 
+  call shmem_finalize()
+
 end program finc

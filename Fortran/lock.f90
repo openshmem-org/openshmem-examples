@@ -62,4 +62,6 @@ program lock
 
   call shmem_clear_lock(L)
 
+  call shmem_finalize()
+
 end program

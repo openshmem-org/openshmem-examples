@@ -71,4 +71,6 @@ program rotput
      print *, me, ': got ', dest, 'WRONG'
   end if
 
+  call shmem_finalize()
+
 end program rotput

@@ -94,5 +94,7 @@ main ()
          me, major_ver, major_status, minor_ver, minor_status, name,
          name_status);
 
+    shmem_finalize ();
+
     return 0;
 }

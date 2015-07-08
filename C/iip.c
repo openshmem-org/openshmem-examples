@@ -73,5 +73,7 @@ main (void)
         printf ("PE %d: n = %d, %s\n", me, n, (n == 42) ? "OK" : "FAIL");
     }
 
+    shmem_finalize ();
+
     return 0;
 }

@@ -67,6 +67,8 @@ main ()
     shmem_barrier (0, 0, npes, pSync);
 
     printf ("%d: x = %d\n", me, x);
-
+    
+    shmem_finalize ();
+ 
     return 0;
 }

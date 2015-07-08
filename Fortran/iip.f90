@@ -72,4 +72,6 @@ program iip
      end if
   end if
 
+  call shmem_finalize()
+
 end program iip

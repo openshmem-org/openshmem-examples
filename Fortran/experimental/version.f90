@@ -57,4 +57,6 @@ program version
   write (*, "(A16, A, A, I1, A1, I1, A, I4, A, I4)") &
        & h, verstr, ' ', maj, '.', min, ': on PE ', me, ' / ',  npes
 
+  call shmem_finalize ()
+
 end program version

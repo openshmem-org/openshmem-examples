@@ -51,7 +51,7 @@ main ()
     shmem_init ();
     me = shmem_my_pe ();
 
-    dst = shmalloc (sizeof (*dst));
+    dst = shmem_malloc (sizeof (*dst));
     *dst = -999;
     shmem_barrier_all ();
 
@@ -75,6 +75,8 @@ main ()
     shmem_barrier_all ();
 
     fprintf (stderr, "%d: dst = %d\n", me, *dst);
+
+    shmem_finalize ();
 
     return 0;
 }
