@@ -2,25 +2,25 @@
 !
 ! Copyright (c) 2011 - 2015
 !   University of Houston System and Oak Ridge National Laboratory.
-! 
+!
 ! All rights reserved.
-! 
+!
 ! Redistribution and use in source and binary forms, with or without
 ! modification, are permitted provided that the following conditions
 ! are met:
-! 
+!
 ! o Redistributions of source code must retain the above copyright notice,
 !   this list of conditions and the following disclaimer.
-! 
+!
 ! o Redistributions in binary form must reproduce the above copyright
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
-! 
+!
 ! o Neither the name of the University of Houston System, Oak Ridge
 !   National Laboratory nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
-! 
+!
 ! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ! "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ! LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -36,12 +36,12 @@
 
 
 !**********************************************************************
-!   pi.f - compute pi by integrating f(x) = 4/(1 + x**2)     
+!   pi.f - compute pi by integrating f(x) = 4/(1 + x**2)    
 !
 !  (C) 2001 by Argonne National Laboratory.
 !      See COPYRIGHT in top-level directory.
-!     
-!   Each node: 
+!    
+!   Each node:
 !    1) receives the number of rectangles used in the approximation.
 !    2) calculates the areas of it's rectangles.
 !    3) Synchronizes for a global summation.
@@ -50,7 +50,7 @@
 !  Variables:
 !
 !    pi  the calculated result
-!    n   number of points of integration.  
+!    n   number of points of integration. 
 !    x           midpoint of each rectangle's interval
 !    f           function to integrate
 !    sum,pi      area of rectangles
@@ -65,9 +65,9 @@ end function
 
 program main
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
-  integer :: num_pes, my_pe
+  integer :: shmem_n_pes, shmem_my_pe
 
   double precision  PI25DT
   parameter        (PI25DT = 3.141592653589793238462643d0)
@@ -85,9 +85,9 @@ program main
 
   real(kind=8), dimension(SHMEM_REDUCE_MIN_WRKDATA_SIZE), save :: pwrk
 
-  call start_pes(0)
-  myid = my_pe()
-  numprocs = num_pes()
+  call shmem_init ()
+  myid = shmem_my_pe()
+  numprocs = shmem_n_pes()
 ! print *, "Process ", myid, " of ", numprocs, " is alive"
 
   call shmem_barrier_all

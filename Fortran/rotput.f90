@@ -2,25 +2,25 @@
 !
 ! Copyright (c) 2011 - 2015
 !   University of Houston System and Oak Ridge National Laboratory.
-! 
+!
 ! All rights reserved.
-! 
+!
 ! Redistribution and use in source and binary forms, with or without
 ! modification, are permitted provided that the following conditions
 ! are met:
-! 
+!
 ! o Redistributions of source code must retain the above copyright notice,
 !   this list of conditions and the following disclaimer.
-! 
+!
 ! o Redistributions in binary form must reproduce the above copyright
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
-! 
+!
 ! o Neither the name of the University of Houston System, Oak Ridge
 !   National Laboratory nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
-! 
+!
 ! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ! "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ! LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -38,7 +38,7 @@
 !
 ! rotate PE id to right neighbor (dest), with wrap-around
 !
- 
+
 program rotput
 
   integer :: shmem_my_pe, shmem_n_pes
@@ -48,22 +48,22 @@ program rotput
   integer me, npes
   integer nextpe
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
-  call start_pes(0)
-  me = my_pe()
-  npes = num_pes()
+  call shmem_init ()
+  me = shmem_my_pe ()
+  npes = shmem_n_pes ()
 
   nextpe = MOD(me + 1, npes)
 
   src = nextpe
 
   dest = -1
-  call shmem_barrier_all()
+  call shmem_barrier_all ()
 
-  call shmem_integer_put(dest, src, 1, nextpe)
+  call shmem_integer_put (dest, src, 1, nextpe)
 
-  call shmem_barrier_all()
+  call shmem_barrier_all ()
 
   if (dest == me) then
      print *, me, ': got ', dest, 'CORRECT'

@@ -35,43 +35,31 @@
 !
 
 
-!
-! expected output on 2 PEs:
-!
-! PE           0 value          74
-! PE           1 value          75
-!          75 is correct
-!
-
-program inc
-  integer me
-  integer, save :: dst
+program globalexit
 
   include 'shmem.fh'
 
-  call shmem_init ()
-  me = shmem_my_pe()
+  integer :: shmem_n_pes, shmem_my_pe ! OpenSHMEM routines
 
-  dst = 74
-  call shmem_barrier_all()
+  integer :: npes, me
+  integer :: open_status
+
+  call shmem_init ()
+
+  npes = shmem_n_pes ()
+  me = shmem_my_pe ()
 
   if (me == 0) then
-     call shmem_int4_inc(dst, 1)
+    open (unit = 2, file = 'input.txt', status='old', &
+          iostat=open_status, action='read')
+
+    if ( open_status /= 0 ) then
+      call shmem_global_exit(99)
+    end if
+
+    ! do something with the file
+
+    close (2)
   end if
 
-  call shmem_barrier_all()
-
-  ! now check
-
-  print *, 'PE', me, 'value', dst
-
-  if (me == 1) then
-     if (dst == 75) then
-        print *, dst, 'is correct'
-     else
-        print *, dst, 'is wrong'
-     end if
-  end if
-
-
-end program inc
+end program globalexit

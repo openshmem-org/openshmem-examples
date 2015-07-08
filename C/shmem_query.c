@@ -38,64 +38,61 @@
 
 
 /*
- * reduce by SUM() [1,2,3,4] across 4 PEs
+ * expected output on every PE:
+ *
+ * On PE<pe-id>:
+ * Major version = <..>(SUCCESS)
+ * Minor Version = <..>(SUCCESS)
+ * Name="<..>"(SUCCESS)
  *
  */
 
 #include <stdio.h>
-#include <string.h>
-#include <assert.h>
-
 #include <shmem.h>
+#include <string.h>
 
-#ifndef MAX
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-#endif
-
-/*
- * reduce 1 element across the PEs
- */
-static const int nred = 1;
-
-/*
- * symmetric source and destination
- */
-int src;
-int dst;
+#define SUCCESS "SUCCESS"
+#define FAIL "FAIL"
+#define UNDEF "UNDEFINED"
 
 int
 main ()
 {
-    int i;
-    long *pSync;
-    int *pWrk;
-    int pWrk_size;
+    char *major_status, *minor_status, *name_status, name[_SHMEM_MAX_NAME_LEN];
+    int major_ver, minor_ver;
+    int me;
 
     shmem_init ();
+    me = shmem_my_pe ();
 
-    pWrk_size = MAX (nred / 2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
-    pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
-    assert (pWrk != NULL);
+    shmem_info_get_version (&major_ver, &minor_ver);
+    shmem_info_get_name (name);
 
-    pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
-    assert (pSync != NULL);
-
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    if (major_ver == _SHMEM_MAJOR_VERSION) {
+        major_status = SUCCESS;
+    }
+    else {
+        major_status = FAIL;
     }
 
-    src = shmem_my_pe () + 1;
-    shmem_barrier_all ();
+    if (minor_ver == _SHMEM_MINOR_VERSION) {
+        minor_status = SUCCESS;
+    }
+    else {
+        minor_status = FAIL;
+    }
 
-    shmem_int_sum_to_all (&dst, &src, nred, 0, 0, 4, pWrk, pSync);
+    if (strlen (name) < _SHMEM_MAX_NAME_LEN) {
+        name_status = SUCCESS;
+    }
+    else {
+        name_status = UNDEF;
+    }
 
-    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
-    printf (" %d", dst);
-    printf ("\n");
-
-    shmem_barrier_all ();
-    shmem_free (pSync);
-    shmem_free (pWrk);
+    printf
+        ("On PE%d:\n Major version = %d(%s)\n Minor Version = %d(%s)\n Name=\"%s\"(%s)\n",
+         me, major_ver, major_status, minor_ver, minor_status, name,
+         name_status);
 
     return 0;
 }

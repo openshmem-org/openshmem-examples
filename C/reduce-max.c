@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -46,7 +46,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 long pSync[_SHMEM_REDUCE_SYNC_SIZE];
 long pWrk[_SHMEM_REDUCE_SYNC_SIZE];
@@ -59,29 +59,26 @@ long dst[N];
 int
 main ()
 {
-  int i;
+    int i;
 
-  for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
-    {
-      pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = _SHMEM_SYNC_VALUE;
     }
 
-  start_pes (0);
+    shmem_init ();
 
-  for (i = 0; i < N; i += 1)
-    {
-      src[i] = shmem_my_pe () + i;
+    for (i = 0; i < N; i += 1) {
+        src[i] = shmem_my_pe () + i;
     }
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  shmem_long_max_to_all (dst, src, 3, 0, 0, 4, pWrk, pSync);
+    shmem_long_max_to_all (dst, src, 3, 0, 0, 4, pWrk, pSync);
 
-  printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
-  for (i = 0; i < N; i += 1)
-    {
-      printf (" %d", dst[i]);
+    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
+    for (i = 0; i < N; i += 1) {
+        printf (" %d", dst[i]);
     }
-  printf ("\n");
+    printf ("\n");
 
-  return 0;
+    return 0;
 }

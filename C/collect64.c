@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -42,7 +42,7 @@
 
 #include <assert.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 static long pSync[_SHMEM_BCAST_SYNC_SIZE];
 
@@ -56,43 +56,39 @@ int npes;
 int me;
 
 
-static
-void
+static void
 show_dst (char *tag)
 {
-  int i;
-  printf ("%8s: dst[%d/%d] =", tag, me, npes);
-  for (i = 0; i < DST_SIZE; i += 1)
-    {
-      printf (" %ld", dst[i]);
+    int i;
+    printf ("%8s: dst[%d/%d] =", tag, me, npes);
+    for (i = 0; i < DST_SIZE; i += 1) {
+        printf (" %ld", dst[i]);
     }
-  printf ("\n");
+    printf ("\n");
 }
 
 int
 main (void)
 {
-  int i;
+    int i;
 
-  start_pes (0);
-  npes = shmem_n_pes ();
-  me = shmem_my_pe ();
+    shmem_init ();
+    npes = shmem_n_pes ();
+    me = shmem_my_pe ();
 
-  for (i = 0; i < DST_SIZE; i++)
-    {
-      dst[i] = -1;
+    for (i = 0; i < DST_SIZE; i++) {
+        dst[i] = -1;
     }
 
-  for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1)
-    {
-      pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
+        pSync[i] = _SHMEM_SYNC_VALUE;
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  shmem_collect64 (dst, src, me + 1, 0, 0, 4, pSync);
+    shmem_collect64 (dst, src, me + 1, 0, 0, 4, pSync);
 
-  show_dst ("AFTER");
+    show_dst ("AFTER");
 
-  return 0;
+    return 0;
 }

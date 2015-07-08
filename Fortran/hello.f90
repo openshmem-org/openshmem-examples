@@ -2,25 +2,25 @@
 !
 ! Copyright (c) 2011 - 2015
 !   University of Houston System and Oak Ridge National Laboratory.
-! 
+!
 ! All rights reserved.
-! 
+!
 ! Redistribution and use in source and binary forms, with or without
 ! modification, are permitted provided that the following conditions
 ! are met:
-! 
+!
 ! o Redistributions of source code must retain the above copyright notice,
 !   this list of conditions and the following disclaimer.
-! 
+!
 ! o Redistributions in binary form must reproduce the above copyright
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
-! 
+!
 ! o Neither the name of the University of Houston System, Oak Ridge
 !   National Laboratory nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
-! 
+!
 ! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ! "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 ! LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -41,19 +41,19 @@
 
 program whoami
 
-  include 'mpp/shmem.fh'
+  include 'shmem.fh'
 
-  integer :: num_pes, my_pe
+  integer :: shmem_n_pes, shmem_my_pe
 
   integer :: npes, me
   character*32 :: h
 
-  call start_pes (0)
+  call shmem_init ()
 
-  npes = num_pes ()
-  me = my_pe ()
+  npes = shmem_n_pes ()
+  me = shmem_my_pe ()
   call hostnm (h)
 
-  print *, h, 'I am ', me, ' of ', npes
+  write (*, "(A16, A, I4, A, I4)") h, 'I am ', me, ' of ', npes
 
 end program whoami

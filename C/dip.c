@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -38,7 +38,7 @@
 
 
 /*
- * double value put from PE 0 to PE 1 to shmalloc'ed variable
+ * double value put from PE 0 to PE 1 to shmem_malloc'ed variable
  * (Intended for runinng on 2 PEs)
  *
  */
@@ -46,9 +46,9 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
-static const double E  = 2.71828182;
+static const double E = 2.71828182;
 static const double PI = 3.14159265;
 
 static const double epsilon = 0.00000001;
@@ -56,34 +56,30 @@ static const double epsilon = 0.00000001;
 int
 main (void)
 {
-  double *f;
-  int me;
+    double *f;
+    int me;
 
-  start_pes (0);
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  f = (double *) shmalloc (sizeof (*f));
+    f = (double *) shmem_malloc (sizeof (*f));
 
-  *f = PI;
-  shmem_barrier_all ();
+    *f = PI;
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      shmem_double_p (f, E, 1);
+    if (me == 0) {
+        shmem_double_p (f, E, 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
 
-  if (me == 1)
-    {
-      printf ("PE %d: %f, %s\n",
-	      me,
-	      *f,
-	      (fabs (*f - E) < epsilon) ? "OK" : "FAIL");
+    if (me == 1) {
+        printf ("PE %d: %f, %s\n",
+                me, *f, (fabs (*f - E) < epsilon) ? "OK" : "FAIL");
     }
 
-  shfree (f);
-  
-  return 0;
+    shmem_free (f);
+
+    return 0;
 }

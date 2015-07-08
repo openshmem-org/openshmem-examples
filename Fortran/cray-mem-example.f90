@@ -5,22 +5,21 @@
 !
 ! Original copyright indicated at above URL.
 !
-! Changes here are to make it OpenSHMEM compliant (e.g. start_pes
-! instead of shmem_init, can't use my_pe as variable because it
-! conflicts with API).
+! Changes here are to make it OpenSHMEM compliant (e.g. can't use
+! shmem_my_pe as variable because it conflicts with API).
 !
 ! Requires "cray pointer" compatibility (e.g. -fcray-pointer with GCC).
 !
 
 program shpalloc_example
   implicit none
-  include "mpp/shmem.fh"
-  integer :: num_pes    ! not declared in SGI header
+  include "shmem.fh"
+  integer :: shmem_n_pes    ! OpenSHMEM routine
 
   integer :: n_pes
   integer :: imax, jmax
-  call start_pes(0)
-  n_pes = num_pes()
+  call shmem_init ()
+  n_pes = shmem_n_pes()
   imax  = n_pes
   jmax  = n_pes
   call sub(imax,jmax)
@@ -28,16 +27,16 @@ end program shpalloc_example
 
 subroutine sub(imax,jmax)
   implicit none
-  include "mpp/shmem.fh"
-  integer :: my_pe, num_pes    ! not declared in SGI header
+  include "shmem.fh"
+  integer :: shmem_my_pe, shmem_n_pes    ! OpenSHMEM routines
 
   integer imax, jmax
   integer :: mype, n_pes
   integer :: pe, err, idefault, ibytes
   pointer (pA,A)
   integer(kind=8) A(imax,jmax)
-  mype = my_pe()
-  n_pes = num_pes()
+  mype = shmem_my_pe()
+  n_pes = shmem_n_pes()
   pe = n_pes - mype - 1
   ibytes=kind(idefault)
   !          want to create matrix of size A(imax,jmax)

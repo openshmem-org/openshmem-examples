@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -40,49 +40,47 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 long dest = -999;
 
 int
 main ()
 {
-  int *all;
-  int me;
+    int *all;
+    int me;
 
-  start_pes (0);
+    shmem_init ();
 
-  me = shmem_my_pe ();
+    me = shmem_my_pe ();
 
-  if (me == 0)
-    {
-      long src = 4321;
-      shmem_long_put (&dest, &src, 1, 1);
+    if (me == 0) {
+        long src = 4321;
+        shmem_long_put (&dest, &src, 1, 1);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  printf ("%d: dest = %ld\n", me, dest);
+    printf ("%d: dest = %ld\n", me, dest);
 
 #if 0
-  all = (int *) shmalloc (sizeof (*all));
-  assert (all != NULL);
+    all = (int *) shmem_malloc (sizeof (*all));
+    assert (all != NULL);
 
-  *all = 314159;
-  shmem_barrier_all ();
+    *all = 314159;
+    shmem_barrier_all ();
 
-  if (me == 1)
-    {
-      int send_to_all = 27182;
-      shmem_int_put (all, &send_to_all, 1, 0);
+    if (me == 1) {
+        int send_to_all = 27182;
+        shmem_int_put (all, &send_to_all, 1, 0);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  printf ("%d: all = %d\n", me, *all);
+    printf ("%d: all = %d\n", me, *all);
 
-  shfree (all);
+    shmem_free (all);
 #endif
 
-  return 0;
+    return 0;
 }

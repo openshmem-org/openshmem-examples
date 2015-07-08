@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -49,7 +49,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 const int table_size = 16;
 
@@ -85,14 +85,14 @@ int me, npes;
 void
 table_update (int nv, int idx)
 {
-  const int q = OWNER (idx);	/* PE that owns this index */
-  const int off = OFFSET (idx);	/* local table offset */
+    const int q = OWNER (idx);  /* PE that owns this index */
+    const int off = OFFSET (idx);   /* local table offset */
 
-  shmem_set_lock (& lock[idx]);
+    shmem_set_lock (&lock[idx]);
 
-  shmem_int_p (& table[off], nv, q);
+    shmem_int_p (&table[off], nv, q);
 
-  shmem_clear_lock (& lock[idx]);
+    shmem_clear_lock (&lock[idx]);
 }
 
 /*
@@ -101,94 +101,88 @@ table_update (int nv, int idx)
 void
 table_dump (void)
 {
-  int i;
+    int i;
 
-  for (i = 0; i < ip_pe; i += 1)
-    {
-      printf ("PE %4d: table[local %4d](global %4d) = %d\n",
-	      me, i, (me * ip_pe) + i, table[i]);
+    for (i = 0; i < ip_pe; i += 1) {
+        printf ("PE %4d: table[local %4d](global %4d) = %d\n",
+                me, i, (me * ip_pe) + i, table[i]);
     }
 }
 
 int
 main (int argc, char *argv[])
 {
-  int table_bytes;
-  int lock_bytes;
-  int i;
+    int table_bytes;
+    int lock_bytes;
+    int i;
 
-  srand ( getpid ()  + getuid () );
+    srand (getpid () + getuid ());
 
-  start_pes (0);
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    shmem_init ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  /*
-   * size of the per-PE partition
-   */
-  ip_pe = table_size / npes;
+    /* 
+     * size of the per-PE partition
+     */
+    ip_pe = table_size / npes;
 
-  /*
-   * each PE only stores what it owns
-   */
-  table_bytes = sizeof (*table) * ip_pe;
-  table = shmalloc (table_bytes);             /* !!! unchecked !!! */
-  /*
-   * initialize table
-   */
-  for (i = 0; i < ip_pe; i+= 1)
-    {
-      table[i] = 0;
+    /* 
+     * each PE only stores what it owns
+     */
+    table_bytes = sizeof (*table) * ip_pe;
+    table = shmem_malloc (table_bytes); /* !!! unchecked !!! */
+    /* 
+     * initialize table
+     */
+    for (i = 0; i < ip_pe; i += 1) {
+        table[i] = 0;
     }
 
-  /*
-   * each PE needs to be able to lock everywhere
-   */
-  lock_bytes = sizeof (*lock) * table_size;
-  lock = shmalloc (lock_bytes);            	/* !!! unchecked !!! */
-  /*
-   * initialize locks
-   */
-  for (i = 0; i < table_size; i+= 1)
-    {
-      lock[i] = 0L;
+    /* 
+     * each PE needs to be able to lock everywhere
+     */
+    lock_bytes = sizeof (*lock) * table_size;
+    lock = shmem_malloc (lock_bytes);   /* !!! unchecked !!! */
+    /* 
+     * initialize locks
+     */
+    for (i = 0; i < table_size; i += 1) {
+        lock[i] = 0L;
     }
 
-  /*
-   * make sure all PEs have initialized symmetric data
-   */
-  shmem_barrier_all ();
+    /* 
+     * make sure all PEs have initialized symmetric data
+     */
+    shmem_barrier_all ();
 
-  for (i = 0; i < 4; i += 1)
-    {
-      const int updater = rand () % npes;
+    for (i = 0; i < 4; i += 1) {
+        const int updater = rand () % npes;
 
-      if (me == updater)
-        {
-          const int i2u = rand () % table_size;
-          const int nv = rand () % 100;
+        if (me == updater) {
+            const int i2u = rand () % table_size;
+            const int nv = rand () % 100;
 
-          printf ("PE %d: About to update index %d with %d...\n",
-                  me, i2u, nv
-                 );
+            printf ("PE %d: About to update index %d with %d...\n",
+                    me, i2u, nv);
 
-          table_update (nv, i2u);
+            table_update (nv, i2u);
         }
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  /*
-   * everyone shows their part of the table
-   */
-  table_dump ();
+    /* 
+     * everyone shows their part of the table
+     */
+    table_dump ();
 
-  /*
-   * clean up allocated memory
-   */
-  shmem_barrier_all ();
-  shfree (lock);
-  shfree (table);
+    /* 
+     * clean up allocated memory
+     */
+    shmem_barrier_all ();
+    shmem_free (lock);
+    shmem_free (table);
 
-  return 0;
+    return 0;
 }

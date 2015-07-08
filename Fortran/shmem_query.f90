@@ -34,44 +34,41 @@
 ! SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 !
 
-
-!
-! expected output on 2 PEs:
-!
-! PE           0 value          74
-! PE           1 value          75
-!          75 is correct
+! For every PE:
+!  PE<id> : Major ver=<..> (SUCCESS) Minor ver=<..>(SUCCESS) Name=<..>
 !
 
-program inc
-  integer me
-  integer, save :: dst
+program query
 
+  implicit none
   include 'shmem.fh'
+
+  character (len=SHMEM_MAX_NAME_LEN) name
+  character (len=7) :: major_status, minor_status
+
+  integer :: major_ver, minor_ver
+  integer :: me, shmem_my_pe
 
   call shmem_init ()
   me = shmem_my_pe()
 
-  dst = 74
-  call shmem_barrier_all()
+  call shmem_info_get_version(major_ver, minor_ver)
+  call shmem_info_get_name(name)
 
-  if (me == 0) then
-     call shmem_int4_inc(dst, 1)
+  if (major_ver == SHMEM_MAJOR_VERSION) then
+     major_status = "SUCCESS"
+  else
+     major_status = "FAIL"
   end if
 
-  call shmem_barrier_all()
-
-  ! now check
-
-  print *, 'PE', me, 'value', dst
-
-  if (me == 1) then
-     if (dst == 75) then
-        print *, dst, 'is correct'
-     else
-        print *, dst, 'is wrong'
-     end if
+  if (minor_ver == SHMEM_MINOR_VERSION) then
+     minor_status = "SUCCESS"
+  else
+     minor_status = "FAIL"
   end if
 
+  print *,'PE',me,':Major ver=',major_ver,'(',major_status,')',&
+       ' Minor ver=',minor_ver,'(',minor_status,')',&
+       ' Name="',name
 
-end program inc
+end program query

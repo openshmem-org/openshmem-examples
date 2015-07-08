@@ -15,12 +15,12 @@
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -32,9 +32,9 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  
- */   
-    
+ * 
+ */
+
 
 #include <stdio.h>
 
@@ -44,37 +44,36 @@ int dst;
 int src = 42;
 
 int
-main()
+main ()
 {
-  int me;
+    int me;
 
-  start_pes (0);
-  me = shmem_my_pe ();
+    shmem_init ();
+    me = shmem_my_pe ();
 
-  dst = 999;
-  shmem_barrier_all ();
+    dst = 999;
+    shmem_barrier_all ();
 
-  if (me == 0)
-    {
-      int s;
-      shmemx_request_handle_t h;
+    if (me == 0) {
+        int s;
+        shmemx_request_handle_t h;
 
-      shmemx_int_put_nb (&dst, &src, 1, 1, &h);
+        shmemx_int_put_nb (&dst, &src, 1, 1, &h);
 
-      shmemx_test_req (h, &s);
+        shmemx_test_req (h, &s);
 
-      fprintf (stderr, "%d: before wait, s = %d\n", me, s);
+        fprintf (stderr, "%d: before wait, s = %d\n", me, s);
 
-      shmemx_wait_req (h);
+        shmemx_wait_req (h);
 
-      shmemx_test_req (h, &s);
+        shmemx_test_req (h, &s);
 
-      fprintf (stderr, "%d: after wait, s = %d\n", me, s);
+        fprintf (stderr, "%d: after wait, s = %d\n", me, s);
     }
 
-  shmem_barrier_all ();
+    shmem_barrier_all ();
 
-  fprintf (stderr, "%d: dst = %d\n", me, dst);
+    fprintf (stderr, "%d: dst = %d\n", me, dst);
 
-  return 0;
+    return 0;
 }

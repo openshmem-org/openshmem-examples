@@ -2,25 +2,25 @@
  *
  * Copyright (c) 2011 - 2015
  *   University of Houston System and Oak Ridge National Laboratory.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, Oak Ridge
  *   National Laboratory nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -48,47 +48,46 @@
 #include <assert.h>
 #include <sys/utsname.h>
 
-#include <mpp/shmem.h>
+#include <shmem.h>
 
 int
 main (int argc, char **argv)
 {
-  long src;
-  long *dest;
-  int me, npes;
-  struct utsname u;
-  int su;
+    long src;
+    long *dest;
+    int me, npes;
+    struct utsname u;
+    int su;
 
-  su = uname (&u);
-  assert (su == 0);
+    su = uname (&u);
+    assert (su == 0);
 
-  start_pes (0);
+    shmem_init ();
 
-  me = shmem_my_pe ();
-  npes = shmem_n_pes ();
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-  {
-    time_t now;
-    time (&now);
-    srand (now + getpid ());
-  }
-
-  src = rand () % 1000;
-
-  dest = (long *) shmalloc (sizeof (*dest));
-  *dest = -1;
-  shmem_barrier_all ();
-
-  if (me == 0)
     {
-      int other_pe = rand () % npes;
-      printf ("%d: -> %d, sending value %ld\n", me, other_pe, src);
-      shmem_long_put (dest, &src, 1, other_pe);
+        time_t now;
+        time (&now);
+        srand (now + getpid ());
     }
 
-  shmem_barrier_all ();
+    src = rand () % 1000;
 
-  printf ("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
+    dest = (long *) shmem_malloc (sizeof (*dest));
+    *dest = -1;
+    shmem_barrier_all ();
 
-  return 0;
+    if (me == 0) {
+        int other_pe = rand () % npes;
+        printf ("%d: -> %d, sending value %ld\n", me, other_pe, src);
+        shmem_long_put (dest, &src, 1, other_pe);
+    }
+
+    shmem_barrier_all ();
+
+    printf ("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
+
+    return 0;
 }

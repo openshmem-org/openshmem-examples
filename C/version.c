@@ -35,67 +35,31 @@
  *
  */
 
-
-
-/*
- * reduce by SUM() [1,2,3,4] across 4 PEs
- *
- */
-
 #include <stdio.h>
-#include <string.h>
-#include <assert.h>
+#include <sys/utsname.h>
 
 #include <shmem.h>
 
-#ifndef MAX
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
-#endif
-
-/*
- * reduce 1 element across the PEs
- */
-static const int nred = 1;
-
-/*
- * symmetric source and destination
- */
-int src;
-int dst;
-
 int
-main ()
+main (int argc, char **argv)
 {
-    int i;
-    long *pSync;
-    int *pWrk;
-    int pWrk_size;
+    int me, npes;
+    struct utsname u;
+    int maj, min;
+    char verstring[_SHMEM_MAX_NAME_LEN];
+
+    uname (&u);
 
     shmem_init ();
 
-    pWrk_size = MAX (nred / 2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
-    pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
-    assert (pWrk != NULL);
+    me = shmem_my_pe ();
+    npes = shmem_n_pes ();
 
-    pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
-    assert (pSync != NULL);
+    shmem_info_get_version (&maj, &min);
+    shmem_info_get_name (verstring);
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
-    }
-
-    src = shmem_my_pe () + 1;
-    shmem_barrier_all ();
-
-    shmem_int_sum_to_all (&dst, &src, nred, 0, 0, 4, pWrk, pSync);
-
-    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
-    printf (" %d", dst);
-    printf ("\n");
-
-    shmem_barrier_all ();
-    shmem_free (pSync);
-    shmem_free (pWrk);
+    printf ("%s: \"%s\" %d.%d on PE %4d of %4d\n",
+            u.nodename, verstring, maj, min, me, npes);
 
     return 0;
 }
