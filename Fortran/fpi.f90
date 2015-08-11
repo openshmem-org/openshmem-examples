@@ -1,7 +1,7 @@
 !
 !
 ! Copyright (c) 2011 - 2015
-!   University of Houston System and Oak Ridge National Laboratory.
+!   University of Houston System and UT-Battelle, LLC..
 !
 ! All rights reserved.
 !
@@ -16,8 +16,8 @@
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
 !
-! o Neither the name of the University of Houston System, Oak Ridge
-!   National Laboratory nor the names of its contributors may be used to
+! o Neither the name of the University of Houston System, 
+!   UT-Battelle, LLC. nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
 !
@@ -38,7 +38,7 @@
 !**********************************************************************
 !   pi.f - compute pi by integrating f(x) = 4/(1 + x**2)    
 !
-!  (C) 2001 by Argonne National Laboratory.
+!  (C) 2001 by Argonne UT-Battelle, LLC..
 !      See COPYRIGHT in top-level directory.
 !    
 !   Each node:
