@@ -131,7 +131,8 @@ main (int argc, char **argv)
     my_rank = shmem_my_pe ();
 
     /* argument processing done by everyone */
-    int c, errflg;
+    int c;
+    unsigned int errflg = 0;
     extern char *optarg;
     extern int optind, optopt;
 
@@ -187,8 +188,9 @@ main (int argc, char **argv)
         printf ("Using defaults: -h 20 -w 20 -m 2\n");
     }
 
-//  if (0 < errflg) 
-//      exit(EXIT_FAILURE);
+    if (errflg > 0) {
+        shmem_global_exit (EXIT_FAILURE);
+    }
 
 
     /* wait for user to input runtime params */
