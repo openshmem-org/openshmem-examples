@@ -1,3 +1,8 @@
+/*****************************************************************************
+ *  Copyright (C) 2015 Silicon Graphics International Corp.
+ *  All rights reserved.
+
+ ****************************************************************************/
 
 /* Program contributed by SGI on the OpenSHMEM mailing list*/
 
