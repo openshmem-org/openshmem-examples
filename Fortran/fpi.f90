@@ -1,7 +1,12 @@
 !
 !
 ! Copyright (c) 2011 - 2015
-!   University of Houston System and UT-Battelle, LLC..
+!   University of Houston System and UT-Battelle, LLC.
+! Copyright (c) 2009 - 2015
+!   Silicon Graphics International Corp.  SHMEM is copyrighted
+!   by Silicon Graphics International Corp. (SGI) The OpenSHMEM API
+!   (shmem) is released by Open Source Software Solutions, Inc., under an
+!   agreement with Silicon Graphics International Corp. (SGI).
 !
 ! All rights reserved.
 !
@@ -38,7 +43,7 @@
 !**********************************************************************
 !   pi.f - compute pi by integrating f(x) = 4/(1 + x**2)    
 !
-!  (C) 2001 by Argonne UT-Battelle, LLC..
+!  (C) 2001 by Argonne UT-Battelle, LLC.
 !      See COPYRIGHT in top-level directory.
 !    
 !   Each node:
