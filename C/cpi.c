@@ -47,7 +47,7 @@
  * distribution
  *
  * MPI version is:
- *  (C) 2001 by Argonne UT-Battelle, LLC..
+ *  (C) 2001 by Argonne UT-Battelle, LLC.
  *      See COPYRIGHT in top-level directory (of MPICH distribution).
  */
 

@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2011 - 2015
-//   University of Houston System and UT-Battelle, LLC..
+//   University of Houston System and UT-Battelle, LLC.
 // Copyright (c) 2009 - 2015
 //  Silicon Graphics International Corp.  SHMEM is copyrighted
 //  by Silicon Graphics International Corp. (SGI) The OpenSHMEM API
