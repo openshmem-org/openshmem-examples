@@ -54,15 +54,15 @@ main (int argc, char **argv)
     int src;
     int *dest;
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
     nextpe = (me + 1) % npes;
 
     src = nextpe;
 
-    dest = (int *) shmem_malloc (sizeof (*dest));
+    dest = (int *) shmalloc (sizeof (*dest));
     assert (dest != NULL);
 
     *dest = -1;
@@ -82,7 +82,7 @@ main (int argc, char **argv)
     printf ("\n");
 
     shmem_barrier_all ();
-    shmem_free (dest);
+    shfree (dest);
 
     return 0;
 }

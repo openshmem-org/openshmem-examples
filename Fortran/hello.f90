@@ -43,15 +43,15 @@ program whoami
 
   include 'shmem.fh'
 
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: _num_pes, _my_pe
 
   integer :: npes, me
   character*32 :: h
 
-  call shmem_init ()
+  call start_pes (0)
 
-  npes = shmem_n_pes ()
-  me = shmem_my_pe ()
+  npes = _num_pes ()
+  me = _my_pe ()
   call hostnm (h)
 
   write (*, "(A16, A, I4, A, I4)") h, 'I am ', me, ' of ', npes

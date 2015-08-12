@@ -39,14 +39,14 @@ program cswap
 
   include 'shmem.fh'
 
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: _num_pes, _my_pe
 
   integer, save :: race_winner
   integer oldval
   integer me
 
-  call shmem_init ()
-  me = shmem_my_pe()
+  call start_pes (0)
+  me = _my_pe()
 
   race_winner = -1
   call shmem_barrier_all()

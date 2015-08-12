@@ -52,11 +52,11 @@ main (void)
     int nlong = 8;
     int me, npes;
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
-    target = (long *) shmem_malloc (8 * sizeof (*target));
+    target = (long *) shmalloc (8 * sizeof (*target));
 
     for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
         pSync[i] = _SHMEM_SYNC_VALUE;
@@ -72,7 +72,7 @@ main (void)
         }
     }
 
-    shmem_free (target);
+    shfree (target);
 
     return 0;
 }

@@ -52,10 +52,10 @@ main (void)
     long *f;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
-    f = (long *) shmem_malloc (sizeof (*f));
+    f = (long *) shmalloc (sizeof (*f));
 
     *f = 3;
     shmem_barrier_all ();

@@ -53,10 +53,10 @@ main (int argc, char **argv)
     int src;
     int me, npes;
 
-    shmem_init ();
+    start_pes (0);
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    me = _my_pe ();
+    npes = _num_pes ();
 
     src = 42;
 

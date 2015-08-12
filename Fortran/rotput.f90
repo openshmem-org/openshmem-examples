@@ -41,7 +41,7 @@
 
 program rotput
 
-  integer :: shmem_my_pe, shmem_n_pes
+  integer :: _my_pe, _num_pes
 
   integer, save :: dest
   integer src
@@ -50,9 +50,9 @@ program rotput
 
   include 'shmem.fh'
 
-  call shmem_init ()
-  me = shmem_my_pe ()
-  npes = shmem_n_pes ()
+  call start_pes (0)
+  me = _my_pe ()
+  npes = _num_pes ()
 
   nextpe = MOD(me + 1, npes)
 

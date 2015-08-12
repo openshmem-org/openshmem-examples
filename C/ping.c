@@ -53,9 +53,9 @@ main ()
 
     setbuf (stdout, NULL);
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
     if (me == 0) {
         int i;

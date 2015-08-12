@@ -45,7 +45,7 @@ program cachetest
 
   include 'shmem.fh'
 
-  call shmem_init ()
+  call start_pes (0)
 
   call shmem_clear_cache_inv ()
 

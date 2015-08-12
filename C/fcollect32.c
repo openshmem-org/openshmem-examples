@@ -71,9 +71,9 @@ main (void)
 {
     int i;
 
-    shmem_init ();
-    npes = shmem_n_pes ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    npes = _num_pes ();
+    me = _my_pe ();
 
     for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
         pSync[i] = _SHMEM_SYNC_VALUE;

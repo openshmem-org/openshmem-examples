@@ -38,17 +38,17 @@ program version
 
   include 'shmem.fh'
 
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: _num_pes, _my_pe
 
   integer :: maj, min
   integer :: npes, me
   character (len = 32) :: h
   character (len = SHMEM_MAX_NAME_LEN) :: verstr
 
-  call shmem_init ()
+  call start_pes (0)
 
-  npes = shmem_n_pes ()
-  me = shmem_my_pe ()
+  npes = _num_pes ()
+  me = _my_pe ()
   call hostnm (h)
 
   call shmem_info_get_version (maj, min)

@@ -61,9 +61,9 @@ init_it (int *argc, char ***argv)
     // mpi_err = MPI_Init(argc,argv);
     // mpi_err = MPI_Comm_size( MPI_COMM_WORLD, &numnodes );
     // mpi_err = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    shmem_init ();
-    numnodes = shmem_n_pes ();
-    myid = shmem_my_pe ();
+    start_pes (0);
+    numnodes = _num_pes ();
+    myid = _my_pe ();
 }
 
 int
@@ -75,10 +75,10 @@ main (int argc, char *argv[])
     float z;
 
     init_it (&argc, &argv);
-    scounts = (int *) shmem_malloc (sizeof (int) * numnodes);
-    rcounts = (int *) shmem_malloc (sizeof (int) * numnodes);
-    sdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
-    rdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
+    scounts = (int *) shmalloc (sizeof (int) * numnodes);
+    rcounts = (int *) shmalloc (sizeof (int) * numnodes);
+    sdisp = (int *) shmalloc (sizeof (int) * numnodes);
+    rdisp = (int *) shmalloc (sizeof (int) * numnodes);
     /* 
        ! seed the random number generator with a ! different number on each
        processor */

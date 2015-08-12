@@ -60,11 +60,11 @@ main (void)
         srand (now + getpid ());
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
-    dest = (long *) shmem_malloc (sizeof (*dest));
+    dest = (long *) shmalloc (sizeof (*dest));
 
     *dest = 9L;
     shmem_barrier_all ();

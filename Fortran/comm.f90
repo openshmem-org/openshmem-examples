@@ -42,14 +42,14 @@ program comm
 
   include 'shmem.fh'
 
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: _num_pes, _my_pe
 
   integer :: re, im
   common /complex/ re, im
   integer, save :: x, y
 
-  call shmem_init ()
-  me = shmem_my_pe()
+  call start_pes (0)
+  me = _my_pe()
 
   if (me == 0) then
      call shmem_integer_put(re, im, 1, 1)

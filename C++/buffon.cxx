@@ -91,15 +91,15 @@ main (int argc, char *argv[])
     // 
     // Initialize SHMEM.
     // 
-    shmem_init ();
+    start_pes (0);
     // 
     // Get the number of processes.
     // 
-    process_num = shmem_n_pes ();
+    process_num = _num_pes ();
     // 
     // Get the rank of this process.
     // 
-    process_rank = shmem_my_pe ();
+    process_rank = _my_pe ();
     // 
     // The master process prints a message.
     // 

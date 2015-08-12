@@ -118,9 +118,9 @@ main (int argc, char *argv[])
 
     srand (getpid () + getuid ());
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
     /* 
      * size of the per-PE partition
@@ -131,7 +131,7 @@ main (int argc, char *argv[])
      * each PE only stores what it owns
      */
     table_bytes = sizeof (*table) * ip_pe;
-    table = shmem_malloc (table_bytes); /* !!! unchecked !!! */
+    table = shmalloc (table_bytes); /* !!! unchecked !!! */
     /* 
      * initialize table
      */
@@ -143,7 +143,7 @@ main (int argc, char *argv[])
      * each PE needs to be able to lock everywhere
      */
     lock_bytes = sizeof (*lock) * table_size;
-    lock = shmem_malloc (lock_bytes);   /* !!! unchecked !!! */
+    lock = shmalloc (lock_bytes);   /* !!! unchecked !!! */
     /* 
      * initialize locks
      */
@@ -181,8 +181,8 @@ main (int argc, char *argv[])
      * clean up allocated memory
      */
     shmem_barrier_all ();
-    shmem_free (lock);
-    shmem_free (table);
+    shfree (lock);
+    shfree (table);
 
     return 0;
 }

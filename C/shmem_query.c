@@ -62,8 +62,8 @@ main ()
     int major_ver, minor_ver;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
     shmem_info_get_version (&major_ver, &minor_ver);
     shmem_info_get_name (name);

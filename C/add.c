@@ -56,8 +56,8 @@ main ()
 {
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
     dst = 22;
     shmem_barrier_all ();

@@ -53,9 +53,9 @@ main (int argc, char **argv)
     int me;
     int *ip;
 
-    shmem_init ();
-    npes = shmem_n_pes ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    npes = _num_pes ();
+    me = _my_pe ();
 
     /* fire off allocation */
     ip = shmalloc_nb (sizeof (*ip));

@@ -50,8 +50,8 @@ main (int argc, char **argv)
     int me;
     int slp;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
     slp = 1;
 
     shmem_barrier_all ();

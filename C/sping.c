@@ -157,10 +157,10 @@ main (int argc, char *argv[])
 
   uname (&un);
 
-  shmem_init ();
+  start_pes (0);
 
-  proc = shmem_my_pe ();
-  nproc = shmem_n_pes ();
+  proc = _my_pe ();
+  nproc = _num_pes ();
 
   for (progName = argv[0] + strlen (argv[0]);
        progName > argv[0] && *(progName - 1) != '/'; progName--)
@@ -200,7 +200,7 @@ main (int argc, char *argv[])
   else if ((incWords = getSize (argv[optind++])) < 0)
     usage (progName);
 
-  if (!(rbuf = (long *) shmem_malloc (maxWords * sizeof (long))))
+  if (!(rbuf = (long *) shmalloc (maxWords * sizeof (long))))
     {
       perror ("Failed memory allocation");
       exit (1);
@@ -274,7 +274,7 @@ main (int argc, char *argv[])
   shmem_barrier_all ();
 
   free (tbuf);
-  shmem_free (rbuf);
+  shfree (rbuf);
 
   return 0;
 }

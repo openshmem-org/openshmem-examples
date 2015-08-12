@@ -45,8 +45,8 @@ program lock
   L = 0
   slp = 1
 
-  call shmem_init ()
-  me = shmem_my_pe()
+  call start_pes (0)
+  me = _my_pe()
 
   call shmem_barrier_all()
 

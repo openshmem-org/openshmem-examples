@@ -46,10 +46,10 @@ main (int argc, char **argv)
 {
     int me, npes;
 
-    shmem_init ();
+    start_pes (0);
 
-    shmem_my_pe ();             /* expect to get warning here */
-    npes = shmem_n_pes ();
+    _my_pe ();             /* expect to get warning here */
+    npes = _num_pes ();
 
     printf ("Hello from %d PEs\n", npes);
 

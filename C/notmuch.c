@@ -48,6 +48,6 @@
 int
 main (int argc, char *argv[])
 {
-    shmem_init ();
+    start_pes (0);
     return 0;
 }

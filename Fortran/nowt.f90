@@ -42,6 +42,6 @@ program nowt
 
   include 'shmem.fh'
 
-  call shmem_init ()
+  call start_pes (0)
 
 end program

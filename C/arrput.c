@@ -64,15 +64,15 @@ main (int argc, char **argv)
     su = uname (&u);
     assert (su == 0);
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
     for (i = 0; i < N; i += 1) {
         src[i] = (long) me;
     }
 
-    dest = (long *) shmem_malloc (N * sizeof (*dest));
+    dest = (long *) shmalloc (N * sizeof (*dest));
 
     nextpe = (me + 1) % npes;
 
@@ -84,7 +84,7 @@ main (int argc, char **argv)
         printf ("%d @ %s: dest[%d] = %ld\n", me, u.nodename, i, dest[i]);
     }
 
-    shmem_free (dest);
+    shfree (dest);
 
     return 0;
 }

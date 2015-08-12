@@ -38,7 +38,7 @@
 
 
 /*
- * just do a shmem_malloc and a free, no output to be expected
+ * just do a shmalloc and a free, no output to be expected
  */
 
 #include <shmem.h>
@@ -48,11 +48,11 @@ main ()
 {
     long *x;
 
-    shmem_init ();
+    start_pes (0);
 
-    x = (long *) shmem_malloc (sizeof (*x));
+    x = (long *) shmalloc (sizeof (*x));
 
-    shmem_free (x);
+    shfree (x);
 
     return 0;
 }

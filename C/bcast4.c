@@ -57,10 +57,10 @@ main (void)
     int nlong = 8;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
-    target = (long *) shmem_malloc (8 * sizeof (*target));
+    target = (long *) shmalloc (8 * sizeof (*target));
 
     for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
         pSync[i] = _SHMEM_SYNC_VALUE;
@@ -79,7 +79,7 @@ main (void)
         printf ("%d: target[%d] = %ld\n", me, i, target[i]);
     }
 
-    shmem_free (target);
+    shfree (target);
 
     return 0;
 }

@@ -62,10 +62,10 @@ main (int argc, char **argv)
     su = uname (&u);
     assert (su == 0);
 
-    shmem_init ();
+    start_pes (0);
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    me = _my_pe ();
+    npes = _num_pes ();
 
     {
         time_t now;
@@ -75,7 +75,7 @@ main (int argc, char **argv)
 
     src = rand () % 1000;
 
-    dest = (long *) shmem_malloc (sizeof (*dest));
+    dest = (long *) shmalloc (sizeof (*dest));
     *dest = -1;
     shmem_barrier_all ();
 

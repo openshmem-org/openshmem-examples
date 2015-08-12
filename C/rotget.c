@@ -52,11 +52,11 @@ main (int argc, char **argv)
     int nextpe;
     int me, npes;
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    start_pes (0);
+    me = _my_pe ();
+    npes = _num_pes ();
 
-    src = (long *) shmem_malloc (sizeof (*src));
+    src = (long *) shmalloc (sizeof (*src));
 
     *src = me;
 

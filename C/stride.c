@@ -54,8 +54,8 @@ main ()
         target[i] = 666;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
     if (me == 0) {
         shmem_short_iput (target, source, 2, 1, 4, 1);

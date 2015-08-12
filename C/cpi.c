@@ -82,9 +82,9 @@ main (int argc, char *argv[])
   double h, sum;
   struct timeval startwtime, endwtime;
 
-  shmem_init ();
-  numprocs = shmem_n_pes ();
-  myid = shmem_my_pe ();
+  start_pes (0);
+  numprocs = _num_pes ();
+  myid = _my_pe ();
 
   if (myid == 0)
     {

@@ -38,7 +38,7 @@
 
 
 /*
- * float value put to shmem_malloc'ed variable
+ * float value put to shmalloc'ed variable
  *
  */
 
@@ -59,10 +59,10 @@ main (void)
     float *f;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
-    f = (float *) shmem_malloc (sizeof (*f));
+    f = (float *) shmalloc (sizeof (*f));
 
     *f = PI;
     shmem_barrier_all ();
@@ -78,7 +78,7 @@ main (void)
                 me, *f, (fabsf (*f - E) < epsilon) ? "OK" : "FAIL");
     }
 
-    shmem_free (f);
+    shfree (f);
 
     return 0;
 }

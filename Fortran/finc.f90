@@ -46,14 +46,14 @@ program finc
 
   include 'shmem.fh'
 
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: _num_pes, _my_pe
 
   integer, save :: dst
   integer :: me
   integer :: old
 
-  call shmem_init ()
-  me = shmem_my_pe()
+  call start_pes (0)
+  me = _my_pe()
 
   old = -1
   dst = 22

@@ -57,8 +57,8 @@ main ()
     static short target[10];
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    me = _my_pe ();
 
     if (me == 0) {
         /* put 10 words into target on PE 1 */

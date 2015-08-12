@@ -44,10 +44,10 @@ main (void)
 {
     int me, npes;
 
-    shmem_init ();
+    start_pes (0);
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    me = _my_pe ();
+    npes = _num_pes ();
 
     if (me == 0) {
         FILE *fp = fopen ("input.txt", "r");

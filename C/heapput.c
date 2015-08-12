@@ -50,9 +50,9 @@ main ()
     int *all;
     int me;
 
-    shmem_init ();
+    start_pes (0);
 
-    me = shmem_my_pe ();
+    me = _my_pe ();
 
     if (me == 0) {
         long src = 4321;
@@ -64,7 +64,7 @@ main ()
     printf ("%d: dest = %ld\n", me, dest);
 
 #if 0
-    all = (int *) shmem_malloc (sizeof (*all));
+    all = (int *) shmalloc (sizeof (*all));
     assert (all != NULL);
 
     *all = 314159;
@@ -79,7 +79,7 @@ main ()
 
     printf ("%d: all = %d\n", me, *all);
 
-    shmem_free (all);
+    shfree (all);
 #endif
 
     return 0;

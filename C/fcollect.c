@@ -58,11 +58,11 @@ main (void)
     int *dst;
     int i;
 
-    shmem_init ();
-    npes = shmem_n_pes ();
-    me = shmem_my_pe ();
+    start_pes (0);
+    npes = _num_pes ();
+    me = _my_pe ();
 
-    dst = (int *) shmem_malloc (64);
+    dst = (int *) shmalloc (64);
 
     for (i = 0; i < 4; i++) {
         dst[i] = 10101;
@@ -88,7 +88,7 @@ main (void)
     printf ("%8s: dst[%d/%d] = %d, %d, %d, %d\n",
             "AFTER", me, npes, dst[0], dst[1], dst[2], dst[3]);
 
-    shmem_free (dst);
+    shfree (dst);
 
     return 0;
 }
