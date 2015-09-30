@@ -21,7 +21,7 @@
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
 !
-! o Neither the name of the University of Houston System, 
+! o Neither the name of the University of Houston System,
 !   UT-Battelle, LLC. nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
@@ -60,21 +60,16 @@ program fadd
   call shmem_init ()
   me = shmem_my_pe()
 
-  old = -1;
-  dst = 22;
+  old = -1
+  dst = 22
   call shmem_barrier_all()
 
   if (me == 1) then
-     old = shmem_int4_fadd(dst, 44, 0);
+     old = shmem_int4_fadd(dst, 44, 0)
   end if
   call shmem_barrier_all()
 
-  if (me == 0) then
-     if (old == (-1) .and. dst == 66) then
-        print *, 'OK'
-     else
-        print *, 'FAIL'
-     end if
-  end if
+  print *, me, ': old = ', old, ', dst = ', dst
+
   call shmem_finalize()
 end program fadd

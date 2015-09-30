@@ -21,7 +21,7 @@
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
 !
-! o Neither the name of the University of Houston System, 
+! o Neither the name of the University of Houston System,
 !   UT-Battelle, LLC. nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
@@ -46,14 +46,13 @@
 
 program rotput
 
+  include 'shmem.fh'
   integer :: shmem_my_pe, shmem_n_pes
 
   integer, save :: dest
   integer src
   integer me, npes
   integer nextpe
-
-  include 'shmem.fh'
 
   call shmem_init ()
   me = shmem_my_pe ()

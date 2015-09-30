@@ -21,7 +21,7 @@
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
 !
-! o Neither the name of the University of Houston System, 
+! o Neither the name of the University of Houston System,
 !   UT-Battelle, LLC. nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
@@ -47,12 +47,13 @@ program query
 
   implicit none
   include 'shmem.fh'
+  integer :: shmem_n_pes, shmem_my_pe
 
   character (len=SHMEM_MAX_NAME_LEN) name
   character (len=7) :: major_status, minor_status
 
   integer :: major_ver, minor_ver
-  integer :: me, shmem_my_pe
+  integer :: me
 
   call shmem_init ()
   me = shmem_my_pe()
