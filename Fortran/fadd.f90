@@ -52,6 +52,7 @@ program fadd
   include 'shmem.fh'
 
   integer :: shmem_n_pes, shmem_my_pe
+  integer :: shmem_int4_fadd
 
   integer, save :: dst
   integer me, old
