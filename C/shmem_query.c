@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -63,7 +63,7 @@
 int
 main ()
 {
-    char *major_status, *minor_status, *name_status, name[_SHMEM_MAX_NAME_LEN];
+    char *major_status, *minor_status, *name_status, name[SHMEM_MAX_NAME_LEN];
     int major_ver, minor_ver;
     int me;
 
@@ -73,21 +73,21 @@ main ()
     shmem_info_get_version (&major_ver, &minor_ver);
     shmem_info_get_name (name);
 
-    if (major_ver == _SHMEM_MAJOR_VERSION) {
+    if (major_ver == SHMEM_MAJOR_VERSION) {
         major_status = SUCCESS;
     }
     else {
         major_status = FAIL;
     }
 
-    if (minor_ver == _SHMEM_MINOR_VERSION) {
+    if (minor_ver == SHMEM_MINOR_VERSION) {
         minor_status = SUCCESS;
     }
     else {
         minor_status = FAIL;
     }
 
-    if (strlen (name) < _SHMEM_MAX_NAME_LEN) {
+    if (strlen (name) < SHMEM_MAX_NAME_LEN) {
         name_status = SUCCESS;
     }
     else {

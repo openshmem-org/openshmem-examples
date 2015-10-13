@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -42,7 +42,7 @@
 
 /*
  * This program shows how to use shmem_fcollect to simulate MPI_Alltoall
- * Each processor send/rec a different  random number to/from other processors. 
+ * Each processor send/rec a different  random number to/from other processors.
  * Adopted/ported from source url: http://geco.mines.edu/workshop/class2/examples/mpi/c_ex07.c
  */
 
@@ -85,7 +85,7 @@ main (int argc, char *argv[])
     rcounts_full = (int *) shmem_malloc (sizeof (int) * numnodes * numnodes);
     sdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
     rdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
-    /* 
+    /*
        ! seed the random number generator with a ! different number on each
        processor */
     seed_random (myid);
@@ -100,9 +100,9 @@ main (int argc, char *argv[])
     /* tell the other processors how much data is coming */
     // mpi_err = MPI_Alltoall(scounts,1,MPI_INT, rcounts,1,MPI_INT,
     // MPI_COMM_WORLD);
-    static long psync[_SHMEM_COLLECT_SYNC_SIZE];
-    for (i = 0; i < _SHMEM_COLLECT_SYNC_SIZE; i++)
-        psync[i] = _SHMEM_SYNC_VALUE;
+    static long psync[SHMEM_COLLECT_SYNC_SIZE];
+    for (i = 0; i < SHMEM_COLLECT_SYNC_SIZE; i++)
+        psync[i] = SHMEM_SYNC_VALUE;
     shmem_barrier_all ();
     int other, j1;
     shmem_fcollect32 (rcounts_full, scounts, 4, 0, 0, numnodes, psync);

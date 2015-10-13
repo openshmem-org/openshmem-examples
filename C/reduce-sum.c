@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -78,15 +78,15 @@ main ()
 
     shmem_init ();
 
-    pWrk_size = MAX (nred / 2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
+    pWrk_size = MAX (nred / 2 + 1, SHMEM_REDUCE_MIN_WRKDATA_SIZE);
     pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
     assert (pWrk != NULL);
 
-    pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
+    pSync = (long *) shmem_malloc (SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
     assert (pSync != NULL);
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
     src = shmem_my_pe () + 1;
