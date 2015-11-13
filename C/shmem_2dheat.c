@@ -65,8 +65,8 @@
 #include <shmem.h>
 
 /* declare functions */
-int get_start (int rank);
-int get_end (int rank);
+int get_start_row (int rank);
+int get_end_row (int rank);
 int get_num_rows (int rank);
 void init_domain (float **domain_ptr, int rank);
 void jacobi (float **current_ptr, float **next_ptr);
@@ -217,8 +217,8 @@ main (int argc, char **argv)
     }
 
     /* let each processor decide what rows(s) it owns */
-    my_start_row = get_start (my_rank);
-    my_end_row = get_end (my_rank);
+    my_start_row = get_start_row (my_rank);
+    my_end_row = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
     if (0 < verbose)
@@ -330,8 +330,8 @@ get_convergence_sqd (float **current_ptr, float **next_ptr, int rank)
     int i, j, my_start, my_end, my_num_rows;
     float sum;
 
-    my_start = get_start (rank);
-    my_end = get_end (rank);
+    my_start = get_start_row (rank);
+    my_end = get_end_row (rank);
     my_num_rows = get_num_rows (rank);
 
     sum = 0.0;
@@ -393,8 +393,8 @@ jacobi (float **current_ptr, float **next_ptr)
     // MPI_Comm_size(MPI_COMM_WORLD,&p); 
     // MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
 
-    my_start = get_start (my_rank);
-    my_end = get_end (my_rank);
+    my_start = get_start_row (my_rank);
+    my_end = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
     /* 
@@ -526,8 +526,8 @@ gauss_seidel (float **current_ptr, float **next_ptr)
     // MPI_Comm_size(MPI_COMM_WORLD,&p);
     // MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
 
-    my_start = get_start (my_rank);
-    my_end = get_end (my_rank);
+    my_start = get_start_row (my_rank);
+    my_end = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
     /* 
@@ -716,8 +716,8 @@ sor (float **current_ptr, float **next_ptr)
     // MPI_Comm_size(MPI_COMM_WORLD,&p);
     // MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
 
-    my_start = get_start (my_rank);
-    my_end = get_end (my_rank);
+    my_start = get_start_row (my_rank);
+    my_end = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
     /* 
@@ -887,7 +887,7 @@ get_val_par (float *above_ptr, float **domain_ptr, float *below_ptr, int rank,
     }
     else {
         /* Else, return value for matrix supplied or ghost rows */
-        if (j < get_start (rank)) {
+        if (j < get_start_row (rank)) {
             if (rank == ROOT) {
                 /* not interested in above ghost row */
                 ret_val = 0.0;
@@ -898,7 +898,7 @@ get_val_par (float *above_ptr, float **domain_ptr, float *below_ptr, int rank,
                    %f\n",rank,i,j,above_ptr[i]); fflush(stdout); */
             }
         }
-        else if (j > get_end (rank)) {
+        else if (j > get_end_row (rank)) {
             if (rank == (p - 1)) {
                 /* not interested in below ghost row */
                 ret_val = 0.0;
@@ -927,8 +927,8 @@ void
 init_domain (float **domain_ptr, int rank)
 {
     int i, j, start, end, rows;
-    start = get_start (rank);
-    end = get_end (rank);
+    start = get_start_row (rank);
+    end = get_end_row (rank);
     rows = get_num_rows (rank);
 
     for (j = start; j <= end; j++) {
@@ -941,7 +941,7 @@ init_domain (float **domain_ptr, int rank)
  /* computes start row for given PE */
 
 int
-get_start (int rank)
+get_start_row (int rank)
 {
     /* computer row divisions to each proc */
     int per_proc, start_row, remainder;
@@ -965,7 +965,7 @@ get_start (int rank)
  /* computes end row for given PE */
 
 int
-get_end (int rank)
+get_end_row (int rank)
 {
     /* computer row divisions to each proc */
     int per_proc, remainder, end_row;
@@ -973,10 +973,10 @@ get_end (int rank)
     per_proc = (int) floor (HEIGHT / H) / p;
     remainder = (int) floor (HEIGHT / H) % p;
     if (rank < remainder) {
-        end_row = get_start (rank) + per_proc;
+        end_row = get_start_row (rank) + per_proc;
     }
     else {
-        end_row = get_start (rank) + per_proc - 1;
+        end_row = get_start_row (rank) + per_proc - 1;
     }
     return end_row;
 }
@@ -986,13 +986,13 @@ get_end (int rank)
 int
 get_num_rows (int rank)
 {
-    return 1 + get_end (rank) - get_start (rank);
+    return 1 + get_end_row (rank) - get_start_row (rank);
 }
 
 int
 global_to_local (int rank, int row)
 {
-    return row - get_start (rank);
+    return row - get_start_row (rank);
 }
 
   /* 
