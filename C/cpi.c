@@ -73,6 +73,8 @@ int n;
 
 long pSync[_SHMEM_BCAST_SYNC_SIZE];
 
+long pSyncRed[_SHMEM_REDUCE_SYNC_SIZE];
+
 double mypi, pi;
 double pWrk[_SHMEM_REDUCE_SYNC_SIZE];
 
@@ -104,6 +106,10 @@ main (int argc, char *argv[])
   /* initialize sync array */
   for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1)
     pSync[i] = _SHMEM_SYNC_VALUE;
+
+  for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
+    pSyncRed[i] = _SHMEM_SYNC_VALUE;
+
   shmem_barrier_all ();
 
   /* send "n" out to everyone */
@@ -124,7 +130,7 @@ main (int argc, char *argv[])
   shmem_barrier_all ();
 
   /* add up partial pi computations into PI */
-  shmem_double_sum_to_all (&pi, &mypi, 1, 0, 0, numprocs, pWrk, pSync);
+  shmem_double_sum_to_all (&pi, &mypi, 1, 0, 0, numprocs, pWrk, pSyncRed);
 
   /* "master" PE summarizes */
   if (myid == 0)
