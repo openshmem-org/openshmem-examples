@@ -91,9 +91,10 @@ main (void)
 
     shmem_barrier_all ();
 
-    shmem_collect64 (dst, src, me + 1, 0, 0, 4, pSync);
-
-    show_dst ("AFTER");
+    if (me < 4) {
+        shmem_collect64 (dst, src, me + 1, 0, 0, 4, pSync);
+        show_dst ("AFTER");
+    }
 
     shmem_finalize ();
 
