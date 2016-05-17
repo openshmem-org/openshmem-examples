@@ -39,7 +39,7 @@
 #
 
 
-SHMEM_CXX      = oshCC
+SHMEM_CXX      = oshcxx
 SHMEM_CXXFLAGS = -g -O2
 
 CXX_TESTS      = $(wildcard *.cxx)
