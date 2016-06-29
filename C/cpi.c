@@ -60,6 +60,7 @@
 
 static const double PI25DT = 3.141592653589793238462643;
 
+static inline
 double
 f (double a)
 {
@@ -70,11 +71,17 @@ f (double a)
  * these all need to be symmetric as shmem targets
  */
 int n;
-
-long pSync[SHMEM_BCAST_SYNC_SIZE];
-
 double mypi, pi;
-double pWrk[SHMEM_REDUCE_SYNC_SIZE];
+
+long pSyncB[SHMEM_BCAST_SYNC_SIZE]; /* for broadcast */
+long pSyncR[SHMEM_REDUCE_SYNC_SIZE]; /* for reduction */
+
+static inline
+long
+max2(long a, long b)
+{
+    return (a > b) ? a : b;
+}
 
 /*
  *
@@ -86,6 +93,7 @@ main (int argc, char *argv[])
   int myid, numprocs, i;
   double h, sum;
   struct timeval startwtime, endwtime;
+  double *pWrkR;                /* symmetric reduction workspace */
 
   shmem_init ();
   numprocs = shmem_n_pes ();
@@ -101,13 +109,26 @@ main (int argc, char *argv[])
       gettimeofday (&startwtime, NULL);
     }
 
-  /* initialize sync array */
-  for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1)
-    pSync[i] = SHMEM_SYNC_VALUE;
+  /* reduction of 1 value: size the workspace accordingly */
+  {
+      const long pWrkRSize = max2 (1/2 + 1, SHMEM_REDUCE_MIN_WRKDATA_SIZE);
+
+      pWrkR = (double *) shmem_malloc (pWrkRSize * sizeof(*pWrkR));
+  }
+
+  /* initialize sync arrays */
+  for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+    pSyncB[i] = SHMEM_SYNC_VALUE;
+  }
+  for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+    pSyncR[i] = SHMEM_SYNC_VALUE;
+  }
   shmem_barrier_all ();
 
+  /* -=- set up done -=- */
+
   /* send "n" out to everyone */
-  shmem_broadcast32 (&n, &n, 1, 0, 0, 0, numprocs, pSync);
+  shmem_broadcast32 (&n, &n, 1, 0, 0, 0, numprocs, pSyncB);
 
   /* do partial computation */
   h = 1.0 / (double) n;
@@ -124,7 +145,7 @@ main (int argc, char *argv[])
   shmem_barrier_all ();
 
   /* add up partial pi computations into PI */
-  shmem_double_sum_to_all (&pi, &mypi, 1, 0, 0, numprocs, pWrk, pSync);
+  shmem_double_sum_to_all (&pi, &mypi, 1, 0, 0, numprocs, pWrkR, pSyncR);
 
   /* "master" PE summarizes */
   if (myid == 0)
@@ -138,6 +159,8 @@ main (int argc, char *argv[])
       printf ("run time = %f ms\n", elapsed);
       fflush (stdout);
     }
+
+  shmem_free (pWrkR);
 
   shmem_finalize ();
 
