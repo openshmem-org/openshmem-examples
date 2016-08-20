@@ -70,8 +70,8 @@ double r8_huge (void);
 //
 // symmetric variables for reduction
 //
-int pWrk[_SHMEM_REDUCE_SYNC_SIZE];
-long pSync[_SHMEM_BCAST_SYNC_SIZE];
+int pWrk[SHMEM_REDUCE_SYNC_SIZE];
+long pSync[SHMEM_BCAST_SYNC_SIZE];
 
 int hit_total;
 int hit_num;
@@ -154,8 +154,8 @@ main (int argc, char *argv[])
     // 
     // initialize sync buffer for reduction
     // 
-    for (int i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (int i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
     shmem_barrier_all ();
 

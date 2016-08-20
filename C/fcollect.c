@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -51,7 +51,7 @@
 
 #include <shmem.h>
 
-long pSync[_SHMEM_BCAST_SYNC_SIZE];
+long pSync[SHMEM_BCAST_SYNC_SIZE];
 
 int src;
 
@@ -77,8 +77,8 @@ main (void)
     printf ("%8s: dst[%d/%d] = %d, %d, %d, %d\n",
             "BEFORE", me, npes, dst[0], dst[1], dst[2], dst[3]);
 
-    for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
     shmem_barrier_all ();
 
@@ -86,7 +86,7 @@ main (void)
 
     shmem_barrier_all ();
 
-    /* 
+    /*
      * end state of "dst" = 100, 101, 102, ...
      */
 

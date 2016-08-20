@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -96,7 +96,7 @@ main (void)
     shmem_barrier_all ();
 
     if (me == 1) {
-        shmem_long_wait_until (dest, _SHMEM_CMP_NE, 9L);
+        shmem_long_wait_until (dest, SHMEM_CMP_NE, 9L);
         fprintf (stderr, "PE %d finished wait, got %ld\n", me, *dest);
     }
 

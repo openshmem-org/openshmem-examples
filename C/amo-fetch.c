@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -41,29 +41,40 @@
  */
 
 
+
 /*
- * trivial test of the shmemx interface
+ * expected output on 2 PEs:
+ *
  */
 
 #include <stdio.h>
-#include <assert.h>
 
-#include <shmemx.h>
+#include <shmem.h>
+
+int dst;
 
 int
 main ()
 {
-    int *p;
+    int me;
+    int fd;                     /* fetched value */
 
     shmem_init ();
+    me = shmem_my_pe ();
 
-    p = shmemx_malloc (64 * sizeof (*p));
+    dst = 123;
+    shmem_barrier_all ();
 
-    assert (p != NULL);
+    if (me == 0) {
+        fd = shmem_int_fetch (&dst, 1);
+    }
+    else {
+        dst += 1;
+    }
 
     shmem_barrier_all ();
 
-    shmemx_free (p);
+    printf ("%d: dst = %d\n", me, dst);
 
     shmem_finalize ();
 

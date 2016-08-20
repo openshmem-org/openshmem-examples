@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -42,28 +42,38 @@
 
 
 
+/*
+ * expected output on 2 PEs:
+ *
+ */
+
 #include <stdio.h>
 
-#include <shmemx.h>
+#include <shmem.h>
+
+int dst;
 
 int
-main (int argc, char *argv[])
+main ()
 {
-    int me, npes;
-    long *x;
+    int me;
 
     shmem_init ();
     me = shmem_my_pe ();
-    npes = shmem_n_pes ();
 
-    /* deliberately pass different values */
-    x = (long *) shmem_malloc ((me + 1) * 2);
-    if (x == (long *) NULL) {
-        fprintf (stderr, "%d/%d: %d\n", me, npes, sherror ());
-        return 1;
+    dst = 123;
+    shmem_barrier_all ();
+
+    if (me == 0) {
+        shmem_int_set (&dst, 999, 1);
+    }
+    else {
+        dst += 1;
     }
 
-    shmem_free (x);
+    shmem_barrier_all ();
+
+    printf ("%d: dst = %d\n", me, dst);
 
     shmem_finalize ();
 

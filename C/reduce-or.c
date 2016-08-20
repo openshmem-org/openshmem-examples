@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -52,8 +52,8 @@
 
 #include <shmem.h>
 
-int pWrk[_SHMEM_REDUCE_SYNC_SIZE];
-long pSync[_SHMEM_REDUCE_SYNC_SIZE];
+int pWrk[SHMEM_REDUCE_SYNC_SIZE];
+long pSync[SHMEM_REDUCE_SYNC_SIZE];
 
 int src;
 int dst;
@@ -65,8 +65,8 @@ main ()
     int me;
     int npes;
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
     shmem_init ();

@@ -1,26 +1,26 @@
 /*
  *
- * Copyright (c) 2011 - 2015 
+ * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, UT-Battelle, LLC
  *    nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -37,15 +37,15 @@
 
 
 /* Application for 2d heat transfer modelling using 3 methods.
- * Original source: Adopted/ported from the mpi version at source url http://www.cct.lsu.edu/~estrabd/2dheat.php  
- * Sample run: oshrun -np 2 shmem_2dheat -h 10 -w 10 -v -m 1 // for method 1 of jacobi 
+ * Original source: Adopted/ported from the mpi version at source url http://www.cct.lsu.edu/~estrabd/2dheat.php
+ * Sample run: oshrun -np 2 shmem_2dheat -h 10 -w 10 -v -m 1 // for method 1 of jacobi
  */
 
 #define _WIDTH   20
 #define _HEIGHT  20
 #define H       1.0
 #define _EPSILON 0.1
-/* 
+/*
   methods:
   1 - jacobi
   2 - gauss-seidel
@@ -85,8 +85,8 @@ int HEIGHT = _HEIGHT;
 int meth = _METHOD;
 float EPSILON = _EPSILON;
 
-long pSync[_SHMEM_REDUCE_SYNC_SIZE];
-float pWrk[_SHMEM_REDUCE_MIN_WRKDATA_SIZE];
+long pSync[SHMEM_REDUCE_SYNC_SIZE];
+float pWrk[SHMEM_REDUCE_MIN_WRKDATA_SIZE];
 
 float convergence;
 float convergence_sqd, local_convergence_sqd;
@@ -195,8 +195,8 @@ main (int argc, char **argv)
 
     /* wait for user to input runtime params */
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1)
+        pSync[i] = SHMEM_SYNC_VALUE;
 
     shmem_barrier_all ();
 
@@ -284,7 +284,7 @@ main (int argc, char **argv)
             }
         }
         k++;
-        // MPI_Barrier(MPI_COMM_WORLD); 
+        // MPI_Barrier(MPI_COMM_WORLD);
         shmem_barrier_all ();
     }
 
@@ -351,37 +351,37 @@ void
 jacobi (float **current_ptr, float **next_ptr)
 {
     int i, j, my_start, my_end, my_num_rows;
-    float *U_Curr_Above = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       from 
-                                                                                                       bottom 
-                                                                                                       row 
-                                                                                                       of 
-                                                                                                       PE 
-                                                                                                       above 
+    float *U_Curr_Above = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       from
+                                                                                                       bottom
+                                                                                                       row
+                                                                                                       of
+                                                                                                       PE
+                                                                                                       above
                                                                                                      */
-    float *U_Curr_Below = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       from 
-                                                                                                       top 
-                                                                                                       row 
-                                                                                                       of 
-                                                                                                       PE 
-                                                                                                       below 
+    float *U_Curr_Below = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       from
+                                                                                                       top
+                                                                                                       row
+                                                                                                       of
+                                                                                                       PE
+                                                                                                       below
                                                                                                      */
-    float *U_Send_Buffer = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));   /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       that 
-                                                                                                       are 
-                                                                                                       currently 
-                                                                                                       being 
-                                                                                                       sent 
+    float *U_Send_Buffer = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));   /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       that
+                                                                                                       are
+                                                                                                       currently
+                                                                                                       being
+                                                                                                       sent
                                                                                                      */
 
     if (!U_Curr_Above || !U_Curr_Below || !U_Send_Buffer) {
@@ -390,14 +390,14 @@ jacobi (float **current_ptr, float **next_ptr)
     }
     // MPI_Request request;
     // MPI_Status status;
-    // MPI_Comm_size(MPI_COMM_WORLD,&p); 
+    // MPI_Comm_size(MPI_COMM_WORLD,&p);
     // MPI_Comm_rank(MPI_COMM_WORLD,&my_rank);
 
     my_start = get_start_row (my_rank);
     my_end = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
-    /* 
+    /*
      * Communicating ghost rows - only bother if p > 1
      */
 
@@ -433,9 +433,9 @@ jacobi (float **current_ptr, float **next_ptr)
         }
         // if (my_rank < (p-1)) {
         /* blocking receive */
-        // MPI_Recv(U_Curr_Below,(int)floor(WIDTH/H),MPI_FLOAT,my_rank+1,0,MPI_COMM_WORLD,&status); 
-        // 
-        // } 
+        // MPI_Recv(U_Curr_Below,(int)floor(WIDTH/H),MPI_FLOAT,my_rank+1,0,MPI_COMM_WORLD,&status);
+        //
+        // }
         // MPI_Barrier(MPI_COMM_WORLD);
         shmem_barrier_all ();
     }
@@ -475,41 +475,41 @@ void
 gauss_seidel (float **current_ptr, float **next_ptr)
 {
     int i, j, my_start, my_end, my_num_rows;
-    float *U_Curr_Above = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       from 
-                                                                                                       bottom 
-                                                                                                       row 
-                                                                                                       of 
-                                                                                                       PE 
-                                                                                                       above 
+    float *U_Curr_Above = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       from
+                                                                                                       bottom
+                                                                                                       row
+                                                                                                       of
+                                                                                                       PE
+                                                                                                       above
                                                                                                      */
-    float *U_Curr_Below = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       from 
-                                                                                                       top 
-                                                                                                       row 
-                                                                                                       of 
-                                                                                                       PE 
-                                                                                                       below 
+    float *U_Curr_Below = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       from
+                                                                                                       top
+                                                                                                       row
+                                                                                                       of
+                                                                                                       PE
+                                                                                                       below
                                                                                                      */
-    float *U_Send_Buffer = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));   /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       that 
-                                                                                                       are 
-                                                                                                       currently 
-                                                                                                       being 
-                                                                                                       sent 
+    float *U_Send_Buffer = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));   /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       that
+                                                                                                       are
+                                                                                                       currently
+                                                                                                       being
+                                                                                                       sent
                                                                                                      */
-    // float U_Curr_Above[(int)floor(WIDTH/H)]; /* 1d array holding values from 
+    // float U_Curr_Above[(int)floor(WIDTH/H)]; /* 1d array holding values from
     // bottom row of PE above */
-    // float U_Curr_Below[(int)floor(WIDTH/H)]; /* 1d array holding values from 
+    // float U_Curr_Below[(int)floor(WIDTH/H)]; /* 1d array holding values from
     // top row of PE below */
     // float U_Send_Buffer[(int)floor(WIDTH/H)]; /* 1d array holding values
     // that are currently being sent */
@@ -530,7 +530,7 @@ gauss_seidel (float **current_ptr, float **next_ptr)
     my_end = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
-    /* 
+    /*
      * Communicating ghost rows - only bother if p > 1
      */
 
@@ -665,41 +665,41 @@ void
 sor (float **current_ptr, float **next_ptr)
 {
     int i, j, my_start, my_end, my_num_rows;
-    float *U_Curr_Above = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       from 
-                                                                                                       bottom 
-                                                                                                       row 
-                                                                                                       of 
-                                                                                                       PE 
-                                                                                                       above 
+    float *U_Curr_Above = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       from
+                                                                                                       bottom
+                                                                                                       row
+                                                                                                       of
+                                                                                                       PE
+                                                                                                       above
                                                                                                      */
-    float *U_Curr_Below = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       from 
-                                                                                                       top 
-                                                                                                       row 
-                                                                                                       of 
-                                                                                                       PE 
-                                                                                                       below 
+    float *U_Curr_Below = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));    /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       from
+                                                                                                       top
+                                                                                                       row
+                                                                                                       of
+                                                                                                       PE
+                                                                                                       below
                                                                                                      */
-    float *U_Send_Buffer = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));   /* 1d 
-                                                                                                       array 
-                                                                                                       holding 
-                                                                                                       values 
-                                                                                                       that 
-                                                                                                       are 
-                                                                                                       currently 
-                                                                                                       being 
-                                                                                                       sent 
+    float *U_Send_Buffer = (float *) shmem_malloc ((sizeof (float)) * ((int) floor (WIDTH / H)));   /* 1d
+                                                                                                       array
+                                                                                                       holding
+                                                                                                       values
+                                                                                                       that
+                                                                                                       are
+                                                                                                       currently
+                                                                                                       being
+                                                                                                       sent
                                                                                                      */
-    // float U_Curr_Above[(int)floor(WIDTH/H)]; /* 1d array holding values from 
+    // float U_Curr_Above[(int)floor(WIDTH/H)]; /* 1d array holding values from
     // bottom row of PE above */
-    // float U_Curr_Below[(int)floor(WIDTH/H)]; /* 1d array holding values from 
+    // float U_Curr_Below[(int)floor(WIDTH/H)]; /* 1d array holding values from
     // top row of PE below */
     // float U_Send_Buffer[(int)floor(WIDTH/H)]; /* 1d array holding values
     // that are currently being sent */
@@ -720,7 +720,7 @@ sor (float **current_ptr, float **next_ptr)
     my_end = get_end_row (my_rank);
     my_num_rows = get_num_rows (my_rank);
 
-    /* 
+    /*
      * Communicating ghost rows - only bother if p > 1
      */
 
@@ -873,7 +873,7 @@ get_val_par (float *above_ptr, float **domain_ptr, float *below_ptr, int rank,
 {
     float ret_val;
 
-    // MPI_Comm_size(MPI_COMM_WORLD,&p); 
+    // MPI_Comm_size(MPI_COMM_WORLD,&p);
 
     /* enforce bc's first */
     if (i == ((int) floor (WIDTH / H / 2) - 1) && j == 0) {
@@ -945,7 +945,7 @@ get_start_row (int rank)
 {
     /* computer row divisions to each proc */
     int per_proc, start_row, remainder;
-    // MPI_Comm_size(MPI_COMM_WORLD,&p); 
+    // MPI_Comm_size(MPI_COMM_WORLD,&p);
 
     /* get initial whole divisor */
     per_proc = (int) floor (HEIGHT / H) / p;
@@ -969,7 +969,7 @@ get_end_row (int rank)
 {
     /* computer row divisions to each proc */
     int per_proc, remainder, end_row;
-    // MPI_Comm_size(MPI_COMM_WORLD,&p); 
+    // MPI_Comm_size(MPI_COMM_WORLD,&p);
     per_proc = (int) floor (HEIGHT / H) / p;
     remainder = (int) floor (HEIGHT / H) % p;
     if (rank < remainder) {
@@ -995,7 +995,7 @@ global_to_local (int rank, int row)
     return row - get_start_row (rank);
 }
 
-  /* 
+  /*
    * f - function that would be non zero if there was an internal heat source
    */
 
