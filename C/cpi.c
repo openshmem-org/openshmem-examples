@@ -60,11 +60,10 @@
 
 static const double PI25DT = 3.141592653589793238462643;
 
-static inline
-double
-f (double a)
+static inline double
+f(double a)
 {
-  return (4.0 / (1.0 + a * a));
+    return (4.0 / (1.0 + a * a));
 }
 
 /*
@@ -74,10 +73,9 @@ int n;
 double mypi, pi;
 
 long pSyncB[SHMEM_BCAST_SYNC_SIZE]; /* for broadcast */
-long pSyncR[SHMEM_REDUCE_SYNC_SIZE]; /* for reduction */
+long pSyncR[SHMEM_REDUCE_SYNC_SIZE];    /* for reduction */
 
-static inline
-long
+static inline long
 max2(long a, long b)
 {
     return (a > b) ? a : b;
@@ -88,82 +86,79 @@ max2(long a, long b)
  */
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
-  int myid, numprocs, i;
-  double h, sum;
-  struct timeval startwtime, endwtime;
-  double *pWrkR;                /* symmetric reduction workspace */
+    int myid, numprocs, i;
+    double h, sum;
+    struct timeval startwtime, endwtime;
+    double *pWrkR;              /* symmetric reduction workspace */
 
-  shmem_init ();
-  numprocs = shmem_n_pes ();
-  myid = shmem_my_pe ();
+    shmem_init();
+    numprocs = shmem_n_pes();
+    myid = shmem_my_pe();
 
-  if (myid == 0)
-    {
-      if (argc > 1)
-	n = atoi (argv[1]);	/* # rectangles on command line */
-      else
-	n = 10000;		/* default # of rectangles */
+    if (myid == 0) {
+        if (argc > 1)
+            n = atoi(argv[1]);  /* # rectangles on command line */
+        else
+            n = 10000;          /* default # of rectangles */
 
-      gettimeofday (&startwtime, NULL);
+        gettimeofday(&startwtime, NULL);
     }
 
-  /* reduction of 1 value: size the workspace accordingly */
-  {
-      const long pWrkRSize = max2 (1/2 + 1, SHMEM_REDUCE_MIN_WRKDATA_SIZE);
-
-      pWrkR = (double *) shmem_malloc (pWrkRSize * sizeof(*pWrkR));
-  }
-
-  /* initialize sync arrays */
-  for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
-    pSyncB[i] = SHMEM_SYNC_VALUE;
-  }
-  for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-    pSyncR[i] = SHMEM_SYNC_VALUE;
-  }
-
-  shmem_barrier_all ();
-
-  /* -=- set up done -=- */
-
-  /* send "n" out to everyone */
-  shmem_broadcast32 (&n, &n, 1, 0, 0, 0, numprocs, pSyncB);
-
-  /* do partial computation */
-  h = 1.0 / (double) n;
-  sum = 0.0;
-  /* A slightly better approach starts from large i and works back */
-  for (i = myid + 1; i <= n; i += numprocs)
+    /* reduction of 1 value: size the workspace accordingly */
     {
-      const double x = h * ((double) i - 0.5);
-      sum += f (x);
-    }
-  mypi = h * sum;
+        const long pWrkRSize = max2(1 / 2 + 1, SHMEM_REDUCE_MIN_WRKDATA_SIZE);
 
-  /* wait for everyone to finish */
-  shmem_barrier_all ();
-
-  /* add up partial pi computations into PI */
-  shmem_double_sum_to_all (&pi, &mypi, 1, 0, 0, numprocs, pWrkR, pSyncR);
-
-  /* "master" PE summarizes */
-  if (myid == 0)
-    {
-      double elapsed;
-      gettimeofday (&endwtime, NULL);
-      elapsed = (endwtime.tv_sec - startwtime.tv_sec) * 1000.0;	/* sec to ms */
-      elapsed += (endwtime.tv_usec - startwtime.tv_usec) / 1000.0;	/* us to ms */
-      printf ("pi is approximately %.16f, Error is %.16f\n",
-	      pi, fabs (pi - PI25DT));
-      printf ("run time = %f ms\n", elapsed);
-      fflush (stdout);
+        pWrkR = (double *) shmem_malloc(pWrkRSize * sizeof(*pWrkR));
     }
 
-  shmem_free (pWrkR);
+    /* initialize sync arrays */
+    for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+        pSyncB[i] = SHMEM_SYNC_VALUE;
+    }
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSyncR[i] = SHMEM_SYNC_VALUE;
+    }
 
-  shmem_finalize ();
+    shmem_barrier_all();
 
-  return 0;
+    /* -=- set up done -=- */
+
+    /* send "n" out to everyone */
+    shmem_broadcast32(&n, &n, 1, 0, 0, 0, numprocs, pSyncB);
+
+    /* do partial computation */
+    h = 1.0 / (double) n;
+    sum = 0.0;
+    /* A slightly better approach starts from large i and works back */
+    for (i = myid + 1; i <= n; i += numprocs) {
+        const double x = h * ((double) i - 0.5);
+        sum += f(x);
+    }
+    mypi = h * sum;
+
+    /* wait for everyone to finish */
+    shmem_barrier_all();
+
+    /* add up partial pi computations into PI */
+    shmem_double_sum_to_all(&pi, &mypi, 1, 0, 0, numprocs, pWrkR, pSyncR);
+
+    /* "master" PE summarizes */
+    if (myid == 0) {
+        double elapsed;
+        gettimeofday(&endwtime, NULL);
+        elapsed = (endwtime.tv_sec - startwtime.tv_sec) * 1000.0;   /* sec to ms */
+        elapsed += (endwtime.tv_usec - startwtime.tv_usec) / 1000.0;    /* us to ms */
+        printf("pi is approximately %.16f, Error is %.16f\n",
+               pi, fabs(pi - PI25DT));
+        printf("run time = %f ms\n", elapsed);
+        fflush(stdout);
+    }
+
+    shmem_free(pWrkR);
+
+    shmem_finalize();
+
+    return 0;
 }

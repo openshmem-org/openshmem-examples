@@ -56,46 +56,46 @@ long pSync[SHMEM_BCAST_SYNC_SIZE];
 int src;
 
 int
-main (void)
+main(void)
 {
     int npes;
     int me;
     int *dst;
     int i;
 
-    shmem_init ();
-    npes = shmem_n_pes ();
-    me = shmem_my_pe ();
+    shmem_init();
+    npes = shmem_n_pes();
+    me = shmem_my_pe();
 
-    dst = (int *) shmem_malloc (64);
+    dst = (int *) shmem_malloc(64);
 
     for (i = 0; i < 4; i++) {
         dst[i] = 10101;
     }
     src = me + 100;
 
-    printf ("%8s: dst[%d/%d] = %d, %d, %d, %d\n",
-            "BEFORE", me, npes, dst[0], dst[1], dst[2], dst[3]);
+    printf("%8s: dst[%d/%d] = %d, %d, %d, %d\n",
+           "BEFORE", me, npes, dst[0], dst[1], dst[2], dst[3]);
 
     for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
         pSync[i] = SHMEM_SYNC_VALUE;
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_fcollect32 (dst, &src, 1, 0, 0, npes, pSync);
+    shmem_fcollect32(dst, &src, 1, 0, 0, npes, pSync);
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     /*
      * end state of "dst" = 100, 101, 102, ...
      */
 
-    printf ("%8s: dst[%d/%d] = %d, %d, %d, %d\n",
-            "AFTER", me, npes, dst[0], dst[1], dst[2], dst[3]);
+    printf("%8s: dst[%d/%d] = %d, %d, %d, %d\n",
+           "AFTER", me, npes, dst[0], dst[1], dst[2], dst[3]);
 
-    shmem_free (dst);
+    shmem_free(dst);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

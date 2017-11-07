@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -54,7 +54,7 @@ int inmsg1 = 9999;
 int inmsg2 = 9999;
 
 void
-even ()
+even()
 {
     int outmsg1 = 4;
     int dest = 1;
@@ -63,17 +63,17 @@ even ()
     // MPI_Status Stat;
     // rc = MPI_Send(&outmsg1, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
     // rc = MPI_Recv(&inmsg1, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
-    shmem_int_put (&inmsg2, &outmsg1, 1, dest);
+    shmem_int_put(&inmsg2, &outmsg1, 1, dest);
 
     if (inmsg1 == 9999) {
-        shmem_int_wait (&inmsg1, 9999);
+        shmem_int_wait_until(&inmsg1, SHMEM_CMP_NE, 9999);
     }
 
-    printf ("Task %d: Received %d\n", rank, inmsg1);
+    printf("Task %d: Received %d\n", rank, inmsg1);
 }
 
 void
-odd ()
+odd()
 {
     int dest = 0;
     int source = 0;
@@ -84,35 +84,35 @@ odd ()
     // rc = MPI_Recv(&inmsg2, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
     // rc = MPI_Send(&outmsg2, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
 
-    shmem_int_put (&inmsg1, &outmsg2, 1, dest);
+    shmem_int_put(&inmsg1, &outmsg2, 1, dest);
 
     if (inmsg2 == 9999) {
-        shmem_int_wait (&inmsg2, 9999);
+        shmem_int_wait_until(&inmsg2, SHMEM_CMP_NE, 9999);
     }
 
-    printf ("Task %d: Received %d\n", rank, inmsg2);
+    printf("Task %d: Received %d\n", rank, inmsg2);
 }
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
 
     // MPI_Init(&argc,&argv);
     // MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    shmem_init ();
-    rank = shmem_my_pe ();
-    numtasks = shmem_n_pes ();
+    shmem_init();
+    rank = shmem_my_pe();
+    numtasks = shmem_n_pes();
 
     if (rank == 0) {
-        even ();
+        even();
     }
     else if (rank == 1) {
-        odd ();
+        odd();
     }
 
     // MPI_Finalize();
-    shmem_finalize ();
+    shmem_finalize();
     return 0;
 }

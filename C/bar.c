@@ -52,7 +52,7 @@ long pSync[SHMEM_BARRIER_SYNC_SIZE];
 int x = 10101;
 
 int
-main ()
+main()
 {
     int me, npes;
     int i;
@@ -61,19 +61,19 @@ main ()
         pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     if (me == 0) {
-        shmem_int_p (&x, 4, 1);
+        shmem_int_p(&x, 4, 1);
     }
 
-    shmem_barrier (0, 0, npes, pSync);
+    shmem_barrier(0, 0, npes, pSync);
 
-    printf ("%d: x = %d\n", me, x);
+    printf("%d: x = %d\n", me, x);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

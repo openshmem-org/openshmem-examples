@@ -55,64 +55,64 @@ int numnodes, myid, mpi_err;
 #define mpi_root 0
 /* end module  */
 
-void init_it (int *argc, char ***argv);
-void seed_random (int id);
-void random_number (float *z);
+void init_it(int *argc, char ***argv);
+void seed_random(int id);
+void random_number(float *z);
 
 void
-init_it (int *argc, char ***argv)
+init_it(int *argc, char ***argv)
 {
     // mpi_err = MPI_Init(argc,argv);
     // mpi_err = MPI_Comm_size( MPI_COMM_WORLD, &numnodes );
     // mpi_err = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    shmem_init ();
-    numnodes = shmem_n_pes ();
-    myid = shmem_my_pe ();
+    shmem_init();
+    numnodes = shmem_n_pes();
+    myid = shmem_my_pe();
 }
 
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
     int *sray, *rray;
     int *sdisp, *scounts, *rdisp, *rcounts, *rcounts_full;
     int ssize, rsize, i, k, j;
     float z;
 
-    init_it (&argc, &argv);
-    scounts = (int *) shmem_malloc (sizeof (int) * numnodes);
-    rcounts = (int *) shmem_malloc (sizeof (int) * numnodes);
-    rcounts_full = (int *) shmem_malloc (sizeof (int) * numnodes * numnodes);
-    sdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
-    rdisp = (int *) shmem_malloc (sizeof (int) * numnodes);
+    init_it(&argc, &argv);
+    scounts = (int *) shmem_malloc(sizeof(int) * numnodes);
+    rcounts = (int *) shmem_malloc(sizeof(int) * numnodes);
+    rcounts_full = (int *) shmem_malloc(sizeof(int) * numnodes * numnodes);
+    sdisp = (int *) shmem_malloc(sizeof(int) * numnodes);
+    rdisp = (int *) shmem_malloc(sizeof(int) * numnodes);
     /*
        ! seed the random number generator with a ! different number on each
        processor */
-    seed_random (myid);
+    seed_random(myid);
     /* find out how much data to send */
     for (i = 0; i < numnodes; i++) {
-        random_number (&z);
+        random_number(&z);
         scounts[i] = (int) (5.0 * z) + 1;
     }
-    printf ("myid= %d scounts=%d %d %d %d\n", myid, scounts[0], scounts[1],
-            scounts[2], scounts[3]);
-    printf ("\n");
+    printf("myid= %d scounts=%d %d %d %d\n", myid, scounts[0], scounts[1],
+           scounts[2], scounts[3]);
+    printf("\n");
     /* tell the other processors how much data is coming */
     // mpi_err = MPI_Alltoall(scounts,1,MPI_INT, rcounts,1,MPI_INT,
     // MPI_COMM_WORLD);
     static long psync[SHMEM_COLLECT_SYNC_SIZE];
     for (i = 0; i < SHMEM_COLLECT_SYNC_SIZE; i++)
         psync[i] = SHMEM_SYNC_VALUE;
-    shmem_barrier_all ();
+    shmem_barrier_all();
     int other, j1;
-    shmem_fcollect32 (rcounts_full, scounts, 4, 0, 0, numnodes, psync);
+    shmem_fcollect32(rcounts_full, scounts, 4, 0, 0, numnodes, psync);
     for (i = 0; i < numnodes; i++) {
         rcounts[i] = rcounts_full[i * numnodes + myid];
     }
-    printf ("-----myid= %d rcounts=", myid);
+    printf("-----myid= %d rcounts=", myid);
     for (i = 0; i < numnodes; i++)
-        printf ("%d ", rcounts[i]);
-    printf ("\n");
+        printf("%d ", rcounts[i]);
+    printf("\n");
 
 
     /* write(*,*)"myid= ",myid," rcounts= ",rcounts */
@@ -133,34 +133,34 @@ main (int argc, char *argv[])
     }
 
     /* allocate send and rec arrays */
-    sray = (int *) shmem_malloc (sizeof (int) * 20);
-    rray = (int *) shmem_malloc (sizeof (int) * 20);
+    sray = (int *) shmem_malloc(sizeof(int) * 20);
+    rray = (int *) shmem_malloc(sizeof(int) * 20);
     for (i = 0; i < ssize; i++) {
         sray[i] = myid;
     }
     /* send/rec different amounts of data to/from each processor */
     // mpi_err = MPI_Alltoallv(sray,scounts,sdisp,MPI_INT,
     // rray,rcounts,rdisp,MPI_INT, MPI_COMM_WORLD);
-    shmem_barrier_all ();
+    shmem_barrier_all();
     for (j1 = 0; j1 < numnodes; j1++) {
         int k1 = sdisp[j1];
         static int k2;
-        shmem_int_get (&k2, &rdisp[myid], 1, j1);
-        shmem_int_put (rray + k2, sray + k1, scounts[j1], j1);
+        shmem_int_get(&k2, &rdisp[myid], 1, j1);
+        shmem_int_put(rray + k2, sray + k1, scounts[j1], j1);
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     // not possible, coz even though the rcounts[myid] will be different on
     // each PE, the elements collected
     // by PE0 from other PE's will be constant.
     // shmem_collect32(rray_full,sray,rcounts[myid],0,0,numnodes,psync);
 
-    printf ("myid= %d rray=", myid);
+    printf("myid= %d rray=", myid);
     for (i = 0; i < rsize; i++)
-        printf ("%d ", rray[i]);
-    printf ("\n");
+        printf("%d ", rray[i]);
+    printf("\n");
     // mpi_err = MPI_Finalize();
-    shmem_finalize ();
+    shmem_finalize();
     return 0;
 }
 
@@ -174,15 +174,15 @@ main (int argc, char *argv[])
 */
 
 void
-seed_random (int id)
+seed_random(int id)
 {
-    srand ((unsigned int) id);
+    srand((unsigned int) id);
 }
 
 void
-random_number (float *z)
+random_number(float *z)
 {
     int i;
-    i = rand ();
+    i = rand();
     *z = (float) i / RAND_MAX;
 }

@@ -59,7 +59,7 @@ int src;
 int dst;
 
 int
-main ()
+main()
 {
     int i;
     int me;
@@ -69,18 +69,18 @@ main ()
         pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     src = me + 1;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_int_or_to_all (&dst, &src, 1, 0, 0, npes, pWrk, pSync);
+    shmem_int_or_to_all(&dst, &src, 1, 0, 0, npes, pWrk, pSync);
 
-    printf ("%d/%d   dst = %d\n", me, npes, dst);
+    printf("%d/%d   dst = %d\n", me, npes, dst);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

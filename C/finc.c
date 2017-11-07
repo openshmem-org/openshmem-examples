@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -57,26 +57,26 @@
 int dst;
 
 int
-main ()
+main()
 {
     int me;
     int old;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     old = -1;
     dst = 22;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        old = shmem_int_finc (&dst, 1);
+        old = shmem_int_atomic_fetch_inc(&dst, 1);
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    printf ("%d: old = %d, dst = %d\n", me, old, dst);
+    printf("%d: old = %d, dst = %d\n", me, old, dst);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

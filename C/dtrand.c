@@ -88,44 +88,44 @@ int me, npes;
  * stored somewhere else
  */
 void
-table_update (int nv, int idx)
+table_update(int nv, int idx)
 {
-    const int q = OWNER (idx);  /* PE that owns this index */
-    const int off = OFFSET (idx);   /* local table offset */
+    const int q = OWNER(idx);   /* PE that owns this index */
+    const int off = OFFSET(idx);    /* local table offset */
 
-    shmem_set_lock (&lock[idx]);
+    shmem_set_lock(&lock[idx]);
 
-    shmem_int_p (&table[off], nv, q);
+    shmem_int_p(&table[off], nv, q);
 
-    shmem_clear_lock (&lock[idx]);
+    shmem_clear_lock(&lock[idx]);
 }
 
 /*
  * just to validate the updates
  */
 void
-table_dump (void)
+table_dump(void)
 {
     int i;
 
     for (i = 0; i < ip_pe; i += 1) {
-        printf ("PE %4d: table[local %4d](global %4d) = %d\n",
-                me, i, (me * ip_pe) + i, table[i]);
+        printf("PE %4d: table[local %4d](global %4d) = %d\n",
+               me, i, (me * ip_pe) + i, table[i]);
     }
 }
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
     int table_bytes;
     int lock_bytes;
     int i;
 
-    srand (getpid () + getuid ());
+    srand(getpid() + getuid());
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     /* 
      * size of the per-PE partition
@@ -135,8 +135,8 @@ main (int argc, char *argv[])
     /* 
      * each PE only stores what it owns
      */
-    table_bytes = sizeof (*table) * ip_pe;
-    table = shmem_malloc (table_bytes); /* !!! unchecked !!! */
+    table_bytes = sizeof(*table) * ip_pe;
+    table = shmem_malloc(table_bytes);  /* !!! unchecked !!! */
     /* 
      * initialize table
      */
@@ -147,8 +147,8 @@ main (int argc, char *argv[])
     /* 
      * each PE needs to be able to lock everywhere
      */
-    lock_bytes = sizeof (*lock) * table_size;
-    lock = shmem_malloc (lock_bytes);   /* !!! unchecked !!! */
+    lock_bytes = sizeof(*lock) * table_size;
+    lock = shmem_malloc(lock_bytes);    /* !!! unchecked !!! */
     /* 
      * initialize locks
      */
@@ -159,37 +159,37 @@ main (int argc, char *argv[])
     /* 
      * make sure all PEs have initialized symmetric data
      */
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     for (i = 0; i < 4; i += 1) {
-        const int updater = rand () % npes;
+        const int updater = rand() % npes;
 
         if (me == updater) {
-            const int i2u = rand () % table_size;
-            const int nv = rand () % 100;
+            const int i2u = rand() % table_size;
+            const int nv = rand() % 100;
 
-            printf ("PE %d: About to update index %d with %d...\n",
-                    me, i2u, nv);
+            printf("PE %d: About to update index %d with %d...\n", me, i2u,
+                   nv);
 
-            table_update (nv, i2u);
+            table_update(nv, i2u);
         }
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     /* 
      * everyone shows their part of the table
      */
-    table_dump ();
+    table_dump();
 
     /* 
      * clean up allocated memory
      */
-    shmem_barrier_all ();
-    shmem_free (lock);
-    shmem_free (table);
+    shmem_barrier_all();
+    shmem_free(lock);
+    shmem_free(table);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

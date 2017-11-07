@@ -54,7 +54,7 @@
 long pSync[SHMEM_BCAST_SYNC_SIZE];
 
 int
-main (void)
+main(void)
 {
     int i;
     long *target;
@@ -62,31 +62,31 @@ main (void)
     int nlong = 8;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
-    target = (long *) shmem_malloc (8 * sizeof (*target));
+    target = (long *) shmem_malloc(8 * sizeof(*target));
 
     for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
         pSync[i] = SHMEM_SYNC_VALUE;
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     /* Number of PEs in the active set must be set properly, this test is
        expected to run with 4 PEs */
     if ((me % 2) == 0) {
-        shmem_broadcast64 (target, source, nlong, 0, 0, 1, 2, pSync);
+        shmem_broadcast64(target, source, nlong, 0, 0, 1, 2, pSync);
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     for (i = 0; i < 8; i++) {
-        printf ("%d: target[%d] = %ld\n", me, i, target[i]);
+        printf("%d: target[%d] = %ld\n", me, i, target[i]);
     }
 
-    shmem_free (target);
+    shmem_free(target);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

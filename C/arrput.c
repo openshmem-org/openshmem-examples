@@ -56,7 +56,7 @@
 #define N 7
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int i;
     int nextpe;
@@ -66,32 +66,32 @@ main (int argc, char **argv)
     struct utsname u;
     int su;
 
-    su = uname (&u);
-    assert (su == 0);
+    su = uname(&u);
+    assert(su == 0);
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     for (i = 0; i < N; i += 1) {
         src[i] = (long) me;
     }
 
-    dest = (long *) shmem_malloc (N * sizeof (*dest));
+    dest = (long *) shmem_malloc(N * sizeof(*dest));
 
     nextpe = (me + 1) % npes;
 
-    shmem_long_put (dest, src, N, nextpe);
+    shmem_long_put(dest, src, N, nextpe);
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     for (i = 0; i < N; i += 1) {
-        printf ("%d @ %s: dest[%d] = %ld\n", me, u.nodename, i, dest[i]);
+        printf("%d @ %s: dest[%d] = %ld\n", me, u.nodename, i, dest[i]);
     }
 
-    shmem_free (dest);
+    shmem_free(dest);
 
-    shmem_finalize ();
- 
+    shmem_finalize();
+
     return 0;
 }

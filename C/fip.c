@@ -59,33 +59,33 @@ static const float PI = 3.14159265;
 static const float epsilon = 0.00000001;
 
 int
-main (void)
+main(void)
 {
     float *f;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
-    f = (float *) shmem_malloc (sizeof (*f));
+    f = (float *) shmem_malloc(sizeof(*f));
 
     *f = PI;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        shmem_float_p (f, E, 1);
+        shmem_float_p(f, E, 1);
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 1) {
-        printf ("PE %d: %f, %s\n",
-                me, *f, (fabsf (*f - E) < epsilon) ? "OK" : "FAIL");
+        printf("PE %d: %f, %s\n",
+               me, *f, (fabsf(*f - E) < epsilon) ? "OK" : "FAIL");
     }
 
-    shmem_free (f);
+    shmem_free(f);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

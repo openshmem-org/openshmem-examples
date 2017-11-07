@@ -54,29 +54,29 @@
 int dst;
 
 int
-main ()
+main()
 {
     int me;
     int fd;                     /* fetched value */
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     dst = 123;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        fd = shmem_int_fetch (&dst, 1);
+        fd = shmem_int_atomic_fetch(&dst, 1);
     }
     else {
         dst += 1;
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    printf ("%d: dst = %d\n", me, dst);
+    printf("%d: dst = %d\n", me, dst);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

@@ -53,7 +53,7 @@
 #include <shmem.h>
 
 int
-main ()
+main()
 {
     short source[10] = {
         1, 2, 3, 4, 5,
@@ -62,23 +62,23 @@ main ()
     static short target[10];
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     if (me == 0) {
         /* put 10 words into target on PE 1 */
-        shmem_short_iput (target, source, 1, 2, 5, 1);
+        shmem_short_iput(target, source, 1, 2, 5, 1);
     }
 
-    shmem_barrier_all ();       /* sync sender and receiver */
+    shmem_barrier_all();        /* sync sender and receiver */
 
     if (me == 1) {
-        printf ("target on PE %d is %hd %hd %hd %hd %hd\n", me,
-                target[0], target[1], target[2], target[3], target[4]);
+        printf("target on PE %d is %hd %hd %hd %hd %hd\n", me,
+               target[0], target[1], target[2], target[3], target[4]);
     }
-    shmem_barrier_all ();       /* sync before exiting */
+    shmem_barrier_all();        /* sync before exiting */
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

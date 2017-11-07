@@ -52,29 +52,29 @@
 #include <shmem.h>
 
 int
-main ()
+main()
 {
     int me, npes;
 
-    setbuf (stdout, NULL);
+    setbuf(stdout, NULL);
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     if (me == 0) {
         int i;
         for (i = 1; i < npes; i += 1) {
-            printf ("From %d: PE %d is ", me, i);
-            printf ("%s", shmem_pe_accessible (i) ? "" : "NOT ");
-            printf ("accessible\n");
+            printf("From %d: PE %d is ", me, i);
+            printf("%s", shmem_pe_accessible(i) ? "" : "NOT ");
+            printf("accessible\n");
         }
     }
     else {
         ;
     }
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

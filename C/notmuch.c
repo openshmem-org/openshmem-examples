@@ -51,9 +51,9 @@
 #include <shmem.h>
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
-    shmem_init ();
-    shmem_finalize ();
+    shmem_init();
+    shmem_finalize();
     return 0;
 }

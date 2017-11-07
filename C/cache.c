@@ -54,23 +54,23 @@
 long var;
 
 int
-main (void)
+main(void)
 {
-    shmem_init ();
+    shmem_init();
 
-    shmem_clear_cache_inv ();
+    shmem_clear_cache_inv();
 
-    shmem_set_cache_inv ();
+    shmem_set_cache_inv();
 
-    shmem_clear_cache_line_inv (&var);
+    shmem_clear_cache_line_inv(&var);
 
-    shmem_set_cache_line_inv (&var);
+    shmem_set_cache_line_inv(&var);
 
-    shmem_udcflush ();
+    shmem_udcflush();
 
-    shmem_udcflush_line (&var);
+    shmem_udcflush_line(&var);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

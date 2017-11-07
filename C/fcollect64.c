@@ -61,24 +61,24 @@ int npes;
 int me;
 
 static void
-show_dst (char *tag)
+show_dst(char *tag)
 {
     int i;
-    printf ("%8s: dst[%d/%d] = ", tag, me, npes);
+    printf("%8s: dst[%d/%d] = ", tag, me, npes);
     for (i = 0; i < DST_SIZE; i += 1) {
-        printf ("%ld ", dst[i]);
+        printf("%ld ", dst[i]);
     }
-    printf ("\n");
+    printf("\n");
 }
 
 int
-main (void)
+main(void)
 {
     int i;
 
-    shmem_init ();
-    npes = shmem_n_pes ();
-    me = shmem_my_pe ();
+    shmem_init();
+    npes = shmem_n_pes();
+    me = shmem_my_pe();
 
     for (i = 0; i < DST_SIZE; i++) {
         dst[i] = -1;
@@ -88,13 +88,13 @@ main (void)
         pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_fcollect64 (dst, src, 2, 0, 0, npes, pSync);
+    shmem_fcollect64(dst, src, 2, 0, 0, npes, pSync);
 
-    show_dst ("AFTER");
+    show_dst("AFTER");
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

@@ -46,7 +46,7 @@
 #include <shmem.h>
 
 int
-main ()
+main()
 {
     static short source[10] = {
         1, 2, 3, 4, 5,
@@ -60,25 +60,25 @@ main ()
         target[i] = 666;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     if (me == 1) {
-        shmem_short_iget (target, source, 2, 1, 4, 0);
+        shmem_short_iget(target, source, 2, 1, 4, 0);
     }
 
-    shmem_barrier_all ();       /* sync sender and receiver */
+    shmem_barrier_all();        /* sync sender and receiver */
 
     if (me == 1) {
         for (i = 0; i < 10; i += 1) {
-            printf ("PE %d: target[%d] = %hd, source[%d] = %hd\n",
-                    me, i, target[i], i, source[i]);
+            printf("PE %d: target[%d] = %hd, source[%d] = %hd\n",
+                   me, i, target[i], i, source[i]);
         }
     }
 
-    shmem_barrier_all ();       /* sync before exiting */
+    shmem_barrier_all();        /* sync before exiting */
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

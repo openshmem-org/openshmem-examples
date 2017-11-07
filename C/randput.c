@@ -56,7 +56,7 @@
 #include <shmem.h>
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     long src;
     long *dest;
@@ -64,37 +64,37 @@ main (int argc, char **argv)
     struct utsname u;
     int su;
 
-    su = uname (&u);
-    assert (su == 0);
+    su = uname(&u);
+    assert(su == 0);
 
-    shmem_init ();
+    shmem_init();
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     {
         time_t now;
-        time (&now);
-        srand (now + getpid ());
+        time(&now);
+        srand(now + getpid());
     }
 
-    src = rand () % 1000;
+    src = rand() % 1000;
 
-    dest = (long *) shmem_malloc (sizeof (*dest));
+    dest = (long *) shmem_malloc(sizeof(*dest));
     *dest = -1;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        int other_pe = rand () % npes;
-        printf ("%d: -> %d, sending value %ld\n", me, other_pe, src);
-        shmem_long_put (dest, &src, 1, other_pe);
+        int other_pe = rand() % npes;
+        printf("%d: -> %d, sending value %ld\n", me, other_pe, src);
+        shmem_long_put(dest, &src, 1, other_pe);
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    printf ("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
+    printf("Result: %d @ %s: %ld\n", me, u.nodename, *dest);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

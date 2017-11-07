@@ -61,17 +61,17 @@
 #define UNDEF "UNDEFINED"
 
 int
-main ()
+main()
 {
     char *major_status, *minor_status, *name_status, name[SHMEM_MAX_NAME_LEN];
     int major_ver, minor_ver;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
-    shmem_info_get_version (&major_ver, &minor_ver);
-    shmem_info_get_name (name);
+    shmem_info_get_version(&major_ver, &minor_ver);
+    shmem_info_get_name(name);
 
     if (major_ver == SHMEM_MAJOR_VERSION) {
         major_status = SUCCESS;
@@ -87,7 +87,7 @@ main ()
         minor_status = FAIL;
     }
 
-    if (strlen (name) < SHMEM_MAX_NAME_LEN) {
+    if (strlen(name) < SHMEM_MAX_NAME_LEN) {
         name_status = SUCCESS;
     }
     else {
@@ -99,7 +99,7 @@ main ()
          me, major_ver, major_status, minor_ver, minor_status, name,
          name_status);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

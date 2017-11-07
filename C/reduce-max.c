@@ -62,7 +62,7 @@ long src[N];
 long dst[N];
 
 int
-main ()
+main()
 {
     int i;
 
@@ -70,22 +70,22 @@ main ()
         pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_init ();
+    shmem_init();
 
     for (i = 0; i < N; i += 1) {
-        src[i] = shmem_my_pe () + i;
+        src[i] = shmem_my_pe() + i;
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_long_max_to_all (dst, src, 3, 0, 0, 4, pWrk, pSync);
+    shmem_long_max_to_all(dst, src, 3, 0, 0, 4, pWrk, pSync);
 
-    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
+    printf("%d/%d   dst =", shmem_my_pe(), shmem_n_pes());
     for (i = 0; i < N; i += 1) {
-        printf (" %ld", dst[i]);
+        printf(" %ld", dst[i]);
     }
-    printf ("\n");
+    printf("\n");
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

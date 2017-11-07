@@ -21,7 +21,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -54,21 +54,21 @@
 static int value;
 
 int
-main ()
+main()
 {
     int old;
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     value = me + 1;
 
-    old = shmem_int_cswap (&value, value, -value, me);
+    old = shmem_int_atomic_compare_swap(&value, value, -value, me);
 
-    printf ("%d: value = %d, old = %d\n", me, value, old);
+    printf("%d: value = %d, old = %d\n", me, value, old);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }
