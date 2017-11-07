@@ -251,14 +251,14 @@ main (int argc, char *argv[])
 	  if (proc & 1)
 	    {
 	      r--;
-	      shmem_wait (&rbuf[nwords - 1], 0);
+	      shmem_long_wait (&rbuf[nwords - 1], 0);
 	      rbuf[nwords - 1] = 0;
 	    }
 
 	  while (r-- > 0)
 	    {
 	      shmem_long_put (rbuf, tbuf, nwords, peer);
-	      shmem_wait (&rbuf[nwords - 1], 0);
+	      shmem_long_wait (&rbuf[nwords - 1], 0);
 	      rbuf[nwords - 1] = 0;
 	    }
 
