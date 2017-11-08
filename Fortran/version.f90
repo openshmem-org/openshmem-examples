@@ -54,8 +54,8 @@ program version
   call shmem_info_get_version (maj, min)
   call shmem_info_get_name (verstr)
 
-  write (*, "(A16, A, A, I1, A1, I1, A, I4, A, I4)") &
-       & h, verstr, ' ', maj, '.', min, ': on PE ', me, ' / ',  npes
+  write (*, *) h, verstr, ' ', maj, '.', min, &
+       ': on PE ', me, ' / ',  npes
 
   call shmem_finalize ()
 
