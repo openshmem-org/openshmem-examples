@@ -1,4 +1,8 @@
 //
+// Copyright (c) 2016 - 2018
+//   Stony Brook University
+// Copyright (c) 2015 - 2018
+//   Los Alamos National Security, LLC.
 // Copyright (c) 2011 - 2015
 //   University of Houston System and UT-Battelle, LLC.
 // Copyright (c) 2009 - 2015
@@ -20,7 +24,7 @@
 //   notice, this list of conditions and the following disclaimer in the
 //   documentation and/or other materials provided with the distribution.
 //
-// o Neither the name of the University of Houston System, 
+// o Neither the name of the University of Houston System,
 //   UT-Battelle, LLC. nor the names of its contributors may be used to
 //   endorse or promote products derived from this software without specific
 //   prior written permission.
@@ -93,21 +97,21 @@ main (int argc, char *argv[])
     int seed;
     int trial_num = 100000;
     int trial_total;
-    // 
+    //
     // Initialize SHMEM.
-    // 
+    //
     shmem_init ();
-    // 
+    //
     // Get the number of processes.
-    // 
+    //
     process_num = shmem_n_pes ();
-    // 
+    //
     // Get the rank of this process.
-    // 
+    //
     process_rank = shmem_my_pe ();
-    // 
+    //
     // The master process prints a message.
-    // 
+    //
     if (process_rank == master) {
         cout << "\n";
         cout << "BUFFON_LAPLACE - Master process:\n";
@@ -127,33 +131,33 @@ main (int argc, char *argv[])
         cout << "  Cell height B =   " << b << "\n";
         cout << "  Needle length L = " << l << "\n";
     }
-    // 
+    //
     // added barrier here to force output sequence
-    // 
+    //
     shmem_barrier_all ();
-    // 
+    //
     // Each process sets a random number seed.
-    // 
+    //
     seed = 123456789 + process_rank * 100;
     srand (seed);
-    // 
+    //
     // Just to make sure that we're all doing different things, have each
     // process print out its rank, seed value, and a first test random value.
-    // 
+    //
     random_value = (double) rand () / (double) RAND_MAX;
 
     cout << "  " << setw (8) << process_rank
 	 << "  " << setw (12) << seed
 	 << "  " << setw (14) << random_value << "\n";
-    // 
+    //
     // Each process now carries out TRIAL_NUM trials, and then
     // sends the value back to the master process.
-    // 
+    //
     hit_num = buffon_laplace_simulate (a, b, l, trial_num);
 
-    // 
+    //
     // initialize sync buffer for reduction
-    // 
+    //
     for (int i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
         pSync[i] = SHMEM_SYNC_VALUE;
     }
@@ -162,9 +166,9 @@ main (int argc, char *argv[])
     shmem_int_sum_to_all (&hit_total, &hit_num, 1, 0, 0, process_num, pWrk,
                           pSync);
 
-    // 
+    //
     // The master process can now estimate PI.
-    // 
+    //
     if (process_rank == master) {
         trial_total = trial_num * process_num;
 
@@ -189,9 +193,9 @@ main (int argc, char *argv[])
 	     << "  " << setw (16) << pi_estimate
 	     << "  " << setw (16) << pi_error << "\n";
     }
-    // 
+    //
     // Shut down
-    // 
+    //
     if (process_rank == master) {
         cout << "\n";
         cout << "BUFFON_LAPLACE - Master process:\n";
@@ -218,22 +222,22 @@ buffon_laplace_simulate (double a, double b, double l, int trial_num)
     hits = 0;
 
     for (trial = 1; trial <= trial_num; trial++) {
-        // 
+        //
         // Randomly choose the location of the eye of the needle in
         // [0,0]x[A,B],
         // and the angle the needle makes.
-        // 
+        //
         x1 = a * (double) rand () / (double) RAND_MAX;
         y1 = b * (double) rand () / (double) RAND_MAX;
         angle = 2.0 * pi * (double) rand () / (double) RAND_MAX;
-        // 
+        //
         // Compute the location of the point of the needle.
-        // 
+        //
         x2 = x1 + l * cos (angle);
         y2 = y1 + l * sin (angle);
-        // 
+        //
         // Count the end locations that lie outside the cell.
-        // 
+        //
         if (x2 <= 0.0 || a <= x2 || y2 <= 0.0 || b <= y2) {
             hits = hits + 1;
         }
