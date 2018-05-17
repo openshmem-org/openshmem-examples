@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -53,8 +57,8 @@
 
 #include <shmem.h>
 
-long pSync[_SHMEM_REDUCE_SYNC_SIZE];
-long pWrk[_SHMEM_REDUCE_SYNC_SIZE];
+long pSync[SHMEM_REDUCE_SYNC_SIZE];
+long pWrk[SHMEM_REDUCE_SYNC_SIZE];
 
 #define N 3
 
@@ -62,30 +66,30 @@ long src[N];
 long dst[N];
 
 int
-main ()
+main()
 {
     int i;
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_init ();
+    shmem_init();
 
     for (i = 0; i < N; i += 1) {
-        src[i] = shmem_my_pe () + i;
+        src[i] = shmem_my_pe() + i;
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_long_max_to_all (dst, src, 3, 0, 0, 4, pWrk, pSync);
+    shmem_long_max_to_all(dst, src, 3, 0, 0, 4, pWrk, pSync);
 
-    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
+    printf("%d/%d   dst =", shmem_my_pe(), shmem_n_pes());
     for (i = 0; i < N; i += 1) {
-        printf (" %ld", dst[i]);
+        printf(" %ld", dst[i]);
     }
-    printf ("\n");
+    printf("\n");
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

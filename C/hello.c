@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -46,21 +50,21 @@
 #include <shmem.h>
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int me, npes;
     struct utsname u;
 
-    uname (&u);
+    uname(&u);
 
-    shmem_init ();
+    shmem_init();
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
-    printf ("%s: Hello from PE %4d of %4d\n", u.nodename, me, npes);
+    printf("%s: Hello from PE %4d of %4d\n", u.nodename, me, npes);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

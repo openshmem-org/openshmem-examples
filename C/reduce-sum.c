@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -69,40 +73,40 @@ int src;
 int dst;
 
 int
-main ()
+main()
 {
     int i;
     long *pSync;
     int *pWrk;
     int pWrk_size;
 
-    shmem_init ();
+    shmem_init();
 
-    pWrk_size = MAX (nred / 2 + 1, _SHMEM_REDUCE_MIN_WRKDATA_SIZE);
-    pWrk = (int *) shmem_malloc (pWrk_size * sizeof (*pWrk));
-    assert (pWrk != NULL);
+    pWrk_size = MAX(nred / 2 + 1, SHMEM_REDUCE_MIN_WRKDATA_SIZE);
+    pWrk = (int *) shmem_malloc(pWrk_size * sizeof(*pWrk));
+    assert(pWrk != NULL);
 
-    pSync = (long *) shmem_malloc (_SHMEM_REDUCE_SYNC_SIZE * sizeof (*pSync));
-    assert (pSync != NULL);
+    pSync = (long *) shmem_malloc(SHMEM_REDUCE_SYNC_SIZE * sizeof(*pSync));
+    assert(pSync != NULL);
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    src = shmem_my_pe () + 1;
-    shmem_barrier_all ();
+    src = shmem_my_pe() + 1;
+    shmem_barrier_all();
 
-    shmem_int_sum_to_all (&dst, &src, nred, 0, 0, 4, pWrk, pSync);
+    shmem_int_sum_to_all(&dst, &src, nred, 0, 0, 4, pWrk, pSync);
 
-    printf ("%d/%d   dst =", shmem_my_pe (), shmem_n_pes ());
-    printf (" %d", dst);
-    printf ("\n");
+    printf("%d/%d   dst =", shmem_my_pe(), shmem_n_pes());
+    printf(" %d", dst);
+    printf("\n");
 
-    shmem_barrier_all ();
-    shmem_free (pSync);
-    shmem_free (pWrk);
+    shmem_barrier_all();
+    shmem_free(pSync);
+    shmem_free(pWrk);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

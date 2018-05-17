@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -47,17 +51,17 @@
 #include <shmem.h>
 
 int
-main ()
+main()
 {
-    shmem_init ();
+    shmem_init();
 
-    if (shmem_my_pe () == 0) {
-        shmem_int_put (NULL, NULL, 1, 1);
+    if (shmem_my_pe() == 0) {
+        shmem_int_put(NULL, NULL, 1, 1);
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

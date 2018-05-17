@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -49,7 +53,7 @@
 
 #include <shmem.h>
 
-static long pSync[_SHMEM_BCAST_SYNC_SIZE];
+static long pSync[SHMEM_BCAST_SYNC_SIZE];
 
 static int src[4] = { 11, 12, 13, 14 };
 
@@ -61,41 +65,41 @@ int npes;
 int me;
 
 static void
-show_dst (char *tag)
+show_dst(char *tag)
 {
     int i;
-    printf ("%8s: dst[%d/%d] =", tag, me, npes);
+    printf("%8s: dst[%d/%d] =", tag, me, npes);
     for (i = 0; i < DST_SIZE; i += 1) {
-        printf (" %d", dst[i]);
+        printf(" %d", dst[i]);
     }
-    printf ("\n");
+    printf("\n");
 }
 
 int
-main (void)
+main(void)
 {
     int i;
 
-    shmem_init ();
-    npes = shmem_n_pes ();
-    me = shmem_my_pe ();
+    shmem_init();
+    npes = shmem_n_pes();
+    me = shmem_my_pe();
 
     for (i = 0; i < DST_SIZE; i++) {
         dst[i] = -1;
     }
 
-    for (i = 0; i < _SHMEM_BCAST_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me < 4) {
-        shmem_collect32 (dst, src, me + 1, 0, 0, 4, pSync);
-        show_dst ("AFTER");
+        shmem_collect32(dst, src, me + 1, 0, 0, 4, pSync);
+        show_dst("AFTER");
     }
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

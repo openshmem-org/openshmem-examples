@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -55,30 +59,30 @@
 int n;
 
 int
-main (void)
+main(void)
 {
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     n = 3;
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        shmem_int_p (&n, 42, 1);
+        shmem_int_p(&n, 42, 1);
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     /* now check */
 
     if (me == 1) {
-        printf ("PE %d: n = %d, %s\n", me, n, (n == 42) ? "OK" : "FAIL");
+        printf("PE %d: n = %d, %s\n", me, n, (n == 42) ? "OK" : "FAIL");
     }
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

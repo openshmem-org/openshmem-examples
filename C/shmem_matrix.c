@@ -1,26 +1,30 @@
 /*
  *
- * Copyright (c) 2011 - 2015 
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
+ * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, UT-Battelle, LLC
  *    nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -44,15 +48,15 @@
 #include <sys/time.h>
 #include <unistd.h>
 double
-gettime ()
+gettime()
 {
     struct timeval tv;
-    gettimeofday (&tv, 0);
+    gettimeofday(&tv, 0);
     return (tv.tv_sec * 1000000 + tv.tv_usec);
 }
 
 double
-dt (double *tv1, double *tv2)
+dt(double *tv1, double *tv2)
 {
     return (*tv1 - *tv2);
 }
@@ -64,29 +68,29 @@ dt (double *tv1, double *tv2)
 
 // routine to print the partial array
 void
-print_array (double **array, int blocksize)
+print_array(double **array, int blocksize)
 {
     int i, j;
     for (i = 0; i < ROWS; i++) {
         for (j = 0; j < blocksize; j++) {
-            printf ("%f  ", array[i][j]);
+            printf("%f  ", array[i][j]);
         }                       // end for loop j
-        printf ("\n");
+        printf("\n");
     }                           // end for loop i
-    printf ("\n");
-    printf ("\n");
+    printf("\n");
+    printf("\n");
 }
 
 
 // needed for reduction operation
-long pSync[_SHMEM_REDUCE_SYNC_SIZE];
-double pWrk[_SHMEM_REDUCE_MIN_WRKDATA_SIZE];
+long pSync[SHMEM_REDUCE_SYNC_SIZE];
+double pWrk[SHMEM_REDUCE_MIN_WRKDATA_SIZE];
 
 // global shmem_accesible
 double maxtime;
 double t, tv[2];
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int i, j, k;
     int blocksize;
@@ -95,44 +99,44 @@ main (int argc, char **argv)
     double **a_local, **b_local;
     double **c_local;
     int B_matrix_displacement;
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1)
-        pSync[i] = _SHMEM_SYNC_VALUE;
-    tv[0] = gettime ();
-    shmem_init ();
-    rank = shmem_my_pe ();
-    size = shmem_n_pes ();
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1)
+        pSync[i] = SHMEM_SYNC_VALUE;
+    tv[0] = gettime();
+    shmem_init();
+    rank = shmem_my_pe();
+    size = shmem_n_pes();
     np = size;                  // number of processes
     blocksize = COLUMNS / np;   // block size
     B_matrix_displacement = rank * blocksize;
 
     // initialize the input arrays
-    shmem_barrier_all ();
-    a_local = (double **) shmem_malloc (ROWS * sizeof (double *));
-    b_local = (double **) shmem_malloc (ROWS * sizeof (double *));
-    c_local = (double **) shmem_malloc (ROWS * sizeof (double *));
+    shmem_barrier_all();
+    a_local = (double **) shmem_malloc(ROWS * sizeof(double *));
+    b_local = (double **) shmem_malloc(ROWS * sizeof(double *));
+    c_local = (double **) shmem_malloc(ROWS * sizeof(double *));
     for (i = 0; i < ROWS; i++) {
-        a_local[i] = (double *) shmem_malloc (blocksize * sizeof (double));
-        b_local[i] = (double *) shmem_malloc (blocksize * sizeof (double));
-        c_local[i] = (double *) shmem_malloc (blocksize * sizeof (double));
+        a_local[i] = (double *) shmem_malloc(blocksize * sizeof(double));
+        b_local[i] = (double *) shmem_malloc(blocksize * sizeof(double));
+        c_local[i] = (double *) shmem_malloc(blocksize * sizeof(double));
         for (j = 0; j < blocksize; j++) {
             a_local[i][j] = i + 1 * j + 1 * rank + 1;   // random values
             b_local[i][j] = i + 2 * j + 2 * rank + 1;   // random values
             c_local[i][j] = 0.0;
         }
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
 #ifdef DEBUG                    // print the input arrays from root process if
-                                // DEBUG enabled
+    // DEBUG enabled
     if (rank == 0) {
-        printf ("matrix a from %d\n", rank);
-        print_array (a_local, blocksize);
-        printf ("matrix b from %d\n", rank);
-        print_array (b_local, blocksize);
+        printf("matrix a from %d\n", rank);
+        print_array(a_local, blocksize);
+        printf("matrix b from %d\n", rank);
+        print_array(b_local, blocksize);
     }
 
 #endif /* */
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     // start the matrix multiplication
     for (i = 0; i < ROWS; i++) {
@@ -147,14 +151,15 @@ main (int argc, char **argv)
             }
 
             // send a block of matrix A to the adjacent PE
-            shmem_barrier_all ();
+            shmem_barrier_all();
             if (rank == np - 1)
-                shmem_double_put (&a_local[i][0], &a_local[i][0], blocksize, 0);
+                shmem_double_put(&a_local[i][0], &a_local[i][0], blocksize,
+                                 0);
 
             else
-                shmem_double_put (&a_local[i][0], &a_local[i][0], blocksize,
-                                  rank + 1);
-            shmem_barrier_all ();
+                shmem_double_put(&a_local[i][0], &a_local[i][0], blocksize,
+                                 rank + 1);
+            shmem_barrier_all();
 
             // reset the displacement of matrix B to the next block
             if (B_matrix_displacement == 0)
@@ -164,29 +169,29 @@ main (int argc, char **argv)
                 B_matrix_displacement = B_matrix_displacement - blocksize;
         }
     }
-    shmem_barrier_all ();
-    tv[1] = gettime ();
-    t = dt (&tv[1], &tv[0]);
+    shmem_barrier_all();
+    tv[1] = gettime();
+    t = dt(&tv[1], &tv[0]);
 
 #if DEBUG
-    printf ("Process %d runtime: %4.2f Sec\n", rank, t / 1000000.0);
+    printf("Process %d runtime: %4.2f Sec\n", rank, t / 1000000.0);
 
 #endif /* */
 
     // Determine the maximum of the execution time for individual PEs
-    shmem_double_max_to_all (&maxtime, &t, 1, 0, 0, size, pWrk, pSync);
+    shmem_double_max_to_all(&maxtime, &t, 1, 0, 0, size, pWrk, pSync);
 
 #if DEBUG                       // print the resultant array from root process
-                                // if DEBUG enabled
+    // if DEBUG enabled
     if (rank == 0) {
-        printf ("matrix c from %d\n", rank);
-        print_array (c_local, blocksize);
+        printf("matrix c from %d\n", rank);
+        print_array(c_local, blocksize);
     }
 
 #endif /* */
     if (rank == 0) {
-        printf ("Execution time in seconds =%4.2f \n", maxtime / 1000000.0);
-        printf ("Execution time in milli seconds =%4.2f \n", maxtime / 1000.0);
+        printf("Execution time in seconds =%4.2f \n", maxtime / 1000000.0);
+        printf("Execution time in milli seconds =%4.2f \n", maxtime / 1000.0);
     }
 
     shmem_finalize();

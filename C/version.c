@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -46,27 +50,27 @@
 #include <shmem.h>
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int me, npes;
     struct utsname u;
     int maj, min;
-    char verstring[_SHMEM_MAX_NAME_LEN];
+    char verstring[SHMEM_MAX_NAME_LEN];
 
-    uname (&u);
+    uname(&u);
 
-    shmem_init ();
+    shmem_init();
 
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
-    shmem_info_get_version (&maj, &min);
-    shmem_info_get_name (verstring);
+    shmem_info_get_version(&maj, &min);
+    shmem_info_get_name(verstring);
 
-    printf ("%s: \"%s\" %d.%d on PE %4d of %4d\n",
-            u.nodename, verstring, maj, min, me, npes);
+    printf("%s: \"%s\" %d.%d on PE %4d of %4d\n",
+           u.nodename, verstring, maj, min, me, npes);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

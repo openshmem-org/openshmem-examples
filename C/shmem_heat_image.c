@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015 
  *   University of Houston System and UT-Battelle, LLC.
  * 
@@ -47,15 +51,15 @@
 #include <unistd.h>
 
 double
-gettime ()
+gettime()
 {
     struct timeval tv;
-    gettimeofday (&tv, 0);
+    gettimeofday(&tv, 0);
     return (tv.tv_sec * 1000000 + tv.tv_usec);
 }
 
 double
-dt (double *tv1, double *tv2)
+dt(double *tv1, double *tv2)
 {
     return (*tv1 - *tv2);
 }
@@ -78,12 +82,12 @@ dt (double *tv1, double *tv2)
 // end change here.
 
 void
-itstep (int mx, int my, void *pf, void *pnewf, void *pr, double rdx2,
-        double rdy2, double beta)
+itstep(int mx, int my, void *pf, void *pnewf, void *pr, double rdx2,
+       double rdy2, double beta)
 {
-    DIM2 (double, f, my) = (typeof (f)) pf;
-    DIM2 (double, newf, my) = (typeof (newf)) pnewf;
-    DIM2 (double, r, my) = (typeof (r)) pr;
+    DIM2(double, f, my) = (typeof(f)) pf;
+    DIM2(double, newf, my) = (typeof(newf)) pnewf;
+    DIM2(double, r, my) = (typeof(r)) pr;
     int i, j, mx1, my1;
     mx1 = mx - 1;
     my1 = my - 1;
@@ -98,30 +102,31 @@ itstep (int mx, int my, void *pf, void *pnewf, void *pr, double rdx2,
 
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
-    int i, j, n, mx1, mx2, my1, my_number, n_of_nodes, totalmx, partmx, leftmx,
-        mx, my;
+    int i, j, n, mx1, mx2, my1, my_number, n_of_nodes, totalmx, partmx,
+        leftmx, mx, my;
     FILE *fp;
     double t, tv[2];
     double rdx2, rdy2, beta;
 
-    shmem_init ();
-    my_number = shmem_my_pe ();
-    n_of_nodes = shmem_n_pes ();
+    shmem_init();
+    my_number = shmem_my_pe();
+    n_of_nodes = shmem_n_pes();
 
     if (argc != 3) {
         if (!my_number)
-            fprintf (stderr, "Usage: %s <nrows> <ncolumns>\n", argv[0]);
+            fprintf(stderr, "Usage: %s <nrows> <ncolumns>\n", argv[0]);
         return (-1);
     }
 
-    totalmx = mx = (int) atol (argv[1]);
-    my = (int) atol (argv[2]);
+    totalmx = mx = (int) atol(argv[1]);
+    my = (int) atol(argv[2]);
 
     if (my < 1) {
         if (!my_number)
-            fprintf (stderr, "Number of columns (%d) should be positive\n", my);
+            fprintf(stderr, "Number of columns (%d) should be positive\n",
+                    my);
         return (-1);
     }
 
@@ -136,7 +141,7 @@ main (int argc, char **argv)
     leftmx = totalmx - partmx * (n_of_nodes - 1);
     if (leftmx < 1) {
         if (!my_number)
-            fprintf (stderr, "Cannot distribute rows, too many processors\n");
+            fprintf(stderr, "Cannot distribute rows, too many processors\n");
         return (-1);
     }
 
@@ -149,17 +154,17 @@ main (int argc, char **argv)
 
 /* Here we know the array sizes, so make the arrays themselves: */
     {
-        DIM2 (double, f, my);
-        DIM2 (double, newf, my);
-        DIM2 (double, r, my);
-        typeof (f) pf[2];
+        DIM2(double, f, my);
+        DIM2(double, newf, my);
+        DIM2(double, r, my);
+        typeof(f) pf[2];
         int curf;
 
-        f = (typeof (f)) shmem_malloc (2 * partmx * sizeof (*f));
-        r = (typeof (r)) malloc (mx * sizeof (*r));
+        f = (typeof(f)) shmem_malloc(2 * partmx * sizeof(*f));
+        r = (typeof(r)) malloc(mx * sizeof(*r));
         if ((!f) || (!r)) {
-            fprintf (stderr, "Cannot allocate, exiting\n");
-            exit (-1);
+            fprintf(stderr, "Cannot allocate, exiting\n");
+            exit(-1);
         }
         curf = 0;
         pf[0] = f;
@@ -172,7 +177,7 @@ main (int argc, char **argv)
             printf
                 ("Solving heat conduction task on %d by %d grid by %d processors\n",
                  totalmx, my - 2, n_of_nodes);
-            fflush (stdout);
+            fflush(stdout);
         }
 
         for (i = 0; i < mx; i++) {
@@ -189,50 +194,50 @@ main (int argc, char **argv)
 
         mx1 = mx - 1;
         my1 = my - 1;
-        shmem_barrier_all ();
+        shmem_barrier_all();
 /* Iteration loop: */
-        tv[0] = gettime ();
+        tv[0] = gettime();
 
         for (n = 0; n < NITER; n++) {
 
             if (!my_number) {
                 if (!(n % STEPITER))
-                    printf ("Iteration %d\n", n);
+                    printf("Iteration %d\n", n);
             }
             /* Step of calculation starts here: */
             f = pf[curf];
             newf = pf[1 - curf];
-            itstep (mx, my, f, newf, r, rdx2, rdy2, beta);
+            itstep(mx, my, f, newf, r, rdx2, rdy2, beta);
             /* Do all the transfers: */
-            shmem_barrier_all ();
+            shmem_barrier_all();
             if (my_number > 0)
-                shmem_double_put (&(newf[partmx - 1][1]), &(newf[1][1]), my - 2,
-                                  my_number - 1);
+                shmem_double_put(&(newf[partmx - 1][1]), &(newf[1][1]),
+                                 my - 2, my_number - 1);
             if (my_number < (n_of_nodes - 1))
-                shmem_double_put (&(newf[0][1]), &(newf[mx - 2][1]), my - 2,
-                                  my_number + 1);
-            shmem_barrier_all ();
+                shmem_double_put(&(newf[0][1]), &(newf[mx - 2][1]), my - 2,
+                                 my_number + 1);
+            shmem_barrier_all();
             /* swap the halves: */
 
             curf = 1 - curf;
         }
 
         if (!my_number) {
-            tv[1] = gettime ();
-            t = dt (&tv[1], &tv[0]);
-            printf ("Elapsed time: %4.2f sec\n", t / 1000000.0);
-            printf ("Output image file in current directory\n");
-            fp = fopen (FILENAME, "w");
-            fclose (fp);
+            tv[1] = gettime();
+            t = dt(&tv[1], &tv[0]);
+            printf("Elapsed time: %4.2f sec\n", t / 1000000.0);
+            printf("Output image file in current directory\n");
+            fp = fopen(FILENAME, "w");
+            fclose(fp);
         }
 
         for (j = 0; j < n_of_nodes; j++) {
-            shmem_barrier_all ();
+            shmem_barrier_all();
             if (j == my_number) {
-                fp = fopen (FILENAME, "a");
+                fp = fopen(FILENAME, "a");
                 for (i = 1; i < (mx - 1); i++)
-                    fwrite (&(newf[i][1]), my - 2, sizeof (newf[0][0]), fp);
-                fclose (fp);
+                    fwrite(&(newf[i][1]), my - 2, sizeof(newf[0][0]), fp);
+                fclose(fp);
             }
         }
     }

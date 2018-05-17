@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -54,53 +58,53 @@
 #include <shmem.h>
 
 int
-main (void)
+main(void)
 {
     int me, npes;
     long *dest;
 
     {
         time_t now;
-        time (&now);
-        srand (now + getpid ());
+        time(&now);
+        srand(now + getpid());
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
-    dest = (long *) shmem_malloc (sizeof (*dest));
+    dest = (long *) shmem_malloc(sizeof(*dest));
 
     *dest = 9L;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
         int i;
         for (i = 0; i < 4; i += 1) {
             long src = 9L;
-            shmem_long_put (dest, &src, 1, 1);
-            fprintf (stderr, "PE %d put %ld\n", me, src);
+            shmem_long_put(dest, &src, 1, 1);
+            fprintf(stderr, "PE %d put %ld\n", me, src);
         }
-        fprintf (stderr, "----------------------------\n");
+        fprintf(stderr, "----------------------------\n");
         for (i = 0; i < 1000; i += 1) {
-            long src = rand () % 10;
-            shmem_long_put (dest, &src, 1, 1);
-            fprintf (stderr, "PE %d put %ld\n", me, src);
+            long src = rand() % 10;
+            shmem_long_put(dest, &src, 1, 1);
+            fprintf(stderr, "PE %d put %ld\n", me, src);
             if (src != 9L)
                 break;
         }
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 1) {
-        shmem_long_wait (dest, 9L);
-        fprintf (stderr, "PE %d finished wait, got %ld\n", me, *dest);
+        shmem_long_wait_until(dest, SHMEM_CMP_NE, 9L);
+        fprintf(stderr, "PE %d finished wait, got %ld\n", me, *dest);
     }
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

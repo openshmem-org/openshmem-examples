@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -46,7 +50,7 @@
 #include <shmem.h>
 
 int
-main ()
+main()
 {
     short source[10] = { 1, 2, 3, 4, 5,
         6, 7, 8, 9, 10
@@ -59,21 +63,21 @@ main ()
         target[i] = 666;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     if (me == 0) {
-        shmem_short_iput (target, source, 2, 1, 4, 1);
+        shmem_short_iput(target, source, 2, 1, 4, 1);
     }
-    shmem_barrier_all ();       /* sync sender and receiver */
+    shmem_barrier_all();        /* sync sender and receiver */
     if (me == 1) {
         for (i = 0; i < 10; i += 1) {
-            printf ("PE %d: target[%d] = %hd\n", me, i, target[i]);
+            printf("PE %d: target[%d] = %hd\n", me, i, target[i]);
         }
     }
-    shmem_barrier_all ();       /* sync before exiting */
+    shmem_barrier_all();        /* sync before exiting */
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

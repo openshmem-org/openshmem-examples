@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -52,35 +56,35 @@
 
 #include <shmem.h>
 
-int pWrk[_SHMEM_REDUCE_SYNC_SIZE];
-long pSync[_SHMEM_REDUCE_SYNC_SIZE];
+int pWrk[SHMEM_REDUCE_SYNC_SIZE];
+long pSync[SHMEM_REDUCE_SYNC_SIZE];
 
 int src;
 int dst;
 
 int
-main ()
+main()
 {
     int i;
     int me;
     int npes;
 
-    for (i = 0; i < _SHMEM_REDUCE_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_REDUCE_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     src = me + 1;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_int_or_to_all (&dst, &src, 1, 0, 0, npes, pWrk, pSync);
+    shmem_int_or_to_all(&dst, &src, 1, 0, 0, npes, pWrk, pSync);
 
-    printf ("%d/%d   dst = %d\n", me, npes, dst);
+    printf("%d/%d   dst = %d\n", me, npes, dst);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -49,15 +53,15 @@
 #include <shmem.h>
 
 int
-main ()
+main()
 {
     long *x;
 
-    shmem_init ();
+    shmem_init();
 
-    x = (long *) shmem_malloc (sizeof (*x));
+    x = (long *) shmem_malloc(sizeof(*x));
 
-    shmem_free (x);
+    shmem_free(x);
 
     return 0;
 }

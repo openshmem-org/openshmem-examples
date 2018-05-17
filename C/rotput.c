@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -52,43 +56,43 @@
 #include <shmem.h>
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int nextpe;
     int me, npes;
     int src;
     int *dest;
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     nextpe = (me + 1) % npes;
 
     src = nextpe;
 
-    dest = (int *) shmem_malloc (sizeof (*dest));
-    assert (dest != NULL);
+    dest = (int *) shmem_malloc(sizeof(*dest));
+    assert(dest != NULL);
 
     *dest = -1;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_int_put (dest, &src, 1, nextpe);
+    shmem_int_put(dest, &src, 1, nextpe);
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    printf ("%4d: got %4d: ", me, *dest);
+    printf("%4d: got %4d: ", me, *dest);
     if (*dest == me) {
-        printf ("CORRECT");
+        printf("CORRECT");
     }
     else {
-        printf ("WRONG, expected %d", me);
+        printf("WRONG, expected %d", me);
     }
-    printf ("\n");
+    printf("\n");
 
-    shmem_barrier_all ();
-    shmem_free (dest);
-    shmem_finalize ();
+    shmem_barrier_all();
+    shmem_free(dest);
+    shmem_finalize();
 
     return 0;
 }

@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -48,44 +52,44 @@
 
 #define NPES 4
 
-long pSync[_SHMEM_BARRIER_SYNC_SIZE];
+long pSync[SHMEM_BARRIER_SYNC_SIZE];
 int x = 10101;
 
 int
-main ()
+main()
 {
     int me, npes;
     int i;
 
-    for (i = 0; i < _SHMEM_BARRIER_SYNC_SIZE; i += 1) {
-        pSync[i] = _SHMEM_SYNC_VALUE;
+    for (i = 0; i < SHMEM_BARRIER_SYNC_SIZE; i += 1) {
+        pSync[i] = SHMEM_SYNC_VALUE;
     }
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        shmem_int_p (&x, 4, 1);
+        shmem_int_p(&x, 4, 1);
     }
 
     if (me == 2) {
-        printf ("Process %d going to sleep\n", me);
-        sleep (3);
-        printf ("Process %d out from sleep\n", me);
+        printf("Process %d going to sleep\n", me);
+        sleep(3);
+        printf("Process %d out from sleep\n", me);
     }
 
-    printf ("Process %d before barrier\n", me);
+    printf("Process %d before barrier\n", me);
     if (me == 2 || me == 3) {
-        shmem_barrier (2, 0, 2, pSync);
+        shmem_barrier(2, 0, 2, pSync);
     }
-    printf ("Process %d after barrier\n", me);
+    printf("Process %d after barrier\n", me);
 
-    printf ("%d: x = %d\n", me, x);
+    printf("%d: x = %d\n", me, x);
 
-    shmem_finalize ();
- 
+    shmem_finalize();
+
     return 0;
 }

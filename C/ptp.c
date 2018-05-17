@@ -53,24 +53,24 @@ volatile int pe_escape = 1;
 int A = 0;
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int me, npes;
     struct timeval now;
     long t_start, t_end;
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     if (npes < 4) {
         if (me == 0)
-            fprintf (stderr, "ERR: test requires 4 or more PEs\n");
+            fprintf(stderr, "ERR: test requires 4 or more PEs\n");
         return 1;
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    gettimeofday (&now, NULL);
+    gettimeofday(&now, NULL);
     t_start = (now.tv_sec * 1000000.0) + now.tv_usec;
 
     switch (me) {
@@ -84,54 +84,54 @@ main (int argc, char **argv)
                 pi2 = pi * (double) j;
                 pi3 = (pi2 * pi) / 1.2;
             }
-            mb ();
+            mb();
         }
-        gettimeofday (&now, NULL);
+        gettimeofday(&now, NULL);
         t_end = ((now.tv_sec * 1000000.0) + now.tv_usec) - t_start;
         break;
 
     case 1:
-        shmem_int_inc (&A, 0);
-        gettimeofday (&now, NULL);
+        shmem_int_atomic_inc(&A, 0);
+        gettimeofday(&now, NULL);
         t_end = ((now.tv_sec * 1000000.0) + now.tv_usec) - t_start;
         break;
 
     case 2:
-        while (1 != shmem_int_g (&A, 0)) {;
+        while (1 != shmem_int_g(&A, 0)) {;
         }
-        shmem_int_inc (&A, 0);
-        gettimeofday (&now, NULL);
+        shmem_int_atomic_inc(&A, 0);
+        gettimeofday(&now, NULL);
         t_end = ((now.tv_sec * 1000000.0) + now.tv_usec) - t_start;
         break;
 
     case 3:
-        while (2 != shmem_int_g (&A, 0)) {;
+        while (2 != shmem_int_g(&A, 0)) {;
         }
-        shmem_int_p ((int *) &pe_escape, 0, 0); // release PE0.
+        shmem_int_p((int *) &pe_escape, 0, 0);  // release PE0.
         if (npes > 4) {
             int i;
 
             for (i = 4; i < npes; i++)
-                shmem_int_p ((int *) &pe_escape, 0, i); // release PE0.
+                shmem_int_p((int *) &pe_escape, 0, i);  // release PE0.
         }
-        gettimeofday (&now, NULL);
+        gettimeofday(&now, NULL);
         t_end = ((now.tv_sec * 1000000.0) + now.tv_usec) - t_start;
         break;
 
     default:
         /* spin until released, A will never == 99, generate PE-0 traffic */
-        while (99 != shmem_int_g (&A, 0) && pe_escape) {
-            mb ();
+        while (99 != shmem_int_g(&A, 0) && pe_escape) {
+            mb();
         }
-        gettimeofday (&now, NULL);
+        gettimeofday(&now, NULL);
         t_end = ((now.tv_sec * 1000000.0) + now.tv_usec) - t_start;
         break;
     }
 
     if (me < 4)
-        fprintf (stderr, "[%d] elapsed usecs %ld A %d\n", me, t_end, A);
+        fprintf(stderr, "[%d] elapsed usecs %ld A %d\n", me, t_end, A);
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     shmem_finalize();
 

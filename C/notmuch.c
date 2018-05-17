@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -51,9 +55,9 @@
 #include <shmem.h>
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
-    shmem_init ();
-    shmem_finalize ();
+    shmem_init();
+    shmem_finalize();
     return 0;
 }

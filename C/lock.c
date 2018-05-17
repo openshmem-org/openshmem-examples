@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -50,32 +54,32 @@
 long L = 0;
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     int me;
     int slp;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
     slp = 1;
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 1) {
-        sleep (3);
+        sleep(3);
     }
 
-    shmem_set_lock (&L);
+    shmem_set_lock(&L);
 
-    printf ("%d: sleeping %d second%s...\n", me, slp, slp == 1 ? "" : "s");
-    sleep (slp);
-    printf ("%d: sleeping...done\n", me);
+    printf("%d: sleeping %d second%s...\n", me, slp, slp == 1 ? "" : "s");
+    sleep(slp);
+    printf("%d: sleeping...done\n", me);
 
-    shmem_clear_lock (&L);
+    shmem_clear_lock(&L);
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

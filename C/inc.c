@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -21,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -57,24 +61,24 @@
 int dst;
 
 int
-main ()
+main()
 {
     int me;
 
-    shmem_init ();
-    me = shmem_my_pe ();
+    shmem_init();
+    me = shmem_my_pe();
 
     dst = 74;
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
     if (me == 0) {
-        shmem_int_inc (&dst, 1);
+        shmem_int_atomic_inc(&dst, 1);
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    printf ("%d: dst = %d\n", me, dst);
+    printf("%d: dst = %d\n", me, dst);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

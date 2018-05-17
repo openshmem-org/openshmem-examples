@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -50,30 +54,30 @@
 #include <shmem.h>
 
 int
-main (int argc, char **argv)
+main(int argc, char **argv)
 {
     long *src;
     long dest;
     int nextpe;
     int me, npes;
 
-    shmem_init ();
-    me = shmem_my_pe ();
-    npes = shmem_n_pes ();
+    shmem_init();
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
-    src = (long *) shmem_malloc (sizeof (*src));
+    src = (long *) shmem_malloc(sizeof(*src));
 
     *src = me;
 
     nextpe = (me + 1) % npes;
 
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_long_get (&dest, src, 1, nextpe);
+    shmem_long_get(&dest, src, 1, nextpe);
 
-    printf ("%d : %ld\n", me, dest);
+    printf("%d : %ld\n", me, dest);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }

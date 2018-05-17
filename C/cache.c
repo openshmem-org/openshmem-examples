@@ -1,5 +1,9 @@
 /*
  *
+ * Copyright (c) 2016 - 2018
+ *   Stony Brook University
+ * Copyright (c) 2015 - 2018
+ *   Los Alamos National Security, LLC.
  * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
  * Copyright (c) 2009 - 2015
@@ -54,23 +58,23 @@
 long var;
 
 int
-main (void)
+main(void)
 {
-    shmem_init ();
+    shmem_init();
 
-    shmem_clear_cache_inv ();
+    shmem_clear_cache_inv();
 
-    shmem_set_cache_inv ();
+    shmem_set_cache_inv();
 
-    shmem_clear_cache_line_inv (&var);
+    shmem_clear_cache_line_inv(&var);
 
-    shmem_set_cache_line_inv (&var);
+    shmem_set_cache_line_inv(&var);
 
-    shmem_udcflush ();
+    shmem_udcflush();
 
-    shmem_udcflush_line (&var);
+    shmem_udcflush_line(&var);
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
 }
