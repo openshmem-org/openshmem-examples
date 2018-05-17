@@ -49,11 +49,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <assert.h>
-
 #include <shmem.h>
 
-static long pSync[SHMEM_BCAST_SYNC_SIZE];
+static long pSync[SHMEM_COLLECT_SYNC_SIZE];
 
 static long src[4] = { 11, 12, 13, 14 };
 
@@ -89,16 +87,17 @@ main(void)
         dst[i] = -1;
     }
 
-    for (i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+    for (i = 0; i < SHMEM_COLLECT_SYNC_SIZE; i += 1) {
         pSync[i] = SHMEM_SYNC_VALUE;
     }
 
     shmem_barrier_all();
 
-    if (me < 4) {
-        shmem_collect64(dst, src, me + 1, 0, 0, 4, pSync);
-        show_dst("AFTER");
-    }
+    shmem_collect64(dst, src, me + 1, 0, 0, npes, pSync);
+
+    shmem_barrier_all();
+
+    show_dst("AFTER");
 
     shmem_finalize();
 
