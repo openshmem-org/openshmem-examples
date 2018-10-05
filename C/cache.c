@@ -25,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -61,6 +61,18 @@ int
 main(void)
 {
     shmem_init();
+
+    shmem_clear_cache_inv();
+
+    shmem_set_cache_inv();
+
+    shmem_clear_cache_line_inv(&var);
+
+    shmem_set_cache_line_inv(&var);
+
+    shmem_udcflush();
+
+    shmem_udcflush_line(&var);
 
     shmem_clear_cache_inv();
 

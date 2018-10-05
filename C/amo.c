@@ -9,7 +9,8 @@
 #include <shmem.h>
 #include <stdio.h>
 #include <stdlib.h>
-const int tries = 1000000;
+
+const int tries = 10000;
 
 #ifdef TEST64BIT
 typedef long locktype;
