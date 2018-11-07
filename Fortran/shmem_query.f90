@@ -50,7 +50,7 @@ program query
 
   implicit none
   include 'shmem.fh'
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: shmem_my_pe
 
   character (len=SHMEM_MAX_NAME_LEN) name
   character (len=7) :: major_status, minor_status

@@ -54,7 +54,7 @@ program finc
 
   include 'shmem.fh'
 
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: shmem_my_pe
   integer :: shmem_int4_finc
 
   integer, save :: dst

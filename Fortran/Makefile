@@ -44,6 +44,7 @@
 
 SHMEM_FC = oshfort
 FFLAGS   = -g -O2
+
 # programs using dynamic memory management need to use pointers.
 # Doesn't hurt other programs so just add support here.
 FFLAGS  +=  -fcray-pointer

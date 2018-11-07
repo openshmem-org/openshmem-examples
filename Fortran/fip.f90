@@ -49,7 +49,7 @@
 program fip
 
   include 'shmem.fh'
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: shmem_my_pe
 
   real e
   parameter ( e = 2.71828182 )

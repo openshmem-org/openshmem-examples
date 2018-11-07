@@ -24,7 +24,7 @@
 !   notice, this list of conditions and the following disclaimer in the
 !   documentation and/or other materials provided with the distribution.
 !
-! o Neither the name of the University of Houston System, 
+! o Neither the name of the University of Houston System,
 !   UT-Battelle, LLC. nor the names of its contributors may be used to
 !   endorse or promote products derived from this software without specific
 !   prior written permission.
@@ -44,11 +44,11 @@
 
 
 !**********************************************************************
-!   pi.f - compute pi by integrating f(x) = 4/(1 + x**2)    
+!   pi.f - compute pi by integrating f(x) = 4/(1 + x**2)
 !
 !  (C) 2001 by Argonne UT-Battelle, LLC.
 !      See COPYRIGHT in top-level directory.
-!    
+!
 !   Each node:
 !    1) receives the number of rectangles used in the approximation.
 !    2) calculates the areas of it's rectangles.
@@ -58,7 +58,7 @@
 !  Variables:
 !
 !    pi  the calculated result
-!    n   number of points of integration. 
+!    n   number of points of integration.
 !    x           midpoint of each rectangle's interval
 !    f           function to integrate
 !    sum,pi      area of rectangles
@@ -81,9 +81,9 @@ program main
   parameter        (PI25DT = 3.141592653589793238462643d0)
 
   double precision, save :: mypi, pi
-  double precision       :: h, sum, x, a
+  double precision       :: h, sum, x
   integer, save          :: n
-  integer                :: myid, numprocs, i, rc
+  integer                :: myid, numprocs, i
 
   integer :: psync_bcast(SHMEM_BCAST_SYNC_SIZE)
   data psync_bcast /SHMEM_BCAST_SYNC_SIZE*SHMEM_SYNC_VALUE/

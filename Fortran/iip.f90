@@ -51,7 +51,7 @@
 
 program iip
   include 'shmem.fh'
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: shmem_my_pe
 
   integer, save :: n
   integer :: me

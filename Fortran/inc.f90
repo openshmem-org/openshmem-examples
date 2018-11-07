@@ -56,7 +56,7 @@ program inc
   integer, save :: dst
 
   include 'shmem.fh'
-  integer :: shmem_n_pes, shmem_my_pe
+  integer :: shmem_my_pe
 
   call shmem_init ()
   me = shmem_my_pe()
