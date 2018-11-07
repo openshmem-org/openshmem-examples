@@ -44,7 +44,7 @@
 
 
 SHMEM_CC       = oshcc
-SHMEM_CFLAGS   = -g -O2 -Wall -Wextra -Werror
+SHMEM_CFLAGS   = -g -O2
 
 C_TESTS        = $(wildcard *.c)
 
