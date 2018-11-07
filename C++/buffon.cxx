@@ -66,7 +66,6 @@ using namespace std;
 
 #include <shmem.h>
 
-int main (int argc, char *argv[]);
 int buffon_laplace_simulate (double a, double b, double l, int trial_num);
 double r8_abs (double x);
 double r8_huge (void);
@@ -81,7 +80,7 @@ int hit_total;
 int hit_num;
 
 int
-main (int argc, char *argv[])
+main(void)
 {
     double a = 1.0;
     double b = 1.0;
