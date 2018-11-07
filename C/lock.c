@@ -54,7 +54,7 @@
 long L = 0;
 
 int
-main(int argc, char **argv)
+main(void)
 {
     int me;
     int slp;

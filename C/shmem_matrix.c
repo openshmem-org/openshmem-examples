@@ -89,12 +89,13 @@ double pWrk[SHMEM_REDUCE_MIN_WRKDATA_SIZE];
 // global shmem_accesible
 double maxtime;
 double t, tv[2];
+
 int
-main(int argc, char **argv)
+main(void)
 {
     int i, j, k;
     int blocksize;
-    int rank, size, nextpe;
+    int rank, size;
     int p, np;                  // round and number of process
     double **a_local, **b_local;
     double **c_local;

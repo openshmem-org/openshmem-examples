@@ -25,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -45,8 +45,8 @@
  */
 
 /*
- * This program shows how to use shmem_put to simulate MPI_Alltoallv. 
- * Each processor send/rec a different  random number to/from other processors. 
+ * This program shows how to use shmem_put to simulate MPI_Alltoallv.
+ * Each processor send/rec a different  random number to/from other processors.
  * Adopted/ported from source url: http://geco.mines.edu/workshop/class2/examples/mpi/c_ex07.c
  */
 
@@ -59,12 +59,12 @@ int numnodes, myid, mpi_err;
 #define mpi_root 0
 /* end module  */
 
-void init_it(int *argc, char ***argv);
+void init_it(void);
 void seed_random(int id);
 void random_number(float *z);
 
 void
-init_it(int *argc, char ***argv)
+init_it(void)
 {
     // mpi_err = MPI_Init(argc,argv);
     // mpi_err = MPI_Comm_size( MPI_COMM_WORLD, &numnodes );
@@ -76,19 +76,19 @@ init_it(int *argc, char ***argv)
 
 
 int
-main(int argc, char *argv[])
+main(void)
 {
     int *sray, *rray;
     int *sdisp, *scounts, *rdisp, *rcounts;
-    int ssize, rsize, i, k, j;
+    int ssize, rsize, i;
     float z;
 
-    init_it(&argc, &argv);
+    init_it();
     scounts = (int *) shmem_malloc(sizeof(int) * numnodes);
     rcounts = (int *) shmem_malloc(sizeof(int) * numnodes);
     sdisp = (int *) shmem_malloc(sizeof(int) * numnodes);
     rdisp = (int *) shmem_malloc(sizeof(int) * numnodes);
-    /* 
+    /*
        ! seed the random number generator with a ! different number on each
        processor */
     seed_random(myid);
@@ -103,7 +103,7 @@ main(int argc, char *argv[])
     // mpi_err = MPI_Alltoall(scounts,1,MPI_INT, rcounts,1,MPI_INT,
     // MPI_COMM_WORLD);
     shmem_barrier_all();
-    int other, j1;
+    int j1;
     for (j1 = 0; j1 < numnodes; j1++) {
         shmem_int_put(&rcounts[myid], &scounts[j1], 1, j1);
     }

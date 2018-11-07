@@ -61,7 +61,6 @@ int
 main()
 {
     int me;
-    int fd;                     /* fetched value */
 
     shmem_init();
     me = shmem_my_pe();
@@ -70,7 +69,9 @@ main()
     shmem_barrier_all();
 
     if (me == 0) {
-        fd = shmem_int_atomic_fetch(&dst, 1);
+        const int fetched = shmem_int_atomic_fetch(&dst, 1);
+
+        printf("%d: fetched value = %d\n", me, fetched);
     }
     else {
         dst += 1;

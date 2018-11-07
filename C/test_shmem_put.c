@@ -25,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -65,9 +65,9 @@
 #define N 7
 
 int
-main(int argc, char **argv)
+main(void)
 {
-    int i, j;
+    int i;
     int nextpe;
     int me, npes;
     int success1, success2, success3, success4, success5, success6, success7,

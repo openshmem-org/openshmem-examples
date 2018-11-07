@@ -60,7 +60,7 @@
 int
 main(void)
 {
-    int me, npes;
+    int me;
     long *dest;
 
     {
@@ -71,7 +71,6 @@ main(void)
 
     shmem_init();
     me = shmem_my_pe();
-    npes = shmem_n_pes();
 
     dest = (long *) shmem_malloc(sizeof(*dest));
 

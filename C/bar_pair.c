@@ -58,7 +58,7 @@ int x = 10101;
 int
 main()
 {
-    int me, npes;
+    int me;
     int i;
 
     for (i = 0; i < SHMEM_BARRIER_SYNC_SIZE; i += 1) {
@@ -67,7 +67,6 @@ main()
 
     shmem_init();
     me = shmem_my_pe();
-    npes = shmem_n_pes();
 
     shmem_barrier_all();
 

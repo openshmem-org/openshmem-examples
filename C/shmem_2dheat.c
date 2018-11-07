@@ -122,11 +122,10 @@ main(int argc, char **argv)
     float **U_Next;
     /* helper variables */
     /* available iterator */
-    int i, j, k, m, n;
-    int per_proc, remainder, my_start_row, my_end_row, my_num_rows;
+    int i, j, k;
+    int my_start_row, my_end_row, my_num_rows;
     int verbose = 0;
     int show_time = 0;
-    double time;
     double t, tv[2];
 
     /* OpenSHMEM initilization */
@@ -253,10 +252,8 @@ main(int argc, char **argv)
     init_domain(U_Next, my_rank);
 
     /* iterate for solution */
-    if (my_rank == ROOT) {
+    tv[0] = gettime();
 
-        tv[0] = gettime();
-    }
     k = 1;
     while (1) {
         method(U_Curr, U_Next);
@@ -292,11 +289,11 @@ main(int argc, char **argv)
         shmem_barrier_all();
     }
 
+    tv[1] = gettime();
 
     /* say something at the end */
     if (my_rank == ROOT) {
         // time = MPI_Wtime() - time;
-        tv[1] = gettime();
         t = dt(&tv[1], &tv[0]);
         printf
             ("Estimated time to convergence in %d iterations using %d processors on a %dx%d grid is %f seconds\n",
@@ -331,12 +328,11 @@ main(int argc, char **argv)
 float
 get_convergence_sqd(float **current_ptr, float **next_ptr, int rank)
 {
-    int i, j, my_start, my_end, my_num_rows;
+    int i, j, my_start, my_end;
     float sum;
 
     my_start = get_start_row(rank);
     my_end = get_end_row(rank);
-    my_num_rows = get_num_rows(rank);
 
     sum = 0.0;
     for (j = my_start; j <= my_end; j++) {
@@ -932,10 +928,9 @@ get_val_par(float *above_ptr, float **domain_ptr, float *below_ptr, int rank,
 void
 init_domain(float **domain_ptr, int rank)
 {
-    int i, j, start, end, rows;
+    int i, j, start, end;
     start = get_start_row(rank);
     end = get_end_row(rank);
-    rows = get_num_rows(rank);
 
     for (j = start; j <= end; j++) {
         for (i = 0; i < (int) floor(WIDTH / H); i++) {
@@ -1008,5 +1003,8 @@ global_to_local(int rank, int row)
 float
 f(int i, int j)
 {
+    (void) i;
+    (void) j;                   /* unused */
+
     return 0.0;
 }

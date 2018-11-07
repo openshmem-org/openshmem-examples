@@ -184,9 +184,11 @@ main(int argc, char *argv[])
 
         case 'h':
             help(progName);
+            break;
 
         default:
             usage(progName);
+            break;
         }
 
     if (optind == argc)

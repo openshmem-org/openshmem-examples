@@ -50,7 +50,7 @@
 #include <shmem.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
     int me, npes;
     struct utsname u;

@@ -59,12 +59,12 @@ int numnodes, myid, mpi_err;
 #define mpi_root 0
 /* end module  */
 
-void init_it(int *argc, char ***argv);
+void init_it(void);
 void seed_random(int id);
 void random_number(float *z);
 
 void
-init_it(int *argc, char ***argv)
+init_it(void)
 {
     // mpi_err = MPI_Init(argc,argv);
     // mpi_err = MPI_Comm_size( MPI_COMM_WORLD, &numnodes );
@@ -76,14 +76,14 @@ init_it(int *argc, char ***argv)
 
 
 int
-main(int argc, char *argv[])
+main(void)
 {
     int *sray, *rray;
     int *sdisp, *scounts, *rdisp, *rcounts, *rcounts_full;
-    int ssize, rsize, i, k, j;
+    int ssize, rsize, i;
     float z;
 
-    init_it(&argc, &argv);
+    init_it();
     scounts = (int *) shmem_malloc(sizeof(int) * numnodes);
     rcounts = (int *) shmem_malloc(sizeof(int) * numnodes);
     rcounts_full = (int *) shmem_malloc(sizeof(int) * numnodes * numnodes);
@@ -108,7 +108,7 @@ main(int argc, char *argv[])
     for (i = 0; i < SHMEM_COLLECT_SYNC_SIZE; i++)
         psync[i] = SHMEM_SYNC_VALUE;
     shmem_barrier_all();
-    int other, j1;
+    int j1;
     shmem_fcollect32(rcounts_full, scounts, 4, 0, 0, numnodes, psync);
     for (i = 0; i < numnodes; i++) {
         rcounts[i] = rcounts_full[i * numnodes + myid];

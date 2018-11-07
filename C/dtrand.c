@@ -25,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -119,7 +119,7 @@ table_dump(void)
 }
 
 int
-main(int argc, char *argv[])
+main(void)
 {
     int table_bytes;
     int lock_bytes;
@@ -131,36 +131,36 @@ main(int argc, char *argv[])
     me = shmem_my_pe();
     npes = shmem_n_pes();
 
-    /* 
+    /*
      * size of the per-PE partition
      */
     ip_pe = table_size / npes;
 
-    /* 
+    /*
      * each PE only stores what it owns
      */
     table_bytes = sizeof(*table) * ip_pe;
     table = shmem_malloc(table_bytes);  /* !!! unchecked !!! */
-    /* 
+    /*
      * initialize table
      */
     for (i = 0; i < ip_pe; i += 1) {
         table[i] = 0;
     }
 
-    /* 
+    /*
      * each PE needs to be able to lock everywhere
      */
     lock_bytes = sizeof(*lock) * table_size;
     lock = shmem_malloc(lock_bytes);    /* !!! unchecked !!! */
-    /* 
+    /*
      * initialize locks
      */
     for (i = 0; i < table_size; i += 1) {
         lock[i] = 0L;
     }
 
-    /* 
+    /*
      * make sure all PEs have initialized symmetric data
      */
     shmem_barrier_all();
@@ -181,12 +181,12 @@ main(int argc, char *argv[])
 
     shmem_barrier_all();
 
-    /* 
+    /*
      * everyone shows their part of the table
      */
     table_dump();
 
-    /* 
+    /*
      * clean up allocated memory
      */
     shmem_barrier_all();

@@ -62,8 +62,7 @@ even()
 {
     int outmsg1 = 4;
     int dest = 1;
-    int source = 1;
-    int rc, count, tag = 1;
+
     // MPI_Status Stat;
     // rc = MPI_Send(&outmsg1, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
     // rc = MPI_Recv(&inmsg1, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
@@ -80,10 +79,8 @@ void
 odd()
 {
     int dest = 0;
-    int source = 0;
     int outmsg2 = 7;
-    int rc, count, tag = 1;
-    int temp2;
+
     // MPI_Status Stat;
     // rc = MPI_Recv(&inmsg2, 1, MPI_CHAR, source, tag, MPI_COMM_WORLD, &Stat);
     // rc = MPI_Send(&outmsg2, 1, MPI_CHAR, dest, tag, MPI_COMM_WORLD);
@@ -98,7 +95,7 @@ odd()
 }
 
 int
-main(int argc, char *argv[])
+main(void)
 {
 
     // MPI_Init(&argc,&argv);

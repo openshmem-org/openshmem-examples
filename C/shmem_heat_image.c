@@ -4,27 +4,27 @@
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
- * Copyright (c) 2011 - 2015 
+ * Copyright (c) 2011 - 2015
  *   University of Houston System and UT-Battelle, LLC.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  * o Redistributions of source code must retain the above copyright notice,
  *   this list of conditions and the following disclaimer.
- * 
+ *
  * o Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * o Neither the name of the University of Houston System, UT-Battelle, LLC
  *    nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -39,7 +39,7 @@
  *
  */
 /* Application for solving heat conduction task and generate the image file.
- * Original source: Adopted/ported from the source url http://www.kiam.ru/MVS/documents/k100/examples/progrev_shmem_cpu.cpp  
+ * Original source: Adopted/ported from the source url http://www.kiam.ru/MVS/documents/k100/examples/progrev_shmem_cpu.cpp
  * Sample run: oshrun -np 2 shmem_heat_image ROWS COLS
  */
 
@@ -72,7 +72,7 @@ dt(double *tv1, double *tv2)
 #define DIM5( basetype, name, w1, w2, w3, w4 ) basetype (*name)[w1][w2][w3][w4]
 #define DIM6( basetype, name, w1, w2, w3, w4, w5 ) basetype (*name)[w1][w2][w3][w4][w5]
 #define DIM7( basetype, name, w1, w2, w3, w4, w5, w6 ) basetype (*name)[w1][w2][w3][w4][w5][w6]
-// file name of output image 
+// file name of output image
 #define FILENAME "tmp.image"
 // Change here the number of steps, the cell geometry, etc
 #define NITER 5000
@@ -104,7 +104,7 @@ itstep(int mx, int my, void *pf, void *pnewf, void *pr, double rdx2,
 int
 main(int argc, char **argv)
 {
-    int i, j, n, mx1, mx2, my1, my_number, n_of_nodes, totalmx, partmx,
+    int i, j, n, my_number, n_of_nodes, totalmx, partmx,
         leftmx, mx, my;
     FILE *fp;
     double t, tv[2];
@@ -192,8 +192,6 @@ main(int argc, char **argv)
             }
         }
 
-        mx1 = mx - 1;
-        my1 = my - 1;
         shmem_barrier_all();
 /* Iteration loop: */
         tv[0] = gettime();

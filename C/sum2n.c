@@ -57,7 +57,7 @@
 int counter = 0;                /* symmetric */
 
 int
-main(int argc, char *argv[])
+main(void)
 {
     int me;
 

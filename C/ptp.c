@@ -53,7 +53,7 @@ volatile int pe_escape = 1;
 int A = 0;
 
 int
-main(int argc, char **argv)
+main(void)
 {
     int me, npes;
     struct timeval now;

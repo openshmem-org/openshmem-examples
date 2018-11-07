@@ -65,7 +65,7 @@ dt(double *tv1, double *tv2)
 }
 
 int
-main(int argc, char *argv[])
+main(void)
 {
     int n = 16;
     int i;

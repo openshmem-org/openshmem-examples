@@ -25,7 +25,7 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * o Neither the name of the University of Houston System, 
+ * o Neither the name of the University of Houston System,
  *   UT-Battelle, LLC. nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific
  *   prior written permission.
@@ -56,7 +56,6 @@ long dest = -999;
 int
 main()
 {
-    int *all;
     int me;
 
     shmem_init();
@@ -71,25 +70,6 @@ main()
     shmem_barrier_all();
 
     printf("%d: dest = %ld\n", me, dest);
-
-#if 0
-    all = (int *) shmem_malloc(sizeof(*all));
-    assert(all != NULL);
-
-    *all = 314159;
-    shmem_barrier_all();
-
-    if (me == 1) {
-        int send_to_all = 27182;
-        shmem_int_put(all, &send_to_all, 1, 0);
-    }
-
-    shmem_barrier_all();
-
-    printf("%d: all = %d\n", me, *all);
-
-    shmem_free(all);
-#endif
 
     shmem_finalize();
 
