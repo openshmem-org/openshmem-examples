@@ -45,7 +45,7 @@
 
 
 
-//****************************************************************************80
+//****************************************************************************
 //
 //    This program uses SHMEM to do a Buffon-Laplace simulation in parallel.
 //
@@ -55,20 +55,65 @@
 //
 //    which contains original licensing and author information
 //
-//****************************************************************************80
+//****************************************************************************
 
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 
-using namespace std;
-
 #include <shmem.h>
 
-int buffon_laplace_simulate (double a, double b, double l, int trial_num);
-double r8_abs (double x);
-double r8_huge (void);
+static const double PI = 3.141592653589793238462643;
+
+int
+buffon_laplace_simulate(double a, double b, double l, int trial_num)
+{
+    double angle;
+    int hits;
+    int trial;
+    double x1;
+    double x2;
+    double y1;
+    double y2;
+
+    hits = 0;
+
+    for (trial = 1; trial <= trial_num; ++trial) {
+        //
+        // Randomly choose the location of the eye of the needle in
+        // [0,0]x[A,B],
+        // and the angle the needle makes.
+        //
+        x1 = a * (double) rand() / (double) RAND_MAX;
+        y1 = b * (double) rand() / (double) RAND_MAX;
+        angle = 2.0 * PI * (double) rand() / (double) RAND_MAX;
+        //
+        // Compute the location of the point of the needle.
+        //
+        x2 = x1 + l * cos(angle);
+        y2 = y1 + l * sin(angle);
+        //
+        // Count the end locations that lie outside the cell.
+        //
+        if (x2 <= 0.0 || a <= x2 || y2 <= 0.0 || b <= y2) {
+            ++hits;
+        }
+    }
+    return hits;
+}
+
+double
+r8_abs(double x)
+{
+    return (0.0 <= x) ? x : (-x);
+}
+
+double
+r8_huge()
+{
+    return 1.0E+30;
+}
 
 //
 // symmetric variables for reduction
@@ -80,14 +125,13 @@ int hit_total;
 int hit_num;
 
 int
-main(void)
+main()
 {
-    double a = 1.0;
-    double b = 1.0;
-    double l = 1.0;
-    int master = 0;
+    const double a = 1.0;
+    const double b = 1.0;
+    const double l = 1.0;
+    const int master = 0;
     double pdf_estimate;
-    double pi = 3.141592653589793238462643;
     double pi_error;
     double pi_estimate;
     int process_num;
@@ -96,74 +140,75 @@ main(void)
     int seed;
     int trial_num = 100000;
     int trial_total;
+
     //
     // Initialize SHMEM.
     //
-    shmem_init ();
+    shmem_init();
     //
     // Get the number of processes.
     //
-    process_num = shmem_n_pes ();
+    process_num = shmem_n_pes();
     //
     // Get the rank of this process.
     //
-    process_rank = shmem_my_pe ();
+    process_rank = shmem_my_pe();
     //
     // The master process prints a message.
     //
     if (process_rank == master) {
-        cout << "\n";
-        cout << "BUFFON_LAPLACE - Master process:\n";
-        cout << "  C++ version\n";
-        cout << "\n";
-        cout << "  A SHMEM example program to estimate PI\n";
-        cout << "  using the Buffon-Laplace needle experiment.\n";
-        cout << "  On a grid of cells of  width A and height B,\n";
-        cout << "  a needle of length L is dropped at random.\n";
-        cout << "  We count the number of times it crosses\n";
-        cout << "  at least one grid line, and use this to estimate \n";
-        cout << "  the value of PI.\n";
-        cout << "\n";
-        cout << "  The number of processes is " << process_num << "\n";
-        cout << "\n";
-        cout << "  Cell width A =    " << a << "\n";
-        cout << "  Cell height B =   " << b << "\n";
-        cout << "  Needle length L = " << l << "\n";
+        std::cout << "\n";
+        std::cout << "BUFFON_LAPLACE - Master process:\n";
+        std::cout << "  C++ version\n";
+        std::cout << "\n";
+        std::cout << "  A SHMEM example program to estimate PI\n";
+        std::cout << "  using the Buffon-Laplace needle experiment.\n";
+        std::cout << "  On a grid of cells of  width A and height B,\n";
+        std::cout << "  a needle of length L is dropped at random.\n";
+        std::cout << "  We count the number of times it crosses\n";
+        std::cout << "  at least one grid line, and use this to estimate \n";
+        std::cout << "  the value of PI.\n";
+        std::cout << "\n";
+        std::cout << "  The number of processes is " << process_num << "\n";
+        std::cout << "\n";
+        std::cout << "  Cell width A =    " << a << "\n";
+        std::cout << "  Cell height B =   " << b << "\n";
+        std::cout << "  Needle length L = " << l << "\n";
     }
     //
     // added barrier here to force output sequence
     //
-    shmem_barrier_all ();
+    shmem_barrier_all();
     //
     // Each process sets a random number seed.
     //
     seed = 123456789 + process_rank * 100;
-    srand (seed);
+    srand(seed);
     //
     // Just to make sure that we're all doing different things, have each
     // process print out its rank, seed value, and a first test random value.
     //
-    random_value = (double) rand () / (double) RAND_MAX;
+    random_value = (double) rand() / (double) RAND_MAX;
 
-    cout << "  " << setw (8) << process_rank
-	 << "  " << setw (12) << seed
-	 << "  " << setw (14) << random_value << "\n";
+    std::cout << "  " << std::setw(8) << process_rank
+     << "  " << std::setw(12) << seed
+     << "  " << std::setw(14) << random_value << "\n";
     //
     // Each process now carries out TRIAL_NUM trials, and then
     // sends the value back to the master process.
     //
-    hit_num = buffon_laplace_simulate (a, b, l, trial_num);
+    hit_num = buffon_laplace_simulate(a, b, l, trial_num);
 
     //
     // initialize sync buffer for reduction
     //
-    for (int i = 0; i < SHMEM_BCAST_SYNC_SIZE; i += 1) {
+    for (int i = 0; i < SHMEM_BCAST_SYNC_SIZE; ++i) {
         pSync[i] = SHMEM_SYNC_VALUE;
     }
-    shmem_barrier_all ();
+    shmem_barrier_all();
 
-    shmem_int_sum_to_all (&hit_total, &hit_num, 1, 0, 0, process_num, pWrk,
-                          pSync);
+    shmem_int_sum_to_all(&hit_total, &hit_num, 1, 0, 0, process_num, pWrk,
+                         pSync);
 
     //
     // The master process can now estimate PI.
@@ -171,92 +216,37 @@ main(void)
     if (process_rank == master) {
         trial_total = trial_num * process_num;
 
-        pdf_estimate = (double) (hit_total) / (double) (trial_total);
+        pdf_estimate = (double) hit_total / (double) trial_total;
 
         if (hit_total == 0) {
-            pi_estimate = r8_huge ();
+            pi_estimate = r8_huge();
         }
         else {
             pi_estimate = l * (2.0 * (a + b) - l) / (a * b * pdf_estimate);
         }
 
-        pi_error = r8_abs (pi - pi_estimate);
+        pi_error = r8_abs(PI - pi_estimate);
 
-        cout << "\n";
-        cout <<
+        std::cout << "\n";
+        std::cout <<
             "    Trials      Hits    Estimated PDF       Estimated Pi        Error\n";
-        cout << "\n";
-        cout << "  " << setw (8) << trial_total
-	     << "  " << setw (8) << hit_total
-	     << "  " << setw (16) << pdf_estimate
-	     << "  " << setw (16) << pi_estimate
-	     << "  " << setw (16) << pi_error << "\n";
+        std::cout << "\n";
+        std::cout << "  " << std::setw(8) << trial_total
+         << "  " << std::setw(8) << hit_total
+         << "  " << std::setw(16) << pdf_estimate
+         << "  " << std::setw(16) << pi_estimate
+         << "  " << std::setw(16) << pi_error << "\n";
     }
     //
     // Shut down
     //
     if (process_rank == master) {
-        cout << "\n";
-        cout << "BUFFON_LAPLACE - Master process:\n";
-        cout << "  Normal end of execution.\n";
+        std::cout << "\n";
+        std::cout << "BUFFON_LAPLACE - Master process:\n";
+        std::cout << "  Normal end of execution.\n";
     }
 
-    shmem_finalize ();
+    shmem_finalize();
 
     return 0;
-}
-
-int
-buffon_laplace_simulate (double a, double b, double l, int trial_num)
-{
-    double angle;
-    int hits;
-    double pi = 3.141592653589793238462643;
-    int trial;
-    double x1;
-    double x2;
-    double y1;
-    double y2;
-
-    hits = 0;
-
-    for (trial = 1; trial <= trial_num; trial++) {
-        //
-        // Randomly choose the location of the eye of the needle in
-        // [0,0]x[A,B],
-        // and the angle the needle makes.
-        //
-        x1 = a * (double) rand () / (double) RAND_MAX;
-        y1 = b * (double) rand () / (double) RAND_MAX;
-        angle = 2.0 * pi * (double) rand () / (double) RAND_MAX;
-        //
-        // Compute the location of the point of the needle.
-        //
-        x2 = x1 + l * cos (angle);
-        y2 = y1 + l * sin (angle);
-        //
-        // Count the end locations that lie outside the cell.
-        //
-        if (x2 <= 0.0 || a <= x2 || y2 <= 0.0 || b <= y2) {
-            hits = hits + 1;
-        }
-    }
-    return hits;
-}
-
-double
-r8_abs (double x)
-{
-    if (0.0 <= x) {
-        return x;
-    }
-    else {
-        return (-x);
-    }
-}
-
-double
-r8_huge ()
-{
-    return 1.0E+30;
 }
