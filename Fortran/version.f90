@@ -48,18 +48,20 @@ program version
   character (len = 32) :: h
   character (len = SHMEM_MAX_NAME_LEN) :: verstr
 
-  call shmem_init ()
+  call shmem_init
 
-  npes = shmem_n_pes ()
-  me = shmem_my_pe ()
-  call hostnm (h)
+  npes = shmem_n_pes()
+  me = shmem_my_pe()
+  call hostnm(h)
 
-  call shmem_info_get_version (maj, min)
-  call shmem_info_get_name (verstr)
+  call shmem_info_get_version(maj, min)
+  call shmem_info_get_name(verstr)
 
-  write (*, *) h, verstr, ' ', maj, '.', min, &
-       ': on PE ', me, ' / ',  npes
+  write (*, 100) h, ' has PE ', me, ' / ',  npes, &
+       ': ', verstr, maj, '.', min
 
-  call shmem_finalize ()
+  call shmem_finalize
+
+100 format (A12, A, I4, A, I4, A, A12, I2, A, I2)
 
 end program version
