@@ -49,7 +49,6 @@
  * Compute sum from 1 to (npes - 1)
  */
 
-
 #include <stdio.h>
 
 #include <shmem.h>
@@ -59,10 +58,11 @@ int counter = 0;                /* symmetric */
 int
 main(void)
 {
-    int me;
+    int me, npes;
 
     shmem_init();
     me = shmem_my_pe();
+    npes = shmem_n_pes();
 
     if (me > 0) {
         shmem_int_atomic_add(&counter, me, 0);
@@ -71,7 +71,7 @@ main(void)
     shmem_barrier_all();
 
     if (me == 0) {
-        printf("counter = %d\n", counter);
+        printf("Sum from 1 to %d = %d\n", npes - 1, counter);
     }
 
     shmem_finalize();
