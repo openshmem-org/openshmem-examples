@@ -81,20 +81,20 @@ main(void)
 
     if (me == 0) {
 
-        if (!check_it(&global_target)) {    /* long global: yes */
+        if (! check_it(&global_target)) {    /* long global: yes */
             msg = "FAIL (global long)";
         }
-        if (!check_it(&static_target)) {    /* static int global: yes */
+        if (! check_it(&static_target)) {    /* static int global: yes */
             msg = "FAIL (static int)";
         }
-        if (check_it(&local_target)) {  /* main() stack: no */
+        if (! check_it(&local_target)) {  /* main() stack: no */
             msg = "FAIL (stack variable)";
         }
-        if (!check_it(shm_target)) {    /* shmem_malloc: yes */
+        if (! check_it(shm_target)) {    /* shmem_malloc: yes */
             msg = "FAIL (shmem_malloc)";
         }
 
-        printf("%s\n", msg);
+        puts(msg);
 
     }
 
