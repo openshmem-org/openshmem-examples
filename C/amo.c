@@ -36,8 +36,8 @@ main()
     twovars = shmem_malloc(sizeof(*twovars));
     if (shmem_my_pe() == 0) {
         printf("Element size: %ld bytes\n", sizeof(locktype));
-        printf("Addresses: 1st element %p\n", &twovars->a);
-        printf("           2nd element %p\n", &twovars->b);
+        printf("Addresses: 1st element %p\n", (void *) &twovars->a);
+        printf("           2nd element %p\n", (void *) &twovars->b);
         printf("Iterations: %d   target PE: %d   other active PE: %d\n",
                tries, tpe, other);
     }
