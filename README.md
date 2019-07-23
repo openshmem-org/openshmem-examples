@@ -1,4 +1,4 @@
-# Copyright (c) 2016 - 2018
+# Copyright (c) 2016 - 2019
 #   Stony Brook University
 # Copyright (c) 2015 - 2018
 #   Los Alamos National Security, LLC.
@@ -48,4 +48,5 @@ Currently they are just functionality tests that were developed or ported
 during the writing of the reference implementation.
 
 Executables are the same name as the source but with a ".x" extension.
-So to build the test for foo.c (or .cxx or .f90), do "make foo.x".
+So to build the test for foo.c or foo.cxx do "make foo.x" (ditto for
+deprecated Fortran examples foo.f90).
