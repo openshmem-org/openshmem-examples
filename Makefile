@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 - 2018
+# Copyright (c) 2016 - 2019
 #   Stony Brook University
 # Copyright (c) 2015 - 2018
 #   Los Alamos National Security, LLC.
@@ -45,7 +45,7 @@
 
 .PHONY: all default clean
 
-SUBDIRS = C C++ Fortran
+SUBDIRS = C C++
 
 all default clean:
 	for d in $(SUBDIRS) ; \
