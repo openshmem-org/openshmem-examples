@@ -42,12 +42,13 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+TARGETS = all default clean
 
-.PHONY: all default clean
+.PHONY: $(TARGETS)
 
 SUBDIRS = C C++
 
-all default clean:
+$(TARGETS):
 	for d in $(SUBDIRS) ; \
 	do \
 		$(MAKE) $(MFLAGS) -C "$$d" $@ ; \
