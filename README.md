@@ -48,5 +48,6 @@ Currently they are just functionality tests that were developed or ported
 during the writing of the reference implementation.
 
 Executables are the same name as the source but with a ".x" extension.
-So to build the test for foo.c or foo.cxx do "make foo.x" (ditto for
-deprecated Fortran examples foo.f90).
+So to build the test for foo.c or foo.cxx do "make foo.x"
+
+N.B. The Fortran examples have been removed.
