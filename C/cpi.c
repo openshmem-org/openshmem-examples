@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2018
+ * Copyright (c) 2016 - 2019
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -58,7 +58,7 @@
 #include <shmem.h>
 #include <stdlib.h>
 #include <sys/time.h>
-
+#include <sys/utsname.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -92,14 +92,19 @@ max2(long a, long b)
 int
 main(int argc, char *argv[])
 {
+    struct utsname u;
     int myid, numprocs, i;
     double h, sum;
     struct timeval startwtime, endwtime;
     double *pWrkR;              /* symmetric reduction workspace */
 
+    uname(&u);
+
     shmem_init();
     numprocs = shmem_n_pes();
     myid = shmem_my_pe();
+
+    printf("PE %d on host \"%s\"\n", myid, u.nodename);
 
     if (myid == 0) {
         if (argc > 1)
