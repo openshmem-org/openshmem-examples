@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2018
+ * Copyright (c) 2016 - 2019
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -55,7 +55,7 @@
 
 #include <shmem.h>
 
-int dst;
+int dst = 123;
 
 int
 main()
@@ -65,16 +65,10 @@ main()
     shmem_init();
     me = shmem_my_pe();
 
-    dst = 123;
-    shmem_barrier_all();
-
     if (me == 0) {
         const int fetched = shmem_int_atomic_fetch(&dst, 1);
 
         printf("%d: fetched value = %d\n", me, fetched);
-    }
-    else {
-        dst += 1;
     }
 
     shmem_barrier_all();
