@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2018
+ * Copyright (c) 2016 - 2019
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -83,13 +83,13 @@ main(void)
         int i;
         for (i = 0; i < 4; i += 1) {
             long src = 9L;
-            shmem_long_put(dest, &src, 1, 1);
+            shmem_long_atomic_set(dest, src, 1);
             fprintf(stderr, "PE %d put %ld\n", me, src);
         }
         fprintf(stderr, "----------------------------\n");
         for (i = 0; i < 1000; i += 1) {
             long src = rand() % 10;
-            shmem_long_put(dest, &src, 1, 1);
+            shmem_long_atomic_set(dest, src, 1);
             fprintf(stderr, "PE %d put %ld\n", me, src);
             if (src != 9L)
                 break;
