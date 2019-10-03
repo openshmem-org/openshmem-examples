@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2018
+ * Copyright (c) 2016 - 2019
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -44,64 +44,27 @@
  *
  */
 
-
-
-/*
- * PE 1 waits for PE 0 to send something other than 9.
- * Send 4 9s to test wait condition, then some random values until != 9.
- */
-
 #include <stdio.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include <sys/utsname.h>
+
 #include <shmem.h>
 
 int
 main(void)
 {
-    int me;
-    long *dest;
+    const int lvl = 2;
+    int me, npes;
+    struct utsname u;
 
-    {
-        time_t now;
-        time(&now);
-        srand(now + getpid());
-    }
+    uname(&u);
 
     shmem_init();
+
     me = shmem_my_pe();
 
-    dest = (long *) shmem_malloc(sizeof(*dest));
+    shmem_pcontrol(lvl, "extra-arg1", "extra-arg2");
 
-    *dest = 9L;
-    shmem_barrier_all();
-
-    if (me == 0) {
-        int i;
-        for (i = 0; i < 4; i += 1) {
-            long src = 9L;
-            shmem_long_put(dest, &src, 1, 1);
-            fprintf(stderr, "PE %d put %ld\n", me, src);
-        }
-        fprintf(stderr, "----------------------------\n");
-        for (i = 0; i < 1000; i += 1) {
-            long src = rand() % 10;
-            shmem_long_put(dest, &src, 1, 1);
-            fprintf(stderr, "PE %d put %ld\n", me, src);
-            if (src != 9L)
-                break;
-        }
-    }
-
-    shmem_barrier_all();
-
-    if (me == 1) {
-        shmem_long_wait_until(dest, SHMEM_CMP_NE, 9L);
-        fprintf(stderr, "PE %d finished wait, got %ld\n", me, *dest);
-    }
-
-    shmem_barrier_all();
+    printf("%s: set pcontrol(level = %d) on PE %4d\n", u.nodename, lvl, me);
 
     shmem_finalize();
 
