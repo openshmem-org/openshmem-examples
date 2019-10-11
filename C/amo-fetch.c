@@ -45,9 +45,11 @@
  */
 
 
-
 /*
- * expected output on 2 PEs:
+ * expected output:
+ *
+ *   PE 0:       dst = 123, fetched value = 123
+ *   all others: dst = 123
  *
  */
 
@@ -68,7 +70,7 @@ main()
     if (me == 0) {
         const int fetched = shmem_int_atomic_fetch(&dst, 1);
 
-        printf("%d: fetched value = %d\n", me, fetched);
+        printf("%d: dst = %d, fetched value = %d\n", me, dst, fetched);
     }
 
     shmem_barrier_all();

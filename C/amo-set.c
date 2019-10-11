@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2018
+ * Copyright (c) 2016 - 2019
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -45,9 +45,12 @@
  */
 
 
-
 /*
- * expected output on 2 PEs:
+ * expected output:
+ *
+ *   PE 0:       dst = 123 (unchanged)
+ *   PE 1:       dst = 999 (set)
+ *   all others: dst = 124 (incremented)
  *
  */
 
@@ -72,7 +75,7 @@ main()
         shmem_int_atomic_set(&dst, 999, 1);
     }
     else {
-        dst += 1;
+        dst++;
     }
 
     shmem_barrier_all();
