@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2018
+ * Copyright (c) 2016 - 2019
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -75,7 +75,14 @@ main(void)
 
     shmem_long_get(&dest, src, 1, nextpe);
 
-    printf("%d : %ld\n", me, dest);
+    printf("%4d: got %4d: ", me, dest);
+    if (nextpe == dest) {
+        printf("CORRECT");
+    }
+    else {
+        printf("WRONG, expected %d", nextpe);
+    }
+    printf("\n");
 
     shmem_finalize();
 
