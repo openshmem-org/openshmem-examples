@@ -47,7 +47,9 @@
 
 
 /*
- * just do the cache calls.   No output expected
+ * just do the cache calls.
+ *
+ * No program output expected (but the library might report deprecation)
  *
  */
 
