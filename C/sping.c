@@ -58,6 +58,8 @@
 #include <sys/time.h>
 
 #include <unistd.h>
+#include <getopt.h>
+
 #include <shmem.h>
 
 #include <sys/utsname.h>
