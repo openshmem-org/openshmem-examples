@@ -66,6 +66,8 @@
 #include <math.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <getopt.h>
+
 #include <shmem.h>
 
 /* declare functions */
