@@ -38,6 +38,7 @@
 #include <getopt.h>
 #include <string.h>
 #include <assert.h>
+#include <sys/utsname.h>
 
 #include <shmem.h>
 
@@ -58,6 +59,9 @@ main(void)
     int me, npes;
     struct timeval now;
     long t_start, t_end;
+    struct utsname u;
+
+    uname(&u);
 
     shmem_init();
     me = shmem_my_pe();
@@ -129,7 +133,9 @@ main(void)
     }
 
     if (me < 4)
-        fprintf(stderr, "[%d] elapsed usecs %ld A %d\n", me, t_end, A);
+        fprintf(stderr,
+                "%s: [%d] elapsed usecs %ld A %d\n",
+                u.nodename, me, t_end, A);
 
     shmem_barrier_all();
 
