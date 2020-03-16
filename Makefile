@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 - 2019
+# Copyright (c) 2016 - 2020
 #   Stony Brook University
 # Copyright (c) 2015 - 2018
 #   Los Alamos National Security, LLC.
@@ -46,7 +46,7 @@ TARGETS = all default clean
 
 .PHONY: $(TARGETS)
 
-SUBDIRS = C C++
+SUBDIRS = c c++
 
 $(TARGETS):
 	for d in $(SUBDIRS) ; \
