@@ -53,16 +53,23 @@ int
 main(void)
 {
     int me, npes;
+    int t_me, t_npes;
     struct utsname u;
 
     uname(&u);
 
     shmem_init();
 
-    me = shmem_team_my_pe(SHMEM_TEAM_WORLD);
-    npes = shmem_team_n_pes(SHMEM_TEAM_WORLD);
+    me = shmem_my_pe();
+    npes = shmem_n_pes();
 
-    printf("%s: Hello from PE %4d of %4d\n", u.nodename, me, npes);
+    t_me = shmem_team_my_pe(SHMEM_TEAM_SHARED);
+    t_npes = shmem_team_n_pes(SHMEM_TEAM_SHARED);
+
+    printf("%s: PE %4d of %4d, shared team PE %4d of %4d\n",
+           u.nodename,
+           me, npes,
+           t_me, t_npes);
 
     shmem_finalize();
 
