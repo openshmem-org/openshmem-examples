@@ -74,7 +74,7 @@ main()
     if (me == 0) {
         shmem_int_atomic_set(&dst, 999, 1);
     }
-    else {
+    else if (me != 1) {
         dst++;
     }
 
