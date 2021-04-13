@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2020
+ * Copyright (c) 2016 - 2021
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -52,24 +52,24 @@
 int
 main(void)
 {
-    int me, npes;
-    int t_me, t_npes;
+    int w_me, w_npes;
+    int s_me, s_npes;
     struct utsname u;
 
     uname(&u);
 
     shmem_init();
 
-    me = shmem_my_pe();
-    npes = shmem_n_pes();
+    w_me = shmem_team_my_pe(SHMEM_TEAM_WORLD);
+    w_npes = shmem_team_n_pes(SHMEM_TEAM_WORLD);
 
-    t_me = shmem_team_my_pe(SHMEM_TEAM_SHARED);
-    t_npes = shmem_team_n_pes(SHMEM_TEAM_SHARED);
+    s_me = shmem_team_my_pe(SHMEM_TEAM_SHARED);
+    s_npes = shmem_team_n_pes(SHMEM_TEAM_SHARED);
 
     printf("%s: PE %4d of %4d, shared team PE %4d of %4d\n",
            u.nodename,
-           me, npes,
-           t_me, t_npes);
+           w_me, w_npes,
+           s_me, s_npes);
 
     shmem_finalize();
 

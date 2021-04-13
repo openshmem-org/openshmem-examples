@@ -133,9 +133,8 @@ main(void)
     }
 
     if (me < 4)
-        fprintf(stderr,
-                "%s: [%d] elapsed usecs %ld A %d\n",
-                u.nodename, me, t_end, A);
+        printf("%s: [%d] elapsed usecs %ld A %d\n",
+               u.nodename, me, t_end, A);
 
     shmem_barrier_all();
 
