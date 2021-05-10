@@ -75,7 +75,7 @@ main(void)
 
     shmem_long_get(&dest, src, 1, nextpe);
 
-    printf("%4d: got %4d: ", me, dest);
+    printf("%4d: got %4ld: ", me, dest);
     if (nextpe == dest) {
         printf("CORRECT");
     }
