@@ -46,7 +46,7 @@
 
 
 /*
- * Compute sum from 1 to (npes - 1)
+ * Compute sum from 1 to npes
  */
 
 #include <stdio.h>
@@ -64,14 +64,12 @@ main(void)
     me = shmem_my_pe();
     npes = shmem_n_pes();
 
-    if (me > 0) {
-        shmem_int_atomic_add(&counter, me, 0);
-    }
+    shmem_int_atomic_add(&counter, me + 1, 0);
 
     shmem_barrier_all();
 
     if (me == 0) {
-        printf("Sum from 1 to %d = %d\n", npes - 1, counter);
+        printf("Sum from 1 to %d = %d\n", npes, counter);
     }
 
     shmem_finalize();
