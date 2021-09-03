@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2016 - 2019
+ * Copyright (c) 2016 - 2021
  *   Stony Brook University
  * Copyright (c) 2015 - 2018
  *   Los Alamos National Security, LLC.
@@ -58,17 +58,18 @@ int counter = 0;                /* symmetric */
 int
 main(void)
 {
-    int me, npes;
+    int me;
 
     shmem_init();
     me = shmem_my_pe();
-    npes = shmem_n_pes();
 
     shmem_int_atomic_add(&counter, me + 1, 0);
 
     shmem_barrier_all();
 
     if (me == 0) {
+        const int npes = shmem_n_pes();
+
         printf("Sum from 1 to %d = %d\n", npes, counter);
     }
 
