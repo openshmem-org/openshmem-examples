@@ -9,12 +9,11 @@ static const int target_pe = 1;
 int
 main()
 {
-    int me, npes;
+    int me;
     long *symvar;
 
     shmem_init ();
     me = shmem_my_pe ();
-    npes = shmem_n_pes ();
 
     symvar = shmem_malloc (sizeof (*symvar) * 4);
 
