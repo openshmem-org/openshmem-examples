@@ -71,7 +71,6 @@ main(void)
 {
     long local_target;
     int *shm_target;
-    char *msg = "OK";
     int me;
 
     shmem_init();
@@ -80,6 +79,7 @@ main(void)
     shm_target = (int *) shmem_malloc(sizeof(int));
 
     if (me == 0) {
+        char *msg = "OK";
 
         if (! check_it(&global_target)) {    /* long global: yes */
             msg = "FAIL (global long)";
