@@ -52,6 +52,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <sys/utsname.h>
 
 #include <shmem.h>
 
@@ -62,6 +63,9 @@ main(void)
     int me, npes;
     int src;
     int *dest;
+    struct utsname u;
+
+    uname(&u);
 
     shmem_init();
     me = shmem_my_pe();
@@ -81,7 +85,7 @@ main(void)
 
     shmem_barrier_all();
 
-    printf("%4d: got %4d: ", me, *dest);
+    printf("%s: %4d: got %4d: ", u.nodename, me, *dest);
     if (*dest == me) {
         printf("CORRECT");
     }
