@@ -89,7 +89,7 @@ decode(int tl)
 static int
 encode(const char *tn)
 {
-    const int len = strlen(tn);
+    const size_t len = strlen(tn);
     struct thread_encdec *tp = threads_table;
 
     while (tp->level != terminator) {
